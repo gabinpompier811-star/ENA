@@ -195,11 +195,8 @@
                             <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
                             <input type="file" id="fileInput" multiple class="hidden">
                         </label>
-                        <button id="btnNewTextFile" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-lg border border-slate-700 flex items-center gap-2">
-                            <i class="fa-solid fa-file-circle-plus"></i> Nouveau fichier texte
-                        </button>
                     </div>
-                    <span class="text-xs text-slate-500">Sauvegarde rapide : <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">Ctrl + S</kbd></span>
+                    <span class="text-xs text-slate-500">Sauvegarde synchro Firebase active</span>
                 </div>
 
                 <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-slate-900/30 rounded-xl border border-slate-800/50"></div>
@@ -222,7 +219,7 @@
 
                     <div class="md:col-span-2 bg-slate-900 p-4 rounded-xl border border-slate-800">
                         <h3 class="text-sm font-bold text-white mb-1">Corps des Formateurs / Instructeurs</h3>
-                        <p class="text-[10px] text-slate-400 mb-3">Cliquez sur un formateur pour afficher le nombre de formations qu'il a dispensées</p>
+                        <p class="text-[10px] text-slate-400 mb-3">Cliquez sur un formateur pour voir ses statistiques ou utilisez l'icône rouge pour le supprimer</p>
                         <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
                     </div>
                 </div>
@@ -293,7 +290,7 @@
                             <i class="fa-solid fa-file-pdf"></i> Exporter Note (PDF)
                         </button>
                     </div>
-                    <span class="text-xs text-slate-400">Sauvegarde automatique / <kbd class="px-1 bg-slate-800 border border-slate-700 rounded">Ctrl+S</kbd></span>
+                    <span class="text-xs text-slate-400">Sauvegarde automatique dans Firebase</span>
                 </div>
                 <div class="flex-1 flex gap-4 overflow-hidden">
                     <div id="notesList" class="w-1/3 bg-slate-900 rounded-xl border border-slate-800 p-2 overflow-y-auto custom-scroll space-y-2"></div>
@@ -361,39 +358,35 @@
             logs: []
         };
 
+        // Chargement en temps réel sans données injectées par défaut
         db.ref('files').on('value', (snapshot) => {
-            state.files = snapshot.val() ? Object.values(snapshot.val()) : [];
+            const val = snapshot.val();
+            state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderFiles();
         });
 
         db.ref('notes').on('value', (snapshot) => {
-            state.notes = snapshot.val() ? Object.values(snapshot.val()) : [
-                { id: '1', title: 'Ordre du jour ENA', content: 'Préparer la session de formation FGI pour la nouvelle promotion.' }
-            ];
+            const val = snapshot.val();
+            state.notes = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderNotes();
         });
 
         db.ref('effectifs').on('value', (snapshot) => {
-            state.effectifs = snapshot.val() ? Object.values(snapshot.val()) : [
-                { id: '1', nom: 'Croft Anthony', grade: 'Soldat 1er Cl.', mat: 'CA-005-FR', aff: '1er RPIMa', form: '[FG1 / BS1] Brevet de Sergent', dateDemande: '18/10/2026 à 09:30', eval: { evaluee: true, note: '16.5', resultat: 'Admis', mention: 'Bien', formateur: 'LTN Léo Giraud', dateEval: '18/10/2026' } },
-                { id: '2', nom: 'Rosier Mathis', grade: 'Lieutenant', mat: 'RM-002-FR', aff: 'CPA 10', form: '[FAE] Formation d\'Application', dateDemande: '18/10/2026 à 10:15', eval: { evaluee: false } }
-            ];
+            const val = snapshot.val();
+            state.effectifs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderEffectifs();
+            renderFormateurs();
         });
 
         db.ref('formateurs').on('value', (snapshot) => {
-            state.formateurs = snapshot.val() ? Object.values(snapshot.val()) : [
-                { id: 'f1', nom: 'LCL Alex Girond', role: 'Directeur / Superviseur', specialite: 'Commandement' },
-                { id: 'f2', nom: 'LTN Mathis Rosier', role: 'Formateur Principal', specialite: 'Drones / Transmissions' },
-                { id: 'f3', nom: 'LTN Léo Giraud', role: 'Instructeur', specialite: 'Tir de précision' }
-            ];
+            const val = snapshot.val();
+            state.formateurs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderFormateurs();
         });
 
         db.ref('logs').on('value', (snapshot) => {
-            state.logs = snapshot.val() ? Object.values(snapshot.val()) : [
-                { id: 'l1', date: new Date().toLocaleString(), user: 'Système', action: 'INITIALISATION', details: 'Démarrage du portail ENA' }
-            ];
+            const val = snapshot.val();
+            state.logs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderLogs();
         });
 
@@ -498,7 +491,7 @@
                 const candidateId = document.getElementById('evalCandidateId').value;
                 const candidate = state.effectifs.find(item => item.id === candidateId);
 
-                if (candidate) {
+                if (candidate && candidate._fbKey) {
                     const evalData = {
                         evaluee: true,
                         resultat: document.getElementById('evalResultat').value,
@@ -509,14 +502,7 @@
                         dateEval: new Date().toLocaleDateString('fr-FR')
                     };
 
-                    db.ref('effectifs').orderByChild('id').equalTo(candidateId).once('value', snapshot => {
-                        const val = snapshot.val();
-                        if (val) {
-                            const firebaseKey = Object.keys(val)[0];
-                            db.ref(`effectifs/${firebaseKey}/eval`).set(evalData);
-                        }
-                    });
-
+                    db.ref(`effectifs/${candidate._fbKey}/eval`).set(evalData);
                     closeEvalModal();
                     addLog('EVALUATION_VALIDEE', `Formation ${candidate.form} évaluée pour ${candidate.nom}`);
                 }
@@ -584,18 +570,52 @@
 
         function saveCurrentNote() {
             if (!state.activeNoteId) return;
+            const note = state.notes.find(n => n.id === state.activeNoteId);
+            if (!note || !note._fbKey) return;
+
             const title = document.getElementById('noteTitle').value;
             const content = document.getElementById('noteContent').value;
-            
-            db.ref('notes').orderByChild('id').equalTo(state.activeNoteId).once('value', snapshot => {
-                const val = snapshot.val();
-                if (val) {
-                    const firebaseKey = Object.keys(val)[0];
-                    db.ref(`notes/${firebaseKey}`).update({ title, content });
-                }
-            });
+            db.ref(`notes/${note._fbKey}`).update({ title, content });
         }
 
+        // Fonctions de suppression Firebase
+        window.deleteFormateur = (fbKey, name) => {
+            if (confirm(`Supprimer le formateur ${name} ?`)) {
+                db.ref(`formateurs/${fbKey}`).remove();
+                addLog('SUPPRESSION_FORMATEUR', `Formateur supprimé : ${name}`);
+            }
+        };
+
+        window.deleteEffectif = (fbKey, name) => {
+            if (confirm(`Supprimer la demande de formation pour ${name} ?`)) {
+                db.ref(`effectifs/${fbKey}`).remove();
+                addLog('SUPPRESSION_EFFECTIF', `Effectif supprimé : ${name}`);
+            }
+        };
+
+        window.deleteNote = (fbKey, title) => {
+            if (confirm(`Supprimer la note "${title}" ?`)) {
+                db.ref(`notes/${fbKey}`).remove();
+                if (state.activeNoteId) {
+                    const currentNote = state.notes.find(n => n._fbKey === fbKey);
+                    if (currentNote && currentNote.id === state.activeNoteId) {
+                        state.activeNoteId = null;
+                        document.getElementById('noteTitle').value = '';
+                        document.getElementById('noteContent').value = '';
+                    }
+                }
+                addLog('SUPPRESSION_NOTE', `Note supprimée : ${title}`);
+            }
+        };
+
+        window.deleteFile = (fbKey, name) => {
+            if (confirm(`Supprimer le fichier ${name} ?`)) {
+                db.ref(`files/${fbKey}`).remove();
+                addLog('SUPPRESSION_FICHIER', `Fichier supprimé : ${name}`);
+            }
+        };
+
+        // Rendu visuel des documents (Aperçu image inclus)
         function renderFiles() {
             const container = document.getElementById('fileList');
             container.innerHTML = '';
@@ -604,12 +624,19 @@
                 return;
             }
             state.files.forEach(file => {
+                const isImage = file.type && file.type.startsWith('image/');
                 container.innerHTML += `
                     <div class="bg-slate-800 border border-slate-700 rounded-lg p-3 flex flex-col justify-between space-y-2">
-                        <div class="truncate text-xs font-bold text-slate-200"><i class="fa-solid fa-file text-blue-400 mr-1"></i> ${file.name}</div>
+                        ${isImage ? `
+                            <div class="w-full h-24 bg-slate-900 rounded overflow-hidden flex items-center justify-center border border-slate-700/50">
+                                <img src="${file.content}" alt="${file.name}" class="max-h-full max-w-full object-contain">
+                            </div>
+                        ` : ''}
+                        <div class="truncate text-xs font-bold text-slate-200"><i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'} mr-1"></i> ${file.name}</div>
                         <div class="text-[10px] text-slate-400">${file.size}</div>
-                        <div class="flex justify-end gap-2">
-                            <a href="${file.content}" download="${file.name}" class="text-blue-400 hover:text-white text-xs"><i class="fa-solid fa-download"></i></a>
+                        <div class="flex justify-between items-center pt-1 border-t border-slate-700/50">
+                            <a href="${file.content}" download="${file.name}" class="text-blue-400 hover:text-white text-xs" title="Télécharger"><i class="fa-solid fa-download"></i></a>
+                            <button onclick="deleteFile('${file._fbKey}', '${file.name}')" class="text-red-400 hover:text-red-300 text-xs" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -619,11 +646,16 @@
         function renderNotes() {
             const container = document.getElementById('notesList');
             container.innerHTML = '';
+            if (state.notes.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-4">Aucune note. Cliquez sur "+ Nouvelle Note"</p>`;
+                return;
+            }
             state.notes.forEach(note => {
                 const isActive = note.id === state.activeNoteId;
                 container.innerHTML += `
-                    <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-slate-800/60 hover:bg-slate-800 text-slate-300'}">
-                        ${note.title || 'Sans titre'}
+                    <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-slate-800/60 hover:bg-slate-800 text-slate-300'}">
+                        <span class="truncate">${note.title || 'Sans titre'}</span>
+                        <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${note.title || 'Sans titre'}')" class="text-red-400 hover:text-red-300 ml-2" title="Supprimer"><i class="fa-solid fa-trash text-[11px]"></i></button>
                     </div>
                 `;
             });
@@ -663,6 +695,7 @@
                         </td>
                         <td class="p-2.5 text-right space-x-1">
                             <button onclick="openEvalModal('${item.id}')" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[10px]">Évaluer</button>
+                            <button onclick="deleteEffectif('${item._fbKey}', '${item.nom}')" class="px-2 py-1 bg-red-900/40 hover:bg-red-800 border border-red-700/50 text-red-300 rounded text-[10px]" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -672,6 +705,10 @@
         function renderFormateurs() {
             const container = document.getElementById('formateursList');
             container.innerHTML = '';
+            if (state.formateurs.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full py-2">Aucun formateur enregistré.</p>`;
+                return;
+            }
             state.formateurs.forEach(f => {
                 const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom);
                 container.innerHTML += `
@@ -680,8 +717,9 @@
                             <p class="text-xs font-bold text-white">${f.nom}</p>
                             <p class="text-[10px] text-blue-400">${f.role} - <span class="text-slate-300">${f.specialite}</span></p>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
                             <span class="text-[10px] px-2 py-1 bg-blue-900/40 border border-blue-700/50 text-blue-300 rounded font-semibold">${formationsFaites.length} formation(s)</span>
+                            <button onclick="deleteFormateur('${f._fbKey}', '${f.nom}')" class="text-red-400 hover:text-red-300 p-1 text-xs" title="Supprimer le formateur"><i class="fa-solid fa-user-minus"></i></button>
                         </div>
                     </div>
                 `;
@@ -691,6 +729,10 @@
         function renderLogs() {
             const tbody = document.getElementById('logsTable');
             tbody.innerHTML = '';
+            if (state.logs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">Aucun log enregistré.</td></tr>`;
+                return;
+            }
             state.logs.forEach(log => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-800/40 text-[11px]">
