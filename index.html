@@ -334,14 +334,12 @@
 
     <!-- Script Firebase & Logique de l'application -->
     <script>
-        // Configuration Firebase (Reliée à votre Realtime Database)
         const firebaseConfig = {
             databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Indicateur connexion Firebase en temps réel
         const statusEl = document.getElementById('connection-status');
         db.ref('.info/connected').on('value', (snap) => {
             if (snap.val() === true) {
@@ -363,7 +361,6 @@
             logs: []
         };
 
-        // Écouteurs de synchronisation en temps réel Firebase
         db.ref('files').on('value', (snapshot) => {
             state.files = snapshot.val() ? Object.values(snapshot.val()) : [];
             renderFiles();
@@ -512,7 +509,6 @@
                         dateEval: new Date().toLocaleDateString('fr-FR')
                     };
 
-                    // Recherche de la clé Firebase correspondante pour la mise à jour
                     db.ref('effectifs').orderByChild('id').equalTo(candidateId).once('value', snapshot => {
                         const val = snapshot.val();
                         if (val) {
@@ -600,7 +596,6 @@
             });
         }
 
-        // Fonctions de rendu visuel
         function renderFiles() {
             const container = document.getElementById('fileList');
             container.innerHTML = '';
@@ -678,13 +673,16 @@
             const container = document.getElementById('formateursList');
             container.innerHTML = '';
             state.formateurs.forEach(f => {
+                const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom);
                 container.innerHTML += `
-                    <div onclick="openFmtStatsModal('${f.id}')" class="bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 p-3 rounded-lg cursor-pointer transition flex items-center justify-between">
-                        <div>
+                    <div class="bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 p-3 rounded-lg transition flex items-center justify-between">
+                        <div onclick="openFmtStatsModal('${f.id}')" class="cursor-pointer flex-1">
                             <p class="text-xs font-bold text-white">${f.nom}</p>
                             <p class="text-[10px] text-blue-400">${f.role} - <span class="text-slate-300">${f.specialite}</span></p>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] px-2 py-1 bg-blue-900/40 border border-blue-700/50 text-blue-300 rounded font-semibold">${formationsFaites.length} formation(s)</span>
+                        </div>
                     </div>
                 `;
             });
@@ -705,7 +703,6 @@
             });
         }
 
-        // Modales
         window.openEvalModal = (candidateId) => {
             const candidate = state.effectifs.find(item => item.id === candidateId);
             if (!candidate) return;
