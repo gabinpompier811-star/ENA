@@ -50,6 +50,17 @@
         </div>
     </div>
 
+    <!-- Modal Visionneuse d'Image Plein Écran -->
+    <div id="imageViewerModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
+            <button onclick="closeImageViewer()" class="absolute -top-10 right-0 text-white hover:text-red-400 text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="viewerImage" src="" alt="Image plein écran" class="max-h-[80vh] max-w-full rounded-lg shadow-2xl object-contain border border-slate-700">
+            <p id="viewerTitle" class="text-sm font-bold text-slate-200 mt-3"></p>
+        </div>
+    </div>
+
     <!-- Modal Fiche d'Évaluation -->
     <div id="evalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4">
@@ -170,7 +181,10 @@
 
         <!-- Navigation par Onglets -->
         <nav class="bg-slate-900/50 border-b border-slate-800 flex items-center px-2 overflow-x-auto custom-scroll">
-            <button class="tab-btn active px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="docs">
+            <button class="tab-btn active px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="dashboard">
+                <i class="fa-solid fa-chart-pie"></i> Tableau de Bord
+            </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="docs">
                 <i class="fa-solid fa-folder-tree"></i> Documents & Fichiers
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="ena">
@@ -178,6 +192,12 @@
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
                 <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles & Suivi
+            </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="planning">
+                <i class="fa-solid fa-calendar-days"></i> Planning & Sessions
+            </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="programmes">
+                <i class="fa-solid fa-book-bookmark"></i> Référentiel Formations
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
                 <i class="fa-solid fa-note-sticky"></i> Notes & Bloc-notes
@@ -193,8 +213,70 @@
         <!-- Contenu des Onglets -->
         <main class="flex-1 overflow-hidden relative">
             
+            <!-- ONGLET TABLEAU DE BORD (DASHBOARD) -->
+            <section id="tab-dashboard" class="tab-content h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                        <div class="p-3 bg-blue-600/20 text-blue-400 rounded-lg"><i class="fa-solid fa-users text-xl"></i></div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Total Candidats</span>
+                            <p id="dashTotalCandidats" class="text-2xl font-black text-white">0</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                        <div class="p-3 bg-emerald-600/20 text-emerald-400 rounded-lg"><i class="fa-solid fa-circle-check text-xl"></i></div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Taux de Réussite</span>
+                            <p id="dashTauxReussite" class="text-2xl font-black text-emerald-400">0%</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                        <div class="p-3 bg-amber-600/20 text-amber-400 rounded-lg"><i class="fa-solid fa-user-graduate text-xl"></i></div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Total Instructeurs</span>
+                            <p id="dashTotalInstructeurs" class="text-2xl font-black text-amber-400">0</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                        <div class="p-3 bg-purple-600/20 text-purple-400 rounded-lg"><i class="fa-solid fa-folder text-xl"></i></div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Fichiers Stockés</span>
+                            <p id="dashTotalFiles" class="text-2xl font-black text-purple-400">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <h3 class="text-xs font-bold text-white border-b border-slate-800 pb-2"><i class="fa-solid fa-clock-rotate-left text-blue-400"></i> Dernières Formations Évaluées</h3>
+                        <div id="dashRecentEvals" class="space-y-2 max-h-56 overflow-y-auto custom-scroll text-xs"></div>
+                    </div>
+
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <h3 class="text-xs font-bold text-white border-b border-slate-800 pb-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Résumé de l'Aptitude Opérationnelle</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between p-2 bg-slate-800/60 rounded border border-slate-700/50">
+                                <span>Formations Validées (Admis)</span>
+                                <span id="dashCountAdmis" class="font-bold text-green-400">0</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-800/60 rounded border border-slate-700/50">
+                                <span>Formations Ajournées (Échecs)</span>
+                                <span id="dashCountAjournes" class="font-bold text-red-400">0</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-800/60 rounded border border-slate-700/50">
+                                <span>Demandes en Attente d'Examen</span>
+                                <span id="dashCountAttente" class="font-bold text-amber-400">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ONGLET DOCUMENTS -->
-            <section id="tab-docs" class="tab-content h-full p-4 flex flex-col space-y-4">
+            <section id="tab-docs" class="tab-content hidden h-full p-4 flex flex-col space-y-4">
                 <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
                     <div class="flex items-center space-x-2">
                         <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
@@ -243,9 +325,12 @@
                 <div id="pdfContentEffectifs" class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                         <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Demandes de Formations & Évaluations</h3>
-                        <button id="btnExportEffectifsPDF" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-pdf"></i> Exporter Tableau (PDF)
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="🔍 Rechercher nom, grade..." class="bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white focus:outline-none">
+                            <button id="btnExportEffectifsPDF" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Exporter Tableau (PDF)
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Formulaire de Demande de Formation -->
@@ -312,8 +397,8 @@
 
                 <div id="ficheContainer" class="hidden space-y-4">
                     <!-- Fiche Profil Top -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center space-x-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="pdfFicheExport">
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center space-x-4 md:col-span-2">
                             <div class="w-14 h-14 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border border-blue-500/30">
                                 <i class="fa-solid fa-user-large"></i>
                             </div>
@@ -330,9 +415,15 @@
                         </div>
 
                         <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Brevets & Formations Validées</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Brevets Validés</span>
                             <p id="fCountValide" class="text-2xl font-black text-emerald-400 mt-0.5">0</p>
                         </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-pdf"></i> Imprimer Fiche Individuelle (PDF)
+                        </button>
                     </div>
 
                     <!-- Historique des formations & Notes personnelles -->
@@ -353,6 +444,86 @@
                                 Enregistrer la note de suivi
                             </button>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ONGLET PLANNING & SESSIONS -->
+            <section id="tab-planning" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-calendar-plus text-blue-500"></i> Programmer une Session</h3>
+                        <form id="formAddSession" class="space-y-2 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Formation</label>
+                                <select id="sessForm" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                                    <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
+                                    <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
+                                    <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
+                                    <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
+                                    <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
+                                    <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Date & Heure</label>
+                                <input type="datetime-local" id="sessDate" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Lieu / Stand</label>
+                                <input type="text" id="sessLieu" placeholder="ex: Stand B, Zone de Saut Alpha" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Instructeur Référent</label>
+                                <select id="sessInstructeur" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></select>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded mt-2">+ Créer la Session</button>
+                        </form>
+                    </div>
+
+                    <div class="md:col-span-2 bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-list-ul text-blue-500"></i> Sessions de Formations Plannifiées</h3>
+                        <div id="sessionsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ONGLET PROGRAMMES / RÉFÉRENTIEL ENA -->
+            <section id="tab-programmes" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel des Brevets & Formations ENA
+                    </h2>
+                    <p class="text-xs text-slate-400">Programme officiel, prérequis et critères d'attribution des diplômes de l'ENA</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                        <span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold border border-blue-700">[FGI] Formation Général Initiale</span>
+                        <h4 class="font-bold text-white pt-1">Brevets de Base</h4>
+                        <p class="text-slate-400">Formation obligatoire pour tous les nouveaux engagés. Apprentissage du tir de combat, topographie, discipline et protocoles radio.</p>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Examen : Pratique & Théorique / Note éliminatoire < 10/20</div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                        <span class="px-2 py-0.5 bg-emerald-900/40 text-emerald-300 rounded font-bold border border-emerald-700">[CAT1 / CME] Gradés de Contact</span>
+                        <h4 class="font-bold text-white pt-1">Commandement d'Équipe</h4>
+                        <p class="text-slate-400">Formation pour Caporaux et Caporaux-Chefs. Apprentissage de la pédagogie de combat, tactique d'escouade et gestion d'éléments sous le feu.</p>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Prérequis : FGI Validée</div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                        <span class="px-2 py-0.5 bg-purple-900/40 text-purple-300 rounded font-bold border border-purple-700">[FG1 / BS1 / BSTAT] Sous-Officiers</span>
+                        <h4 class="font-bold text-white pt-1">Brevet de Sergent & Adjoint</h4>
+                        <p class="text-slate-400">Cursus de préparation au commandement de groupe et de section. Tactique avancée, liaisons interarmes et secourisme de combat niveau 2.</p>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Évaluation : Mise en situation tactique rélle</div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                        <span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded font-bold border border-amber-700">[DEM / CDU] Cursus Officiers</span>
+                        <h4 class="font-bold text-white pt-1">Diplôme d'État-Major</h4>
+                        <p class="text-slate-400">Haut cursus de commandement destiné aux chefs d'unité et officiers d'État-Major. Planification stratégique, logistique lourde et conduite des opérations.</p>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Attribution par le Directeur de l'ENA</div>
                     </div>
                 </div>
             </section>
@@ -391,35 +562,26 @@
                 <div class="space-y-3 max-w-4xl mx-auto">
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-blue-400">Version 2.4 - Fiches Individuelles & Rôles Instructeurs</span>
+                            <span class="font-bold text-xs text-blue-400">Version 3.0 - Dashboard, Planning & Référentiel ENA</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li>Création du module **Fiches Individuelles & Suivi Personnel** pour consulter le dossier complet d'un soldat et y ajouter des appréciations du commandement.</li>
-                            <li>Ajustement du formulaire des instructeurs avec liste déroulante verrouillée des rôles officiels (*Directeur, Instructeur Chef...*) sans saisie de spécialité.</li>
-                            <li>Ajout de l'onglet **Mises à jour** pour suivre le journal des développements.</li>
+                            <li>Création du **Tableau de bord statistique** (taux de réussite, total admis/échecs).</li>
+                            <li>Module de **Planning & Agenda des sessions** de formations.</li>
+                            <li>Ajout du **Référentiel des brevets ENA** et des fiches pédagogiques.</li>
+                            <li>Intégration d'une **visionneuse modale d'images grand écran**.</li>
+                            <li>Fonction d'**export PDF personnalisé** pour les fiches individuelles.</li>
                         </ul>
                     </div>
 
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-emerald-400">Version 2.3 - Corrections de Suppression & Firebase</span>
+                            <span class="font-bold text-xs text-emerald-400">Version 2.4 - Fiches Individuelles & Rôles Instructeurs</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li>Refonte du système de suppression pour gérer sans bug les noms de fichiers contenant des apostrophes ou caractères spéciaux.</li>
-                            <li>Intégration d'un écouteur d'événements direct JavaScript (`addEventListener`) sur les boutons de suppression d'images.</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-slate-300">Version 2.0 - Synchronisation Temps Réel Firebase</span>
-                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li>Migration du stockage local (`localStorage`) vers **Google Firebase Realtime Database**.</li>
-                            <li>Partage et mise à jour instantanée des données entre tous les utilisateurs connectés.</li>
+                            <li>Création du module Fiches Individuelles & Suivi Personnel.</li>
+                            <li>Ajustement du formulaire instructeur avec la liste officielle des rôles ENA.</li>
                         </ul>
                     </div>
                 </div>
@@ -479,6 +641,7 @@
             activeNoteId: null,
             effectifs: [],
             formateurs: [],
+            sessions: [],
             logs: [],
             selectedMilitaireId: null
         };
@@ -488,6 +651,7 @@
             const val = snapshot.val();
             state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderFiles();
+            updateDashboard();
         });
 
         db.ref('notes').on('value', (snapshot) => {
@@ -502,6 +666,7 @@
             renderEffectifs();
             renderFormateurs();
             updateFichesSelect();
+            updateDashboard();
             if (state.selectedMilitaireId) loadFicheMilitaire();
         });
 
@@ -509,6 +674,14 @@
             const val = snapshot.val();
             state.formateurs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderFormateurs();
+            updateInstructeursSelects();
+            updateDashboard();
+        });
+
+        db.ref('sessions').on('value', (snapshot) => {
+            const val = snapshot.val();
+            state.sessions = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
+            renderSessions();
         });
 
         db.ref('logs').on('value', (snapshot) => {
@@ -613,6 +786,26 @@
                 e.target.reset();
             });
 
+            document.getElementById('formAddSession').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formation = document.getElementById('sessForm').value;
+                const dateVal = document.getElementById('sessDate').value;
+                const lieu = document.getElementById('sessLieu').value;
+                const instructeur = document.getElementById('sessInstructeur').value;
+
+                const dateObj = new Date(dateVal);
+                const dateFormatted = `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`;
+
+                const sessionObj = {
+                    id: Date.now().toString(),
+                    formation, date: dateFormatted, lieu, instructeur
+                };
+
+                db.ref('sessions').push(sessionObj);
+                addLog('CREATION_SESSION', `Session de ${formation} programmée le ${dateFormatted}`);
+                e.target.reset();
+            });
+
             document.getElementById('evalForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const candidateId = document.getElementById('evalCandidateId').value;
@@ -704,17 +897,79 @@
             db.ref(`notes/${note._fbKey}`).update({ title, content });
         }
 
-        // Suppression de fichier propre et sécurisée
+        // Dashboard Statistique Update
+        function updateDashboard() {
+            const totalCandidats = new Set(state.effectifs.map(e => e.nom)).size;
+            document.getElementById('dashTotalCandidats').textContent = totalCandidats;
+            document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
+            document.getElementById('dashTotalFiles').textContent = state.files.length;
+
+            const evals = state.effectifs.filter(e => e.eval && e.eval.evaluee);
+            const admis = evals.filter(e => e.eval.resultat === 'Admis').length;
+            const ajournes = evals.filter(e => e.eval.resultat === 'Ajourné').length;
+            const enAttente = state.effectifs.length - evals.length;
+
+            document.getElementById('dashCountAdmis').textContent = admis;
+            document.getElementById('dashCountAjournes').textContent = ajournes;
+            document.getElementById('dashCountAttente').textContent = enAttente;
+
+            const taux = evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0;
+            document.getElementById('dashTauxReussite').textContent = taux + '%';
+
+            // Dernières évals
+            const recentContainer = document.getElementById('dashRecentEvals');
+            recentContainer.innerHTML = '';
+            if (evals.length === 0) {
+                recentContainer.innerHTML = `<p class="text-slate-500 text-center py-2">Aucune évaluation validée.</p>`;
+            } else {
+                evals.slice(-4).reverse().forEach(e => {
+                    recentContainer.innerHTML += `
+                        <div class="bg-slate-800 p-2 rounded flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-white">${e.nom}</p>
+                                <p class="text-[10px] text-blue-400">${e.form}</p>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${e.eval.resultat} (${e.eval.note}/20)</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function updateInstructeursSelects() {
+            const selectSess = document.getElementById('sessInstructeur');
+            if (!selectSess) return;
+            selectSess.innerHTML = '';
+            state.formateurs.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f.nom;
+                opt.textContent = `${f.nom} (${f.role})`;
+                selectSess.appendChild(opt);
+            });
+        }
+
+        // Visionneuse Image Plein écran
+        window.openImageViewer = (src, title) => {
+            document.getElementById('viewerImage').src = src;
+            document.getElementById('viewerTitle').textContent = title;
+            document.getElementById('imageViewerModal').classList.remove('hidden');
+        };
+
+        window.closeImageViewer = () => {
+            document.getElementById('imageViewerModal').classList.add('hidden');
+        };
+
+        // Suppressions
         window.deleteFile = (fbKey) => {
             if (!fbKey) return;
             if (confirm("Voulez-vous vraiment supprimer définitivement ce fichier / cette photo ?")) {
-                db.ref('files/' + fbKey).remove()
-                    .then(() => {
-                        addLog('SUPPRESSION_FICHIER', `Fichier supprimé`);
-                    })
-                    .catch((err) => {
-                        alert("Erreur de suppression : " + err.message);
-                    });
+                db.ref('files/' + fbKey).remove().then(() => addLog('SUPPRESSION_FICHIER', `Fichier supprimé`));
+            }
+        };
+
+        window.deleteSession = (fbKey) => {
+            if (confirm("Supprimer cette session plannifiée ?")) {
+                db.ref('sessions/' + fbKey).remove().then(() => addLog('SUPPRESSION_SESSION', `Session supprimée`));
             }
         };
 
@@ -735,30 +990,19 @@
         window.deleteNote = (fbKey, title) => {
             if (confirm(`Supprimer la note "${title}" ?`)) {
                 db.ref(`notes/${fbKey}`).remove();
-                if (state.activeNoteId) {
-                    const currentNote = state.notes.find(n => n._fbKey === fbKey);
-                    if (currentNote && currentNote.id === state.activeNoteId) {
-                        state.activeNoteId = null;
-                        document.getElementById('noteTitle').value = '';
-                        document.getElementById('noteContent').value = '';
-                    }
-                }
                 addLog('SUPPRESSION_NOTE', `Note supprimée : ${title}`);
             }
         };
 
-        // Gestion Fiches Individuelles
+        // Fiches Individuelles
         function updateFichesSelect() {
             const select = document.getElementById('selectFicheMilitaire');
             const currentValue = select.value;
             select.innerHTML = `<option value="">-- Sélectionner un Militaire --</option>`;
             
-            // Regrouper par nom pour éviter les doublons
             const uniqueMilaires = [];
             state.effectifs.forEach(e => {
-                if (!uniqueMilaires.some(m => m.nom === e.nom)) {
-                    uniqueMilaires.push(e);
-                }
+                if (!uniqueMilaires.some(m => m.nom === e.nom)) uniqueMilaires.push(e);
             });
 
             uniqueMilaires.forEach(m => {
@@ -792,7 +1036,6 @@
             document.getElementById('fMat').textContent = mil.mat;
             document.getElementById('fAff').textContent = mil.aff || 'N/A';
 
-            // Formations
             const formValide = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis');
             document.getElementById('fCountValide').textContent = formValide.length;
 
@@ -813,9 +1056,7 @@
                 `;
             });
 
-            // Remarques / Notes du commandement
             document.getElementById('fNotesPerso').value = mil.notesPerso || '';
-
             container.classList.remove('hidden');
         };
 
@@ -836,6 +1077,30 @@
             alert('Notes enregistrées avec succès !');
         };
 
+        // Render Sessions
+        function renderSessions() {
+            const container = document.getElementById('sessionsList');
+            container.innerHTML = '';
+            if (state.sessions.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full py-4 text-center">Aucune session de formation plannifiée.</p>`;
+                return;
+            }
+
+            state.sessions.forEach(s => {
+                container.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700/80 p-3 rounded-lg flex justify-between items-start space-y-1">
+                        <div>
+                            <span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold border border-blue-700/50">${s.formation}</span>
+                            <p class="text-white font-bold mt-1.5"><i class="fa-solid fa-clock text-slate-400 mr-1"></i> ${s.date}</p>
+                            <p class="text-slate-300"><i class="fa-solid fa-location-dot text-red-400 mr-1"></i> ${s.lieu}</p>
+                            <p class="text-blue-400 font-semibold"><i class="fa-solid fa-user-tie mr-1"></i> Instructeur : ${s.instructeur || 'Non assigné'}</p>
+                        </div>
+                        <button onclick="deleteSession('${s._fbKey}')" class="text-red-400 hover:text-red-300 p-1" title="Annuler session"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
         // Rendu des fichiers
         function renderFiles() {
             const container = document.getElementById('fileList');
@@ -855,7 +1120,7 @@
                 
                 card.innerHTML = `
                     ${isImage ? `
-                        <div class="w-full h-24 bg-slate-900 rounded overflow-hidden flex items-center justify-center border border-slate-700/50">
+                        <div onclick="openImageViewer('${file.content}', '${fileNameSafe.replace(/'/g, "\\'")}')" class="w-full h-24 bg-slate-900 rounded overflow-hidden flex items-center justify-center border border-slate-700/50 cursor-pointer hover:opacity-80 transition" title="Cliquer pour agrandir">
                             <img src="${file.content}" alt="Aperçu" class="max-h-full max-w-full object-contain">
                         </div>
                     ` : ''}
@@ -868,7 +1133,7 @@
                             <i class="fa-solid fa-download"></i>
                         </a>
                         <button type="button" class="btn-delete-file text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-900/40 border border-red-700/50 rounded flex items-center gap-1" title="Supprimer">
-                            <i class="fa-solid fa-trash"></i> Supprimer
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 `;
@@ -917,11 +1182,19 @@
         function renderEffectifs() {
             const tbody = document.getElementById('effectifsTable');
             tbody.innerHTML = '';
-            if (state.effectifs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">Aucune demande de formation enregistrée.</td></tr>`;
+            
+            const searchVal = (document.getElementById('searchTable')?.value || '').toLowerCase();
+            const filtered = state.effectifs.filter(e => 
+                (e.nom || '').toLowerCase().includes(searchVal) ||
+                (e.grade || '').toLowerCase().includes(searchVal) ||
+                (e.mat || '').toLowerCase().includes(searchVal)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">Aucune demande de formation ne correspond à la recherche.</td></tr>`;
                 return;
             }
-            state.effectifs.forEach(item => {
+            filtered.forEach(item => {
                 const isValide = item.eval && item.eval.evaluee;
                 const escapedNom = (item.nom || '').replace(/'/g, "\\'");
                 tbody.innerHTML += `
