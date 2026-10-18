@@ -239,12 +239,10 @@
             </div>
             
             <div class="flex items-center space-x-3">
-                <!-- Bouton Paramètres ⚙️ -->
                 <button onclick="openSettingsModal()" class="p-1.5 bg-input border rounded-lg hover:opacity-80 text-xs flex items-center gap-1.5 text-slate-200" title="Paramètres d'apparence">
                     <i class="fa-solid fa-gear text-blue-400"></i> <span class="hidden sm:inline">Paramètres</span>
                 </button>
 
-                <!-- Cloche Notifications -->
                 <div class="relative">
                     <button id="btnNotifToggle" onclick="toggleNotifications()" class="relative p-1.5 bg-input border rounded-lg hover:opacity-80">
                         <i class="fa-solid fa-bell text-slate-300 text-sm"></i>
@@ -307,7 +305,7 @@
 
             <!-- Onglet Administrateur Réservé Gabin -->
             <button id="navAdminBtn" class="tab-btn hidden px-4 py-2.5 text-xs font-medium text-amber-400 flex items-center gap-2 whitespace-nowrap border-l border-amber-500/30 bg-amber-950/20" data-tab="admin">
-                <i class="fa-solid fa-user-gear"></i> Administration Accès (Gabin)
+                <i class="fa-solid fa-user-gear"></i> Administration & Hiérarchie
             </button>
 
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
@@ -323,7 +321,6 @@
             
             <!-- ONGLET TABLEAU DE BORD -->
             <section id="tab-dashboard" class="tab-content h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <!-- Filtre d'Unité Dashboard -->
                 <div class="bg-card border p-3 rounded-xl flex items-center justify-between gap-4">
                     <span class="text-xs font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-filter text-blue-400"></i> Filtrer les Statistiques par Unité :
@@ -415,7 +412,6 @@
 
             <!-- ONGLET ENA & FORMATIONS -->
             <section id="tab-ena" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <!-- Gestion des Formateurs -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-card p-4 rounded-xl border">
                         <h3 class="text-sm font-bold text-white mb-3">Ajouter un Instructeur</h3>
@@ -443,7 +439,6 @@
                     </div>
                 </div>
 
-                <!-- Suivi des Formations Demandées & Passées -->
                 <div id="pdfContentEffectifs" class="bg-card p-4 rounded-xl border space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
                         <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Demandes de Formations & Évaluations</h3>
@@ -458,7 +453,6 @@
                         </div>
                     </div>
                     
-                    <!-- Formulaire de Demande de Formation -->
                     <form id="formAddPersonnel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2 mb-3 pt-2">
                         <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
@@ -538,7 +532,6 @@
             <!-- ONGLET TIRS & INAPTITUDES (GITA) -->
             <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Formulaire Score de Tir -->
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir</h3>
                         <form id="formAddScoreTir" class="space-y-3 text-xs">
@@ -570,7 +563,6 @@
                         </div>
                     </div>
 
-                    <!-- Formulaire Inaptitude Médicale (GITA) -->
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
                         <form id="formAddInaptitude" class="space-y-3 text-xs">
@@ -625,7 +617,6 @@
                 </div>
 
                 <div id="ficheContainer" class="hidden space-y-4">
-                    <!-- Fiche Profil Top -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="bg-card p-4 rounded-xl border flex items-center space-x-4 md:col-span-2">
                             <div class="w-14 h-14 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border border-blue-500/30">
@@ -705,7 +696,6 @@
                         </div>
                     </div>
 
-                    <!-- Status Inaptitude / Médaille sur Fiche -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-card p-3 rounded-xl border space-y-1">
                             <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-award"></i> Décorations :</h4>
@@ -724,7 +714,6 @@
                         </button>
                     </div>
 
-                    <!-- Historique des formations & Notes personnelles -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-card p-4 rounded-xl border space-y-3">
                             <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-700/60 pb-2">
@@ -887,40 +876,39 @@
             <section id="tab-admin" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="bg-card p-4 rounded-xl border border-amber-500/50 bg-amber-950/10">
                     <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-user-shield text-xl"></i> Panneau d'Administration Restreint (Gabin)
+                        <i class="fa-solid fa-user-shield text-xl"></i> Administration & Gestion de la Hiérarchie
                     </h2>
-                    <p class="text-xs text-slate-400">Espace haute sécurité réservé exclusivement à <span class="text-amber-300 font-mono font-bold">gabinpompier811@gmail.com</span>. Vous pouvez autoriser de nouveaux utilisateurs et attribuer leurs rôles.</p>
+                    <p class="text-xs text-slate-400">Espace de contrôle haute sécurité réservé exclusivement à <span class="text-amber-300 font-mono font-bold">gabinpompier811@gmail.com</span>.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Formulaire d'Autorisation de Membre -->
                     <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Autoriser un Nouveau Membre</h3>
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Affecter un Rôle & Accès</h3>
                         <form id="formAddAllowedUser" class="space-y-3 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">Email du membre :</label>
                                 <input type="email" id="adminUserEmail" placeholder="nom@gmail.com" required class="w-full bg-input border rounded p-2">
                             </div>
                             <div>
-                                <label class="block text-slate-400 mb-1">Nom / Indicatif :</label>
+                                <label class="block text-slate-400 mb-1">Nom / Grade / Indicatif :</label>
                                 <input type="text" id="adminUserNom" placeholder="ex: CPT Thomas" required class="w-full bg-input border rounded p-2">
                             </div>
                             <div>
-                                <label class="block text-slate-400 mb-1">Rôle d'Accès Attribué :</label>
-                                <select id="adminUserRole" class="w-full bg-input border rounded p-2 font-bold text-amber-400">
-                                    <option value="Administrateur">👑 Administrateur (Tous droits)</option>
-                                    <option value="Directeur ENA">🎖️ Directeur ENA</option>
-                                    <option value="Instructeur Référent">🎓 Instructeur Référent</option>
-                                    <option value="Opérateur FS">🪖 Opérateur FS (Lecture / Note)</option>
+                                <label class="block text-slate-400 mb-1">Hiérarchie du Rôle :</label>
+                                <select id="adminUserRole" class="w-full bg-input border rounded p-2 font-bold text-amber-300">
+                                    <option value="Co-Fondateur">👑 Co-Fondateur (Tous les droits)</option>
+                                    <option value="Administrateur">⭐ Administrateur (Tous droits sauf exclure les Fondateurs)</option>
+                                    <option value="Modérateur">🛡️ Modérateur (Gestion sans exclusion/ban)</option>
+                                    <option value="Personnel ENA">🎓 Personnel ENA (Gestion fiches, cours, diplômes)</option>
+                                    <option value="Personnel Opérateur">🪖 Personnel Opérateur (Lecture & Notes uniquement)</option>
                                 </select>
                             </div>
-                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Ajouter Membre Autorisé</button>
+                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Valider la Nomination</button>
                         </form>
                     </div>
 
-                    <!-- Registre des Membres Autorisés -->
                     <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Liste des Membres Autorisés & Rôles</h3>
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres Enregistrés & Permissions</h3>
                         <div id="adminUsersList" class="space-y-2 text-xs"></div>
                     </div>
                 </div>
@@ -936,7 +924,6 @@
                 </div>
 
                 <div class="space-y-3 max-w-4xl mx-auto">
-                    <!-- VERSION 6.0 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2 border-amber-500/40">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
                             <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-crown mr-1"></i> Version 6.0 - Fiche Médicale, Paramètres Couleurs & Onglet Administration Gabin</span>
@@ -949,7 +936,6 @@
                         </ul>
                     </div>
 
-                    <!-- VERSION 5.1 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
                             <span class="font-bold text-xs text-cyan-400"><i class="fa-solid fa-shield-halved mr-1"></i> Version 5.1 - Unités Forces Spéciales Exclusives</span>
@@ -960,7 +946,6 @@
                         </ul>
                     </div>
 
-                    <!-- VERSION 5.0 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
                             <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-crosshair mr-1"></i> Version 5.0 - Unités, Carnet de Tirs, GITA, Notifications & Thèmes</span>
@@ -1038,7 +1023,6 @@
             selectedMilitaireId: null
         };
 
-        // Modals & Paramètres Couleurs
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -1058,7 +1042,6 @@
         changeAccent(savedAccent);
         document.getElementById('themeSelector').value = savedTheme;
 
-        // Synchronisation Realtime Database
         db.ref('files').on('value', (snapshot) => {
             const val = snapshot.val();
             state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
@@ -1234,7 +1217,6 @@
             app.classList.add('flex');
             document.getElementById('userInfo').textContent = state.user.email;
 
-            // Débloquer l'onglet Administration exclusivement pour gabinpompier811@gmail.com
             const adminBtn = document.getElementById('navAdminBtn');
             if (state.user.email.toLowerCase() === 'gabinpompier811@gmail.com') {
                 adminBtn.classList.remove('hidden');
@@ -1454,7 +1436,6 @@
             db.ref(`notes/${note._fbKey}`).update({ title, content });
         }
 
-        // Dashboard Statistique Update
         function updateDashboard() {
             const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
             
@@ -1466,7 +1447,6 @@
             const totalCandidats = new Set(filteredEff.map(e => e.nom)).size;
             document.getElementById('dashTotalCandidats').textContent = totalCandidats;
             document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
-            document.getElementById('dashTotalFiles').textContent = state.files.length;
             document.getElementById('dashTotalInaptes').textContent = state.inaptitudes.length;
 
             const evals = filteredEff.filter(e => e.eval && e.eval.evaluee);
@@ -1500,7 +1480,6 @@
             }
         }
 
-        // Render Unités Exclusives
         function renderUnites() {
             const container = document.getElementById('unitesListGrid');
             if(!container) return;
@@ -1548,48 +1527,61 @@
             loadFicheMilitaire();
         };
 
-        // Render Admin Membres Autorisés
         function renderAdminUsers() {
             const container = document.getElementById('adminUsersList');
             if(!container) return;
             container.innerHTML = '';
             
-            // Toujours afficher Gabin en Administrateur Suprême
             container.innerHTML += `
-                <div class="bg-amber-950/30 border border-amber-500/50 p-3 rounded-lg flex justify-between items-center">
+                <div class="bg-amber-950/40 border border-amber-500/60 p-3 rounded-lg flex justify-between items-center">
                     <div>
                         <p class="font-bold text-amber-300">gabinpompier811@gmail.com (Gabin)</p>
-                        <p class="text-[10px] text-slate-400">Fondateur & Administrateur Suprême</p>
+                        <p class="text-[10px] text-slate-400">Fondateur Principal - Pleins Pouvoirs Absolus</p>
                     </div>
-                    <span class="px-2 py-0.5 bg-amber-600 text-white rounded text-[10px] font-bold">👑 Admin Suprême</span>
+                    <span class="px-2.5 py-1 bg-amber-500 text-black rounded text-[10px] font-extrabold uppercase">👑 Fondateur</span>
                 </div>
             `;
 
             if(state.allowedUsers.length === 0) {
-                container.innerHTML += `<p class="text-slate-500 italic py-2">Aucun autre membre supplémentaire autorisé pour le moment.</p>`;
+                container.innerHTML += `<p class="text-slate-500 italic py-2">Aucun autre membre affecté dans la hiérarchie.</p>`;
                 return;
             }
 
             state.allowedUsers.forEach(u => {
+                let badgeColor = "bg-blue-600 text-white";
+                if(u.role === "Co-Fondateur") badgeColor = "bg-purple-600 text-white";
+                if(u.role === "Administrateur") badgeColor = "bg-red-600 text-white";
+                if(u.role === "Modérateur") badgeColor = "bg-emerald-600 text-white";
+                if(u.role === "Personnel ENA") badgeColor = "bg-cyan-600 text-white";
+                if(u.role === "Personnel Opérateur") badgeColor = "bg-slate-700 text-slate-200";
+
                 container.innerHTML += `
                     <div class="bg-input border p-2.5 rounded-lg flex justify-between items-center">
                         <div>
-                            <p class="font-bold text-white">${u.nom} (${u.email})</p>
-                            <p class="text-[10px] text-blue-400">Rôle : ${u.role}</p>
+                            <p class="font-bold text-white">${u.nom} <span class="text-slate-400 font-normal">(${u.email})</span></p>
+                            <p class="text-[10px] text-slate-400">Niveau : ${u.role}</p>
                         </div>
-                        <button onclick="deleteAllowedUser('${u._fbKey}')" class="text-red-400 hover:text-red-300 text-xs p-1" title="Révoquer accès"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${u.role}</span>
+                            <button onclick="deleteAllowedUser('${u._fbKey}', '${u.role}')" class="text-red-400 hover:text-red-300 text-xs p-1" title="Révoquer / Exclure"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
+                        </div>
                     </div>
                 `;
             });
         }
 
-        window.deleteAllowedUser = (fbKey) => {
-            if(confirm("Révoquer l'accès pour ce membre ?")) {
-                db.ref('allowedUsers/' + fbKey).remove().then(() => addLog('ADMIN_MEMBRE_REVOQUE', 'Accès membre révoqué'));
+        window.deleteAllowedUser = (fbKey, role) => {
+            if (role === "Fondateur" || role === "Co-Fondateur") {
+                if (state.user.email.toLowerCase() !== 'gabinpompier811@gmail.com') {
+                    alert("⚠️ Seul le Fondateur suprême peut exclure ou révoquer un Fondateur / Co-Fondateur !");
+                    return;
+                }
+            }
+            if(confirm("Révoquer les accès de cet utilisateur ?")) {
+                db.ref('allowedUsers/' + fbKey).remove().then(() => addLog('ADMIN_MEMBRE_REVOQUE', 'Membre révoqué'));
             }
         };
 
-        // Render Tirs & Inaptitudes
         function renderTirs() {
             const container = document.getElementById('tirsHistoryList');
             if(!container) return;
@@ -1639,7 +1631,6 @@
             }
         };
 
-        // Notifications System
         function toggleNotifications() {
             document.getElementById('notifDropdown').classList.toggle('hidden');
         }
@@ -1735,7 +1726,6 @@
             document.getElementById('imageViewerModal').classList.add('hidden');
         };
 
-        // Suppressions
         window.deleteFile = (fbKey) => {
             if (!fbKey) return;
             if (confirm("Voulez-vous vraiment supprimer définitivement ce fichier / cette photo ?")) {
@@ -1776,7 +1766,6 @@
             }
         };
 
-        // Fiches Individuelles & Médicales
         function updateFichesSelect() {
             const select = document.getElementById('selectFicheMilitaire');
             const currentValue = select.value;
@@ -1821,14 +1810,12 @@
             const formValide = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis');
             document.getElementById('fCountValide').textContent = formValide.length;
 
-            // Données Médicales
             document.getElementById('fSang').value = mil.sang || 'Non renseigné';
             document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
             document.getElementById('fDateVMA').value = mil.dateVMA || '';
             document.getElementById('fAllergies').value = mil.allergies || '';
             document.getElementById('fVaccins').value = mil.vaccins || '';
 
-            // Décorations obtenues
             const decos = state.decorations.filter(d => d.nom === nom);
             const decoContainer = document.getElementById('fDecorationsList');
             decoContainer.innerHTML = '';
@@ -1844,7 +1831,6 @@
                 });
             }
 
-            // Inaptitudes sur Fiche
             const inaptes = state.inaptitudes.filter(i => i.nom === nom);
             const inapteContainer = document.getElementById('fInaptitudesList');
             if(inaptes.length === 0) {
@@ -1914,7 +1900,6 @@
             alert('Notes enregistrées avec succès !');
         };
 
-        // Render Décorations
         function renderDecorations() {
             const container = document.getElementById('decorationsRegistry');
             container.innerHTML = '';
@@ -1941,7 +1926,6 @@
             });
         }
 
-        // Render Sessions
         function renderSessions() {
             const container = document.getElementById('sessionsList');
             container.innerHTML = '';
@@ -1965,7 +1949,6 @@
             });
         }
 
-        // Rendu des fichiers
         function renderFiles() {
             const container = document.getElementById('fileList');
             container.innerHTML = '';
