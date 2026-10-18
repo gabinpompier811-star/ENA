@@ -549,41 +549,86 @@
                     </div>
                 </div>
             </section>
-
-            <!-- ONGLET CHANGELOG / MISES À JOUR -->
+            
+            <!-- ONGLET CHANGELOG / MISES À JOUR COMPLET -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique des Mises à Jour & Améliorations
+                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique Complet des Mises à Jour & Évolutions ENA
                     </h2>
-                    <p class="text-xs text-slate-400">Journal des évolutions techniques et fonctionnelles du portail ENA</p>
+                    <p class="text-xs text-slate-400">Suivi chronologique de tous les ajouts, modifications et correctifs du portail</p>
                 </div>
-
-                <div class="space-y-3 max-w-4xl mx-auto">
+            
+                <div class="space-y-4 max-w-4xl mx-auto">
+            
+                    <!-- VERSION 3.0 -->
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-blue-400">Version 3.0 - Dashboard, Planning & Référentiel ENA</span>
+                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-rocket mr-1"></i> Version 3.0 - Grand Tableau de Bord, Planning & Référentiel ENA</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li>Création du **Tableau de bord statistique** (taux de réussite, total admis/échecs).</li>
-                            <li>Module de **Planning & Agenda des sessions** de formations.</li>
-                            <li>Ajout du **Référentiel des brevets ENA** et des fiches pédagogiques.</li>
-                            <li>Intégration d'une **visionneuse modale d'images grand écran**.</li>
-                            <li>Fonction d'**export PDF personnalisé** pour les fiches individuelles.</li>
+                            <li><strong>Tableau de Bord Statistiques :</strong> Indicateurs clés en temps réel (taux de réussite global, total candidats, échecs/reussites, instructeurs actifs).</li>
+                            <li><strong>Onglet Planning & Sessions :</strong> Module de programmation d'examens et convocations avec date, heure, lieu/stand et instructeur référent.</li>
+                            <li><strong>Onglet Référentiel des Formations :</strong> Guide pédagogique complet répertoriant tous les brevets de l'ENA (FGI, CAT1, CME, BSTAT, DEM...).</li>
+                            <li><strong>Visionneuse d'Images Modale :</strong> Agrandissement des captures d'écran et photos en plein écran d'un simple clic sans téléchargement obligatoire.</li>
+                            <li><strong>Export PDF des Fiches Individuelles :</strong> Possibilité de télécharger la fiche matricule complète d'un soldat en document PDF.</li>
+                            <li><strong>Moteur de Recherche Dynamique :</strong> Recherche instantanée dans le tableau des demandes par nom, grade ou matricule.</li>
                         </ul>
                     </div>
-
+            
+                    <!-- VERSION 2.4 -->
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-emerald-400">Version 2.4 - Fiches Individuelles & Rôles Instructeurs</span>
+                            <span class="font-bold text-xs text-purple-400"><i class="fa-solid fa-user-gear mr-1"></i> Version 2.4 - Module Suivi Individuel & Refonte Rôles Instructeurs</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li>Création du module Fiches Individuelles & Suivi Personnel.</li>
-                            <li>Ajustement du formulaire instructeur avec la liste officielle des rôles ENA.</li>
+                            <li><strong>Onglet Fiches Individuelles :</strong> Création du dossier militaire personnalisé pour chaque soldat avec historique des diplômes et bloc d'appréciations du commandement.</li>
+                            <li><strong>Formulaire Instructeur Révisé :</strong> Suppression du champ *Spécialité* et intégration du menu déroulant fixe avec les rôles officiels ENA (Directeur, Chef des Instructeurs, Formateur Principal...).</li>
                         </ul>
                     </div>
+            
+                    <!-- VERSION 2.3 -->
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-wrench mr-1"></i> Version 2.3 - Correction de la Suppression d'Images</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Fix Suppression d'Images :</strong> Correction du bug bloquant la suppression des fichiers contenant des apostrophes ou espaces (ex: <i>Capture d'écran.png</i>).</li>
+                            <li>Attachement direct d'un écouteur d'événement JS (`addEventListener`) sur les boutons d'action des cartes fichiers.</li>
+                        </ul>
+                    </div>
+            
+                    <!-- VERSION 2.0 -->
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-database mr-1"></i> Version 2.0 - Migration Cloud Firebase Realtime Database</span>
+                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Synchronisation en Temps Réel :</strong> Passage du stockage local à une base de données Cloud Google Firebase.</li>
+                            <li><strong>Zéro Donnée Fictive par Défaut :</strong> Démarrage propre du portail sans données pré-remplies.</li>
+                            <li><strong>Multi-utilisateurs :</strong> Partage instantané des ajouts/modifications entre tous les membres connectés.</li>
+                            <li><strong>Boutons de Suppression Généraux :</strong> Ajout de boutons de suppression sur l'ensemble des éléments (Formateurs, Notes, Candidats, Fichiers).</li>
+                        </ul>
+                    </div>
+            
+                    <!-- VERSION 1.0 -->
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-flag mr-1"></i> Version 1.0 - Lancement du Portail ENA Workspace</span>
+                            <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li>Création de l'interface principale ENA (Interface sombre tactique avec Tailwind CSS).</li>
+                            <li>Gestion des demandes de formations et passage des fiches d'évaluations.</li>
+                            <li>Prise de notes sauvegardées et journal des logs d'activité.</li>
+                            <li>Module d'export de tableaux au format PDF.</li>
+                        </ul>
+                    </div>
+            
                 </div>
             </section>
 
