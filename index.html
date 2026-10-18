@@ -358,7 +358,7 @@
             logs: []
         };
 
-        // Chargement en temps réel sans données injectées par défaut
+        // Chargement en temps réel depuis Firebase sans données fictives par défaut
         db.ref('files').on('value', (snapshot) => {
             const val = snapshot.val();
             state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
@@ -578,7 +578,19 @@
             db.ref(`notes/${note._fbKey}`).update({ title, content });
         }
 
-        // Fonctions de suppression Firebase
+        // Fonctions de suppression Firebase directes
+        window.deleteFile = (fbKey, name) => {
+            if (confirm(`Supprimer définitivement le fichier/l'image "${name}" ?`)) {
+                db.ref('files').child(fbKey).remove()
+                    .then(() => {
+                        addLog('SUPPRESSION_FICHIER', `Fichier supprimé : ${name}`);
+                    })
+                    .catch((error) => {
+                        alert("Erreur lors de la suppression : " + error.message);
+                    });
+            }
+        };
+
         window.deleteFormateur = (fbKey, name) => {
             if (confirm(`Supprimer le formateur ${name} ?`)) {
                 db.ref(`formateurs/${fbKey}`).remove();
@@ -608,13 +620,6 @@
             }
         };
 
-        window.deleteFile = (fbKey, name) => {
-            if (confirm(`Supprimer le fichier ${name} ?`)) {
-                db.ref(`files/${fbKey}`).remove();
-                addLog('SUPPRESSION_FICHIER', `Fichier supprimé : ${name}`);
-            }
-        };
-
         // Rendu visuel des documents (Aperçu image inclus)
         function renderFiles() {
             const container = document.getElementById('fileList');
@@ -625,6 +630,7 @@
             }
             state.files.forEach(file => {
                 const isImage = file.type && file.type.startsWith('image/');
+                const escapedName = file.name ? file.name.replace(/'/g, "\\'") : 'fichier';
                 container.innerHTML += `
                     <div class="bg-slate-800 border border-slate-700 rounded-lg p-3 flex flex-col justify-between space-y-2">
                         ${isImage ? `
@@ -632,11 +638,17 @@
                                 <img src="${file.content}" alt="${file.name}" class="max-h-full max-w-full object-contain">
                             </div>
                         ` : ''}
-                        <div class="truncate text-xs font-bold text-slate-200"><i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'} mr-1"></i> ${file.name}</div>
-                        <div class="text-[10px] text-slate-400">${file.size}</div>
-                        <div class="flex justify-between items-center pt-1 border-t border-slate-700/50">
-                            <a href="${file.content}" download="${file.name}" class="text-blue-400 hover:text-white text-xs" title="Télécharger"><i class="fa-solid fa-download"></i></a>
-                            <button onclick="deleteFile('${file._fbKey}', '${file.name}')" class="text-red-400 hover:text-red-300 text-xs" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                        <div class="truncate text-xs font-bold text-slate-200" title="${file.name}">
+                            <i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'} mr-1"></i> ${file.name}
+                        </div>
+                        <div class="text-[10px] text-slate-400">${file.size || ''}</div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
+                            <a href="${file.content}" download="${file.name}" class="text-blue-400 hover:text-white text-xs px-2 py-1 bg-slate-900/60 rounded" title="Télécharger">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
+                            <button onclick="deleteFile('${file._fbKey}', '${escapedName}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-900/40 border border-red-700/50 rounded" title="Supprimer">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -652,10 +664,11 @@
             }
             state.notes.forEach(note => {
                 const isActive = note.id === state.activeNoteId;
+                const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\'");
                 container.innerHTML += `
                     <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-slate-800/60 hover:bg-slate-800 text-slate-300'}">
                         <span class="truncate">${note.title || 'Sans titre'}</span>
-                        <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${note.title || 'Sans titre'}')" class="text-red-400 hover:text-red-300 ml-2" title="Supprimer"><i class="fa-solid fa-trash text-[11px]"></i></button>
+                        <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${escapedTitle}')" class="text-red-400 hover:text-red-300 ml-2" title="Supprimer"><i class="fa-solid fa-trash text-[11px]"></i></button>
                     </div>
                 `;
             });
@@ -683,6 +696,7 @@
             }
             state.effectifs.forEach(item => {
                 const isValide = item.eval && item.eval.evaluee;
+                const escapedNom = (item.nom || '').replace(/'/g, "\\'");
                 tbody.innerHTML += `
                     <tr class="${isValide ? 'row-valide' : 'hover:bg-slate-800/40'} transition">
                         <td class="p-2.5 font-bold text-white">${item.nom}</td>
@@ -695,7 +709,7 @@
                         </td>
                         <td class="p-2.5 text-right space-x-1">
                             <button onclick="openEvalModal('${item.id}')" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[10px]">Évaluer</button>
-                            <button onclick="deleteEffectif('${item._fbKey}', '${item.nom}')" class="px-2 py-1 bg-red-900/40 hover:bg-red-800 border border-red-700/50 text-red-300 rounded text-[10px]" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="deleteEffectif('${item._fbKey}', '${escapedNom}')" class="px-2 py-1 bg-red-900/40 hover:bg-red-800 border border-red-700/50 text-red-300 rounded text-[10px]" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -711,6 +725,7 @@
             }
             state.formateurs.forEach(f => {
                 const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom);
+                const escapedNom = (f.nom || '').replace(/'/g, "\\'");
                 container.innerHTML += `
                     <div class="bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 p-3 rounded-lg transition flex items-center justify-between">
                         <div onclick="openFmtStatsModal('${f.id}')" class="cursor-pointer flex-1">
@@ -719,7 +734,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] px-2 py-1 bg-blue-900/40 border border-blue-700/50 text-blue-300 rounded font-semibold">${formationsFaites.length} formation(s)</span>
-                            <button onclick="deleteFormateur('${f._fbKey}', '${f.nom}')" class="text-red-400 hover:text-red-300 p-1 text-xs" title="Supprimer le formateur"><i class="fa-solid fa-user-minus"></i></button>
+                            <button onclick="deleteFormateur('${f._fbKey}', '${escapedNom}')" class="text-red-400 hover:text-red-300 p-1 text-xs" title="Supprimer le formateur"><i class="fa-solid fa-user-minus"></i></button>
                         </div>
                     </div>
                 `;
