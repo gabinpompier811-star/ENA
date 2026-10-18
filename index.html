@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="slate">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,18 +14,36 @@
     <!-- Librairie Export PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #60a5fa; background-color: #1e293b; }
+        /* Thème Night Slate (Défaut) */
+        html[data-theme="slate"] body { background-color: #020617; color: #f1f5f9; }
+        html[data-theme="slate"] .bg-card { background-color: #0f172a; border-color: #1e293b; }
+        html[data-theme="slate"] .bg-header { background-color: #0f172a; border-color: #1e293b; }
+        html[data-theme="slate"] .bg-input { background-color: #1e293b; border-color: #334155; color: #fff; }
+
+        /* Thème Desert Camo */
+        html[data-theme="desert"] body { background-color: #1c1917; color: #f5f5f4; }
+        html[data-theme="desert"] .bg-card { background-color: #292524; border-color: #44403c; }
+        html[data-theme="desert"] .bg-header { background-color: #292524; border-color: #44403c; }
+        html[data-theme="desert"] .bg-input { background-color: #44403c; border-color: #78716c; color: #fff; }
+
+        /* Thème OLED Black */
+        html[data-theme="oled"] body { background-color: #000000; color: #ffffff; }
+        html[data-theme="oled"] .bg-card { background-color: #0a0a0a; border-color: #262626; }
+        html[data-theme="oled"] .bg-header { background-color: #000000; border-color: #262626; }
+        html[data-theme="oled"] .bg-input { background-color: #171717; border-color: #404040; color: #fff; }
+
+        .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #60a5fa; background-color: rgba(30, 41, 59, 0.6); }
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
         .row-valide { background-color: rgba(22, 101, 52, 0.35) !important; border-left: 4px solid #22c55e !important; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
     <!-- Modal Authentification -->
     <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 w-full max-w-md shadow-2xl">
+        <div class="bg-card border rounded-xl p-6 w-full max-w-md shadow-2xl">
             <div class="text-center mb-6">
                 <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-600/20 text-blue-500 rounded-lg mb-2">
                     <i class="fa-solid fa-shield-halved text-2xl"></i>
@@ -37,11 +55,11 @@
             <form id="authForm" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Identifiant / Email</label>
-                    <input type="text" id="authEmail" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <input type="text" id="authEmail" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
-                    <input type="password" id="authPassword" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <input type="password" id="authPassword" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
                 </div>
                 <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg transition">
                     Se connecter / S'inscrire
@@ -63,7 +81,7 @@
 
     <!-- Modal Fiche d'Évaluation -->
     <div id="evalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+        <div class="bg-card border rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 id="evalModalTitle" class="text-base font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-clipboard-check text-blue-500"></i> Fiche d'Évaluation
@@ -77,32 +95,32 @@
                 <div class="grid grid-cols-2 gap-3 text-xs">
                     <div>
                         <label class="block text-slate-400 mb-1">Candidat</label>
-                        <input type="text" id="evalCandidateName" readonly class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-slate-300 font-bold">
+                        <input type="text" id="evalCandidateName" readonly class="w-full bg-input rounded p-2 text-slate-300 font-bold">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">Formation Evaluée</label>
-                        <input type="text" id="evalFormName" readonly class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-blue-400 font-bold">
+                        <input type="text" id="evalFormName" readonly class="w-full bg-input rounded p-2 text-blue-400 font-bold">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 text-xs">
                     <div>
                         <label class="block text-slate-400 mb-1">Résultat Exam</label>
-                        <select id="evalResultat" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                        <select id="evalResultat" class="w-full bg-input rounded p-2">
                             <option value="Admis">Admis</option>
                             <option value="Ajourné">Ajourné</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">Note / 20</label>
-                        <input type="number" id="evalNote" min="0" max="20" step="0.5" placeholder="15" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                        <input type="number" id="evalNote" min="0" max="20" step="0.5" placeholder="15" required class="w-full bg-input rounded p-2">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 text-xs">
                     <div>
                         <label class="block text-slate-400 mb-1">Mention</label>
-                        <select id="evalMention" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                        <select id="evalMention" class="w-full bg-input rounded p-2">
                             <option value="Pas de mention">Pas de mention</option>
                             <option value="Assez Bien">Assez Bien</option>
                             <option value="Bien">Bien</option>
@@ -112,17 +130,17 @@
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">Responsable Formateur</label>
-                        <select id="evalFormateur" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></select>
+                        <select id="evalFormateur" class="w-full bg-input rounded p-2"></select>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Commentaires & Remarques</label>
-                    <textarea id="evalComments" rows="3" placeholder="Avis de l'instructeur..." class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-xs text-white resize-none"></textarea>
+                    <textarea id="evalComments" rows="3" placeholder="Avis de l'instructeur..." class="w-full bg-input rounded p-2 text-xs resize-none"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-                    <button type="button" onclick="closeEvalModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-xs rounded hover:bg-slate-700">Annuler</button>
+                    <button type="button" onclick="closeEvalModal()" class="px-3 py-1.5 bg-input text-slate-300 text-xs rounded hover:opacity-80">Annuler</button>
                     <button type="submit" class="px-4 py-1.5 bg-green-600 text-white text-xs font-bold rounded hover:bg-green-500">Valider & Enregistrer</button>
                 </div>
             </form>
@@ -145,7 +163,7 @@
                 <p class="text-sm text-slate-300">Le Directeur de l'École Nationale de l'Armée atteste que :</p>
                 <p id="dipNomMilitaire" class="text-3xl font-black text-white uppercase tracking-wider underline decoration-amber-500"></p>
                 <p class="text-xs text-slate-400">Matricule : <span id="dipMatricule" class="font-mono text-amber-300"></span></p>
-                <p class="text-sm text-slate-200">A satisfait avec succès aux épreuves théoriques et pratiques du brevet :</p>
+                <p class="text-sm text-slate-200">A satisfied aux épreuves théoriques et pratiques du brevet :</p>
                 <p id="dipFormation" class="text-xl font-bold text-blue-400 bg-blue-900/30 px-4 py-1.5 rounded-lg border border-blue-500/50 inline-block"></p>
             </div>
 
@@ -167,15 +185,41 @@
     <!-- Application Principale -->
     <div id="app" class="hidden flex-col h-screen">
         <!-- Navbar Top -->
-        <header class="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between">
+        <header class="bg-header border-b px-4 py-2.5 flex items-center justify-between relative z-20">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-shield-halved text-blue-500 text-xl"></i>
-                <span class="font-bold text-slate-100 text-sm tracking-wide">ENA WORKSPACE</span>
+                <span class="font-bold text-sm tracking-wide">ENA WORKSPACE</span>
             </div>
-            <div class="flex items-center space-x-4">
+            
+            <div class="flex items-center space-x-3">
+                <!-- Sélecteur de Thème -->
+                <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-input border rounded px-2 py-1 text-xs focus:outline-none">
+                    <option value="slate">🌙 Night Slate</option>
+                    <option value="desert">🏜️ Desert Camo</option>
+                    <option value="oled">🖤 OLED Black</option>
+                </select>
+
+                <!-- Cloche Notifications -->
+                <div class="relative">
+                    <button id="btnNotifToggle" onclick="toggleNotifications()" class="relative p-1.5 bg-input border rounded-lg hover:opacity-80">
+                        <i class="fa-solid fa-bell text-slate-300 text-sm"></i>
+                        <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                    </button>
+                    <!-- Dropdown Notifications -->
+                    <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-card border rounded-xl shadow-2xl p-3 z-50 text-xs space-y-2 max-h-80 overflow-y-auto custom-scroll">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-white"><i class="fa-solid fa-bell text-blue-400 mr-1"></i> Notifications Interne</span>
+                            <button onclick="clearNotifications()" class="text-[10px] text-slate-400 hover:text-red-400">Effacer</button>
+                        </div>
+                        <div id="notifList" class="space-y-1.5">
+                            <p class="text-slate-500 text-center py-2">Aucune alerte récente.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <span id="connection-status" class="px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]">Connexion...</span>
-                <span id="userInfo" class="text-xs text-slate-400"></span>
-                <button id="btnSaveGlobal" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5">
+                <span id="userInfo" class="text-xs text-slate-400 hidden sm:inline"></span>
+                <button id="btnSaveGlobal" class="text-xs bg-input border px-3 py-1.5 rounded-md flex items-center gap-1.5 hover:opacity-80">
                     <i class="fa-solid fa-download"></i> Backup (JSON)
                 </button>
                 <button id="btnLogout" class="text-xs bg-red-900/30 text-red-400 hover:bg-red-900/50 border border-red-800/40 px-3 py-1.5 rounded-md">
@@ -185,7 +229,7 @@
         </header>
 
         <!-- Navigation par Onglets -->
-        <nav class="bg-slate-900/50 border-b border-slate-800 flex items-center px-2 overflow-x-auto custom-scroll">
+        <nav class="bg-header border-b flex items-center px-2 overflow-x-auto custom-scroll">
             <button class="tab-btn active px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="dashboard">
                 <i class="fa-solid fa-chart-pie"></i> Tableau de Bord
             </button>
@@ -195,26 +239,32 @@
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="ena">
                 <i class="fa-solid fa-graduation-cap"></i> ENA & Formations
             </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="unites">
+                <i class="fa-solid fa-users-viewfinder"></i> Unités & Sections
+            </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="tirs">
+                <i class="fa-solid fa-crosshair"></i> Tirs & Inaptitudes
+            </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
-                <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles & Suivi
+                <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="planning">
                 <i class="fa-solid fa-calendar-days"></i> Planning & Sessions
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="decorations">
-                <i class="fa-solid fa-medal"></i> Décorations & Citations
+                <i class="fa-solid fa-medal"></i> Décorations
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="programmes">
-                <i class="fa-solid fa-book-bookmark"></i> Référentiel Formations
+                <i class="fa-solid fa-book-bookmark"></i> Référentiel
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
-                <i class="fa-solid fa-note-sticky"></i> Notes & Bloc-notes
+                <i class="fa-solid fa-note-sticky"></i> Notes
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
                 <i class="fa-solid fa-code-commit"></i> Mises à jour
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="logs">
-                <i class="fa-solid fa-list-check"></i> Journal des Logs
+                <i class="fa-solid fa-list-check"></i> Logs
             </button>
         </nav>
 
@@ -223,8 +273,23 @@
             
             <!-- ONGLET TABLEAU DE BORD -->
             <section id="tab-dashboard" class="tab-content h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <!-- Filtre d'Unité Dashboard -->
+                <div class="bg-card border p-3 rounded-xl flex items-center justify-between gap-4">
+                    <span class="text-xs font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-blue-400"></i> Filtrer les Statistiques par Unité :
+                    </span>
+                    <select id="dashUniteFilter" onchange="updateDashboard()" class="bg-input border rounded px-3 py-1.5 text-xs focus:outline-none">
+                        <option value="TOUTES">Toutes les Unités</option>
+                        <option value="1ère Compagnie">1ère Compagnie</option>
+                        <option value="2ème Compagnie">2ème Compagnie</option>
+                        <option value="Section Appui">Section Appui</option>
+                        <option value="Commando">Commando / FS</option>
+                        <option value="État-Major">État-Major</option>
+                    </select>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                    <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-blue-600/20 text-blue-400 rounded-lg"><i class="fa-solid fa-users text-xl"></i></div>
                         <div>
                             <span class="text-[10px] text-slate-400 uppercase font-bold">Total Candidats</span>
@@ -232,7 +297,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                    <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-emerald-600/20 text-emerald-400 rounded-lg"><i class="fa-solid fa-circle-check text-xl"></i></div>
                         <div>
                             <span class="text-[10px] text-slate-400 uppercase font-bold">Taux de Réussite</span>
@@ -240,7 +305,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
+                    <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-amber-600/20 text-amber-400 rounded-lg"><i class="fa-solid fa-user-graduate text-xl"></i></div>
                         <div>
                             <span class="text-[10px] text-slate-400 uppercase font-bold">Total Instructeurs</span>
@@ -248,33 +313,33 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3">
-                        <div class="p-3 bg-purple-600/20 text-purple-400 rounded-lg"><i class="fa-solid fa-folder text-xl"></i></div>
+                    <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
+                        <div class="p-3 bg-red-600/20 text-red-400 rounded-lg"><i class="fa-solid fa-user-slash text-xl"></i></div>
                         <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold">Fichiers Stockés</span>
-                            <p id="dashTotalFiles" class="text-2xl font-black text-purple-400">0</p>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Inaptitudes Medicales</span>
+                            <p id="dashTotalInaptes" class="text-2xl font-black text-red-400">0</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
-                        <h3 class="text-xs font-bold text-white border-b border-slate-800 pb-2"><i class="fa-solid fa-clock-rotate-left text-blue-400"></i> Dernières Formations Évaluées</h3>
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-xs font-bold text-white border-b border-slate-700/60 pb-2"><i class="fa-solid fa-clock-rotate-left text-blue-400"></i> Dernières Formations Évaluées</h3>
                         <div id="dashRecentEvals" class="space-y-2 max-h-56 overflow-y-auto custom-scroll text-xs"></div>
                     </div>
 
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
-                        <h3 class="text-xs font-bold text-white border-b border-slate-800 pb-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Résumé de l'Aptitude Opérationnelle</h3>
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-xs font-bold text-white border-b border-slate-700/60 pb-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Résumé de l'Aptitude Opérationnelle</h3>
                         <div class="space-y-2 text-xs">
-                            <div class="flex justify-between p-2 bg-slate-800/60 rounded border border-slate-700/50">
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50">
                                 <span>Formations Validées (Admis)</span>
                                 <span id="dashCountAdmis" class="font-bold text-green-400">0</span>
                             </div>
-                            <div class="flex justify-between p-2 bg-slate-800/60 rounded border border-slate-700/50">
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50">
                                 <span>Formations Ajournées (Échecs)</span>
                                 <span id="dashCountAjournes" class="font-bold text-red-400">0</span>
                             </div>
-                            <div class="flex justify-between p-2 bg-slate-800/60 rounded border border-slate-700/50">
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50">
                                 <span>Demandes en Attente d'Examen</span>
                                 <span id="dashCountAttente" class="font-bold text-amber-400">0</span>
                             </div>
@@ -285,7 +350,7 @@
 
             <!-- ONGLET DOCUMENTS -->
             <section id="tab-docs" class="tab-content hidden h-full p-4 flex flex-col space-y-4">
-                <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
+                <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
                     <div class="flex items-center space-x-2">
                         <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
                             <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
@@ -295,20 +360,19 @@
                     <span class="text-xs text-slate-500">Sauvegarde synchro Firebase active</span>
                 </div>
 
-                <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-slate-900/30 rounded-xl border border-slate-800/50"></div>
+                <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-card/30 rounded-xl border"></div>
             </section>
 
             <!-- ONGLET ENA & FORMATIONS -->
             <section id="tab-ena" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                
                 <!-- Gestion des Formateurs -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <div class="bg-card p-4 rounded-xl border">
                         <h3 class="text-sm font-bold text-white mb-3">Ajouter un Instructeur</h3>
                         <form id="formAddFormateur" class="space-y-3">
-                            <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+                            <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-input rounded px-2.5 py-1.5 text-xs">
                             
-                            <select id="fmtRole" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+                            <select id="fmtRole" required class="w-full bg-input rounded px-2.5 py-1.5 text-xs">
                                 <option value="" disabled selected>-- Sélectionner le Rôle --</option>
                                 <option value="Directeur de l'ENA">Directeur de l'ENA</option>
                                 <option value="Directeur Adjoint de l'ENA">Directeur Adjoint de l'ENA</option>
@@ -322,7 +386,7 @@
                         </form>
                     </div>
 
-                    <div class="md:col-span-2 bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <div class="md:col-span-2 bg-card p-4 rounded-xl border">
                         <h3 class="text-sm font-bold text-white mb-1">Corps des Formateurs / Instructeurs</h3>
                         <p class="text-[10px] text-slate-400 mb-3">Cliquez sur un formateur pour voir ses statistiques ou utilisez l'icône rouge pour le supprimer</p>
                         <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
@@ -330,11 +394,11 @@
                 </div>
 
                 <!-- Suivi des Formations Demandées & Passées -->
-                <div id="pdfContentEffectifs" class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div id="pdfContentEffectifs" class="bg-card p-4 rounded-xl border space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
                         <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Demandes de Formations & Évaluations</h3>
                         <div class="flex items-center gap-2">
-                            <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="🔍 Rechercher nom, grade..." class="bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white focus:outline-none">
+                            <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="🔍 Rechercher nom, grade..." class="bg-input border rounded px-2.5 py-1 text-xs focus:outline-none">
                             <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center gap-1" title="Exporter en Tableur Excel/CSV">
                                 <i class="fa-solid fa-file-excel"></i> Export Excel
                             </button>
@@ -346,12 +410,19 @@
                     
                     <!-- Formulaire de Demande de Formation -->
                     <form id="formAddPersonnel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2 mb-3 pt-2">
-                        <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
-                        <input type="text" id="pGrade" placeholder="Grade" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
-                        <input type="text" id="pMat" placeholder="Matricule" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
-                        <input type="text" id="pAff" placeholder="Affectation" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+                        <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
+                        <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
+                        <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         
-                        <select id="pForm" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+                        <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs">
+                            <option value="1ère Compagnie">1ère Compagnie</option>
+                            <option value="2ème Compagnie">2ème Compagnie</option>
+                            <option value="Section Appui">Section Appui</option>
+                            <option value="Commando">Commando / FS</option>
+                            <option value="État-Major">État-Major</option>
+                        </select>
+                        
+                        <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
                             <option value="" disabled selected>-- Formation Demandée --</option>
                             <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
                             <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
@@ -366,20 +437,20 @@
                             <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
                         </select>
 
-                        <input type="datetime-local" id="pDateTime" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+                        <input type="datetime-local" id="pDateTime" required class="bg-input border rounded px-2 py-1.5 text-xs">
 
                         <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Inscrire Formation</button>
                     </form>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+                            <thead class="bg-input text-slate-400 uppercase text-[10px] tracking-wider">
                                 <tr>
                                     <th class="p-2">Militaire</th>
                                     <th class="p-2">Grade</th>
                                     <th class="p-2">Matricule</th>
+                                    <th class="p-2">Unité / Section</th>
                                     <th class="p-2">Formation Demandée</th>
-                                    <th class="p-2">Date & Heure Demande</th>
                                     <th class="p-2">Statut / Note</th>
                                     <th class="p-2 text-right">Action</th>
                                 </tr>
@@ -390,9 +461,106 @@
                 </div>
             </section>
 
+            <!-- ONGLET UNITÉS & SECTIONS -->
+            <section id="tab-unites" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-users-viewfinder text-blue-500"></i> Organisation des Unités & Sections
+                        </h2>
+                        <p class="text-xs text-slate-400">Consultez la répartition des militaires par compagnie et section d'affectation</p>
+                    </div>
+                    <div class="w-full sm:w-64">
+                        <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-input border rounded p-2 text-xs font-bold">
+                            <option value="TOUTES">Toutes les Unités</option>
+                            <option value="1ère Compagnie">1ère Compagnie</option>
+                            <option value="2ème Compagnie">2ème Compagnie</option>
+                            <option value="Section Appui">Section Appui</option>
+                            <option value="Commando">Commando / FS</option>
+                            <option value="État-Major">État-Major</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="unitesListGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </section>
+
+            <!-- ONGLET TIRS & INAPTITUDES (GITA) -->
+            <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Formulaire Score de Tir -->
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir</h3>
+                        <form id="formAddScoreTir" class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Tireur</label>
+                                <select id="tirMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Arme Utilisée</label>
+                                    <select id="tirArme" required class="w-full bg-input border rounded p-2">
+                                        <option value="HK416">HK416 (Fusil d'assaut)</option>
+                                        <option value="PAMAS / Glock">PAMAS / Glock (PA)</option>
+                                        <option value="SCAR-H">SCAR-H (Tir de précision)</option>
+                                        <option value="Sniper / PGM">Sniper / PGM (TELD)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Score / 100</label>
+                                    <input type="number" id="tirScore" min="0" max="100" placeholder="85" required class="w-full bg-input border rounded p-2">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded">+ Enregistrer le Tir</button>
+                        </form>
+
+                        <div class="border-t border-slate-700/60 pt-3">
+                            <h4 class="text-xs font-bold text-slate-200 mb-2">Derniers Scores au Stand :</h4>
+                            <div id="tirsHistoryList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire Inaptitude Médicale (GITA) -->
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
+                        <form id="formAddInaptitude" class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Militaire Concerné</label>
+                                <select id="inapteMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Type d'Inaptitude</label>
+                                    <select id="inapteType" required class="w-full bg-input border rounded p-2">
+                                        <option value="Sport & Examens Physiques">Sport & Examens Physiques</option>
+                                        <option value="Inapte Tir de Combat">Inapte Tir de Combat</option>
+                                        <option value="Inapte Saut Parachutiste">Inapte Saut Parachutiste</option>
+                                        <option value="Inaptitude Totale (GITA)">Inaptitude Totale (GITA)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Fin d'Inaptitude</label>
+                                    <input type="date" id="inapteDateFin" required class="w-full bg-input border rounded p-2">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Motif / Remarque Médicale</label>
+                                <input type="text" id="inapteMotif" placeholder="ex: Entorse cheville droite" required class="w-full bg-input border rounded p-2">
+                            </div>
+                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Déclarer Inapte</button>
+                        </form>
+
+                        <div class="border-t border-slate-700/60 pt-3">
+                            <h4 class="text-xs font-bold text-slate-200 mb-2">Militaire Actuellement Inaptes :</h4>
+                            <div id="inaptesActiveList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ONGLET FICHES INDIVIDUELLES -->
             <section id="tab-fiches" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <h2 class="text-base font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire & Suivi Individuel
@@ -400,7 +568,7 @@
                         <p class="text-xs text-slate-400">Consultez et complétez les fiches de suivi de chaque élément de la troupe</p>
                     </div>
                     <div class="w-full sm:w-72">
-                        <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-xs text-white font-bold">
+                        <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-input border rounded p-2 text-xs font-bold">
                             <option value="">-- Sélectionner un Militaire --</option>
                         </select>
                     </div>
@@ -409,32 +577,39 @@
                 <div id="ficheContainer" class="hidden space-y-4">
                     <!-- Fiche Profil Top -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center space-x-4 md:col-span-2">
+                        <div class="bg-card p-4 rounded-xl border flex items-center space-x-4 md:col-span-2">
                             <div class="w-14 h-14 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border border-blue-500/30">
                                 <i class="fa-solid fa-user-large"></i>
                             </div>
                             <div>
                                 <h3 id="fNom" class="text-lg font-extrabold text-white"></h3>
                                 <p id="fGrade" class="text-xs font-semibold text-blue-400"></p>
-                                <span id="fMat" class="text-[10px] font-mono bg-slate-800 px-2 py-0.5 rounded text-slate-300 border border-slate-700"></span>
+                                <span id="fMat" class="text-[10px] font-mono bg-input px-2 py-0.5 rounded border"></span>
                             </div>
                         </div>
 
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Affectation actuelle</span>
+                        <div class="bg-card p-4 rounded-xl border flex flex-col justify-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Unité / Section</span>
                             <p id="fAff" class="text-sm font-bold text-slate-200 mt-1"></p>
                         </div>
 
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
+                        <div class="bg-card p-4 rounded-xl border flex flex-col justify-center">
                             <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Brevets Validés</span>
                             <p id="fCountValide" class="text-2xl font-black text-emerald-400 mt-0.5">0</p>
                         </div>
                     </div>
 
-                    <!-- Puces Décorations du militaire -->
-                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2">
-                        <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-award"></i> Décorations & Citations Obtenues :</h4>
-                        <div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs"></div>
+                    <!-- Status Inaptitude / Médaille sur Fiche -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-card p-3 rounded-xl border space-y-1">
+                            <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-award"></i> Décorations :</h4>
+                            <div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs"></div>
+                        </div>
+
+                        <div class="bg-card p-3 rounded-xl border space-y-1">
+                            <h4 class="text-xs font-bold text-red-400 flex items-center gap-1.5"><i class="fa-solid fa-notes-medical"></i> Statut Médical / Inaptitude :</h4>
+                            <div id="fInaptitudesList" class="text-xs text-slate-300">Aptitude opérationnelle complète</div>
+                        </div>
                     </div>
 
                     <div class="flex justify-end">
@@ -445,20 +620,20 @@
 
                     <!-- Historique des formations & Notes personnelles -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
-                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-2">
+                        <div class="bg-card p-4 rounded-xl border space-y-3">
+                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-700/60 pb-2">
                                 <i class="fa-solid fa-award text-amber-400"></i> Historique des Formations & Évaluations
                             </h4>
                             <div id="fHistoriqueFormations" class="space-y-2 max-h-60 overflow-y-auto custom-scroll text-xs"></div>
                         </div>
 
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3 flex flex-col">
-                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-2">
+                        <div class="bg-card p-4 rounded-xl border space-y-3 flex flex-col">
+                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-700/60 pb-2">
                                 <i class="fa-solid fa-pen-to-square text-blue-400"></i> Appréciations & Notes du Commandement
                             </h4>
-                            <textarea id="fNotesPerso" placeholder="Saisissez ici des notes individuelles sur ce soldat (comportement, points forts, sanctions, missions...)" class="w-full flex-1 min-h-[120px] bg-slate-800 border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none resize-none"></textarea>
+                            <textarea id="fNotesPerso" placeholder="Saisissez ici des notes individuelles..." class="w-full flex-1 min-h-[120px] bg-input border rounded p-2.5 text-xs focus:outline-none resize-none"></textarea>
                             <button onclick="saveFicheNotes()" class="self-end px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs rounded shadow">
-                                Enregistrer la note de suivi
+                                Enregistrer la note
                             </button>
                         </div>
                     </div>
@@ -468,12 +643,12 @@
             <!-- ONGLET PLANNING & SESSIONS -->
             <section id="tab-planning" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-calendar-plus text-blue-500"></i> Programmer une Session</h3>
                         <form id="formAddSession" class="space-y-2 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">Formation</label>
-                                <select id="sessForm" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                                <select id="sessForm" required class="w-full bg-input border rounded p-2">
                                     <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
                                     <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
                                     <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
@@ -484,21 +659,21 @@
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Date & Heure</label>
-                                <input type="datetime-local" id="sessDate" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                                <input type="datetime-local" id="sessDate" required class="w-full bg-input border rounded p-2">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Lieu / Stand</label>
-                                <input type="text" id="sessLieu" placeholder="ex: Stand B, Zone de Saut Alpha" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                                <input type="text" id="sessLieu" placeholder="ex: Stand B, Zone de Saut Alpha" required class="w-full bg-input border rounded p-2">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Instructeur Référent</label>
-                                <select id="sessInstructeur" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></select>
+                                <select id="sessInstructeur" class="w-full bg-input border rounded p-2"></select>
                             </div>
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded mt-2">+ Créer la Session</button>
                         </form>
                     </div>
 
-                    <div class="md:col-span-2 bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-list-ul text-blue-500"></i> Sessions de Formations Plannifiées</h3>
                         <div id="sessionsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"></div>
                     </div>
@@ -508,16 +683,16 @@
             <!-- ONGLET DÉCORATIONS & CITATIONS -->
             <section id="tab-decorations" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-award text-amber-400"></i> Décerner une Décoration</h3>
                         <form id="formAddDecoration" class="space-y-3 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">Militaire Récipiendaire</label>
-                                <select id="decoMilitaire" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white font-bold"></select>
+                                <select id="decoMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select>
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Titre de la Décoration / Médaille</label>
-                                <select id="decoTitre" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+                                <select id="decoTitre" required class="w-full bg-input border rounded p-2">
                                     <option value="Médaille de la Défense Nationale">Médaille de la Défense Nationale</option>
                                     <option value="Citation à l'Ordre du Régiment">Citation à l'Ordre du Régiment</option>
                                     <option value="Croix de la Valeur Militaire">Croix de la Valeur Militaire</option>
@@ -527,13 +702,13 @@
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Motif / Citation</label>
-                                <textarea id="decoMotif" rows="2" placeholder="Saisir la raison de la distinction..." required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white resize-none"></textarea>
+                                <textarea id="decoMotif" rows="2" placeholder="Saisir la raison de la distinction..." required class="w-full bg-input border rounded p-2 resize-none"></textarea>
                             </div>
                             <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Décerner la Médaille</button>
                         </form>
                     </div>
 
-                    <div class="md:col-span-2 bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-ribbon text-amber-400"></i> Registre des Décorations Décernées</h3>
                         <div id="decorationsRegistry" class="space-y-2 text-xs"></div>
                     </div>
@@ -542,7 +717,7 @@
 
             <!-- ONGLET PROGRAMMES / RÉFÉRENTIEL ENA -->
             <section id="tab-programmes" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                <div class="bg-card p-4 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
                         <i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel des Brevets & Formations ENA
                     </h2>
@@ -550,32 +725,32 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                    <div class="bg-card border p-4 rounded-xl space-y-2">
                         <span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold border border-blue-700">[FGI] Formation Général Initiale</span>
                         <h4 class="font-bold text-white pt-1">Brevets de Base</h4>
                         <p class="text-slate-400">Formation obligatoire pour tous les nouveaux engagés. Apprentissage du tir de combat, topographie, discipline et protocoles radio.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Examen : Pratique & Théorique / Note éliminatoire < 10/20</div>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Examen : Pratique & Théorique / Note éliminatoire < 10/20</div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                    <div class="bg-card border p-4 rounded-xl space-y-2">
                         <span class="px-2 py-0.5 bg-emerald-900/40 text-emerald-300 rounded font-bold border border-emerald-700">[CAT1 / CME] Gradés de Contact</span>
                         <h4 class="font-bold text-white pt-1">Commandement d'Équipe</h4>
                         <p class="text-slate-400">Formation pour Caporaux et Caporaux-Chefs. Apprentissage de la pédagogie de combat, tactique d'escouade et gestion d'éléments sous le feu.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Prérequis : FGI Validée</div>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Prérequis : FGI Validée</div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                    <div class="bg-card border p-4 rounded-xl space-y-2">
                         <span class="px-2 py-0.5 bg-purple-900/40 text-purple-300 rounded font-bold border border-purple-700">[FG1 / BS1 / BSTAT] Sous-Officiers</span>
                         <h4 class="font-bold text-white pt-1">Brevet de Sergent & Adjoint</h4>
                         <p class="text-slate-400">Cursus de préparation au commandement de groupe et de section. Tactique avancée, liaisons interarmes et secourisme de combat niveau 2.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Évaluation : Mise en situation tactique rélle</div>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Évaluation : Mise en situation tactique réelle</div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                    <div class="bg-card border p-4 rounded-xl space-y-2">
                         <span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded font-bold border border-amber-700">[DEM / CDU] Cursus Officiers</span>
                         <h4 class="font-bold text-white pt-1">Diplôme d'État-Major</h4>
                         <p class="text-slate-400">Haut cursus de commandement destiné aux chefs d'unité et officiers d'État-Major. Planification stratégique, logistique lourde et conduite des opérations.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-800 pt-2">Attribution par le Directeur de l'ENA</div>
+                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Attribution par le Directeur de l'ENA</div>
                     </div>
                 </div>
             </section>
@@ -594,105 +769,68 @@
                     <span class="text-xs text-slate-400">Sauvegarde automatique dans Firebase</span>
                 </div>
                 <div class="flex-1 flex gap-4 overflow-hidden">
-                    <div id="notesList" class="w-1/3 bg-slate-900 rounded-xl border border-slate-800 p-2 overflow-y-auto custom-scroll space-y-2"></div>
-                    <div id="pdfNoteContainer" class="w-2/3 bg-slate-900 rounded-xl border border-slate-800 p-4 flex flex-col">
-                        <input type="text" id="noteTitle" placeholder="Titre de la note..." class="bg-transparent border-b border-slate-800 pb-2 text-sm font-bold text-white focus:outline-none mb-3">
-                        <textarea id="noteContent" placeholder="Écrivez vos notes ici..." class="flex-1 bg-transparent text-xs text-slate-300 resize-none focus:outline-none custom-scroll"></textarea>
+                    <div id="notesList" class="w-1/3 bg-card rounded-xl border p-2 overflow-y-auto custom-scroll space-y-2"></div>
+                    <div id="pdfNoteContainer" class="w-2/3 bg-card rounded-xl border p-4 flex flex-col">
+                        <input type="text" id="noteTitle" placeholder="Titre de la note..." class="bg-transparent border-b border-slate-700 pb-2 text-sm font-bold text-white focus:outline-none mb-3">
+                        <textarea id="noteContent" placeholder="Écrivez vos notes ici..." class="flex-1 bg-transparent text-xs resize-none focus:outline-none custom-scroll"></textarea>
                     </div>
                 </div>
             </section>
 
-           <!-- ONGLET CHANGELOG / MISES À JOUR COMPLET -->
+            <!-- ONGLET CHANGELOG / MISES À JOUR -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                <div class="bg-card p-4 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
                         <i class="fa-solid fa-code-branch text-blue-500"></i> Historique Complet des Mises à Jour & Évolutions ENA
                     </h2>
                     <p class="text-xs text-slate-400">Suivi chronologique de tous les ajouts, modifications et correctifs du portail</p>
                 </div>
-            
+
                 <div class="space-y-3 max-w-4xl mx-auto">
-            
+                    <!-- VERSION 5.0 -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-cyan-400"><i class="fa-solid fa-crosshair mr-1"></i> Version 5.0 - Unités, Carnet de Tirs, GITA, Notifications & Thèmes</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Gestion des Unités & Sections (`tab-unites`) :</strong> Organisation des troupes par compagnie (1ère, 2ème, Appui, Commando) et filtre dynamique.</li>
+                            <li><strong>Carnet de Tir & Inaptitudes GITA (`tab-tirs`) :</strong> Suivi des scores de tir au stand (HK416, Glock, SCAR-H) et déclaration des inaptitudes médicales temporaires.</li>
+                            <li><strong>Centre de Notifications Interne :</strong> Cloche d'alertes en direct dans la navigation supérieure.</li>
+                            <li><strong>Sélecteur de Thèmes Tactiques :</strong> Prise en charge des modes *Night Slate*, *Desert Camo* et *OLED Black*.</li>
+                        </ul>
+                    </div>
+
                     <!-- VERSION 4.0 -->
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <div class="bg-card border rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
                             <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-certificate mr-1"></i> Version 4.0 - Diplômes PDF Officiels, Décorations & Exports Excel</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Générateur de Diplômes Officiels (PDF) :</strong> Impression instantanée du brevet officiel ENA pour chaque examen réussi.</li>
-                            <li><strong>Onglet Décorations & Citations :</strong> Attribution et registre des médailles militaires avec puces visuelles sur les fiches individuelles.</li>
-                            <li><strong>Exportation Tableur (Excel / CSV) :</strong> Téléchargement du registre des candidats et évaluations au format CSV/Excel.</li>
+                            <li><strong>Générateur de Diplômes (PDF) :</strong> Impression instantanée du brevet officiel ENA pour chaque examen réussi.</li>
+                            <li><strong>Onglet Décorations :</strong> Attribution et registre des médailles militaires.</li>
+                            <li><strong>Exportation Tableur (Excel/CSV) :</strong> Téléchargement direct des effectifs.</li>
                         </ul>
                     </div>
-            
+
                     <!-- VERSION 3.0 -->
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-rocket mr-1"></i> Version 3.0 - Grand Tableau de Bord, Planning & Référentiel ENA</span>
+                    <div class="bg-card border rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-rocket mr-1"></i> Version 3.0 - Grand Tableau de Bord & Planning</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite global, total candidats, échecs/réussites, instructeurs actifs.</li>
-                            <li><strong>Onglet Planning & Sessions :</strong> Module de programmation d'examens et convocations avec lieu et instructeur référent.</li>
-                            <li><strong>Visionneuse d'Images Modale :</strong> Agrandissement des photos en plein écran sans téléchargement.</li>
-                            <li><strong>Moteur de Recherche Dynamique :</strong> Recherche instantanée par nom, grade ou matricule.</li>
+                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite global et indicateurs.</li>
+                            <li><strong>Planning & Sessions :</strong> Module de programmation des examens.</li>
                         </ul>
                     </div>
-            
-                    <!-- VERSION 2.4 -->
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-purple-400"><i class="fa-solid fa-user-gear mr-1"></i> Version 2.4 - Module Suivi Individuel & Refonte Rôles Instructeurs</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Onglet Fiches Individuelles :</strong> Dossier militaire avec historique des diplômes et appréciations du commandement.</li>
-                            <li><strong>Formulaire Instructeur Révisé :</strong> Menu déroulant fixe avec les rôles officiels ENA (Directeur, Chef Instructeur...).</li>
-                        </ul>
-                    </div>
-            
-                    <!-- VERSION 2.3 -->
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-wrench mr-1"></i> Version 2.3 - Correction de la Suppression d'Images</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Fix Suppression d'Images :</strong> Correction du bug bloquant la suppression des fichiers avec caractères spéciaux ou espaces.</li>
-                        </ul>
-                    </div>
-            
-                    <!-- VERSION 2.0 -->
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-database mr-1"></i> Version 2.0 - Migration Cloud Firebase Realtime Database</span>
-                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Synchronisation Cloud :</strong> Passage au stockage Firebase en temps réel pour tous les utilisateurs.</li>
-                            <li><strong>Boutons de Suppression :</strong> Suppression instantanée des fichiers, instructeurs, notes et demandes.</li>
-                        </ul>
-                    </div>
-            
-                    <!-- VERSION 1.0 -->
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-flag mr-1"></i> Version 1.0 - Lancement du Portail ENA Workspace</span>
-                            <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li>Création de l'interface principale ENA (design somptueux sombre/tactique sous Tailwind CSS).</li>
-                            <li>Gestion des demandes de formations, fiches d'évaluations et journal des logs.</li>
-                        </ul>
-                    </div>
-            
                 </div>
             </section>
 
             <!-- ONGLET LOGS -->
             <section id="tab-logs" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
-                <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
+                <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-receipt text-blue-500"></i> Historique & Logs d'Activité
                     </h2>
@@ -700,9 +838,9 @@
                         <i class="fa-solid fa-file-pdf"></i> Exporter Logs (PDF)
                     </button>
                 </div>
-                <div id="pdfLogsContainer" class="flex-1 bg-slate-900 rounded-xl border border-slate-800 p-2 overflow-y-auto custom-scroll">
+                <div id="pdfLogsContainer" class="flex-1 bg-card rounded-xl border p-2 overflow-y-auto custom-scroll">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-800 text-slate-400 text-[10px] uppercase">
+                        <thead class="bg-input text-slate-400 text-[10px] uppercase">
                             <tr>
                                 <th class="p-2">Horodatage</th>
                                 <th class="p-2">Utilisateur</th>
@@ -746,9 +884,21 @@
             formateurs: [],
             sessions: [],
             decorations: [],
+            tirs: [],
+            inaptitudes: [],
+            notifications: [],
             logs: [],
             selectedMilitaireId: null
         };
+
+        // Gestion du Thème
+        function changeTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('ena_theme', themeName);
+        }
+        const savedTheme = localStorage.getItem('ena_theme') || 'slate';
+        changeTheme(savedTheme);
+        document.getElementById('themeSelector').value = savedTheme;
 
         // Synchronisation Realtime Database
         db.ref('files').on('value', (snapshot) => {
@@ -769,8 +919,10 @@
             state.effectifs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderEffectifs();
             renderFormateurs();
+            renderUnites();
             updateFichesSelect();
             updateDecorationsSelects();
+            updateTirsSelects();
             updateDashboard();
             if (state.selectedMilitaireId) loadFicheMilitaire();
         });
@@ -796,6 +948,26 @@
             if (state.selectedMilitaireId) loadFicheMilitaire();
         });
 
+        db.ref('tirs').on('value', (snapshot) => {
+            const val = snapshot.val();
+            state.tirs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
+            renderTirs();
+        });
+
+        db.ref('inaptitudes').on('value', (snapshot) => {
+            const val = snapshot.val();
+            state.inaptitudes = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
+            renderInaptitudes();
+            updateDashboard();
+            if (state.selectedMilitaireId) loadFicheMilitaire();
+        });
+
+        db.ref('notifications').on('value', (snapshot) => {
+            const val = snapshot.val();
+            state.notifications = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
+            renderNotifications();
+        });
+
         db.ref('logs').on('value', (snapshot) => {
             const val = snapshot.val();
             state.logs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
@@ -810,6 +982,7 @@
                 action, details
             };
             db.ref('logs').push(logEntry);
+            db.ref('notifications').push({ text: `${action} : ${details}`, date: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) });
         }
 
         function generatePDF(elementId, filename) {
@@ -818,23 +991,22 @@
                 margin: 0.3,
                 filename: filename,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#0f172a' },
+                html2canvas: { scale: 2, backgroundColor: '#020617' },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
             html2pdf().set(opt).from(element).save();
             addLog('EXPORT_PDF', `Export PDF : ${filename}`);
         }
 
-        // Export Excel/CSV
         function exportToCSV() {
             if (state.effectifs.length === 0) {
                 alert("Aucune donnée à exporter.");
                 return;
             }
-            let csv = "Militaire;Grade;Matricule;Formation;DateDemande;Statut;Note;Formateur\n";
+            let csv = "Militaire;Grade;Matricule;Unite;Formation;DateDemande;Statut;Note;Formateur\n";
             state.effectifs.forEach(e => {
                 const isVal = e.eval && e.eval.evaluee;
-                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.form}";"${e.dateDemande}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}";"${isVal ? e.eval.formateur : ''}"\n`;
+                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.aff || ''}";"${e.form}";"${e.dateDemande}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}";"${isVal ? e.eval.formateur : ''}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
@@ -844,7 +1016,6 @@
             addLog('EXPORT_CSV', 'Export des effectifs au format CSV/Excel');
         }
 
-        // Imprimer un diplôme PDF
         window.printDiplome = (candidateId) => {
             const cand = state.effectifs.find(e => e.id === candidateId);
             if (!cand || !cand.eval) return;
@@ -930,7 +1101,7 @@
                 const nom = document.getElementById('pNom').value;
                 const grade = document.getElementById('pGrade').value;
                 const mat = document.getElementById('pMat').value;
-                const aff = document.getElementById('pAff').value;
+                const aff = document.getElementById('pUnite').value;
                 const form = document.getElementById('pForm').value;
                 const dtVal = document.getElementById('pDateTime').value;
 
@@ -983,6 +1154,29 @@
 
                 db.ref('decorations').push(decoObj);
                 addLog('DECORATION_ATTRIBUEE', `${titre} décernée à ${nomMilitaire}`);
+                e.target.reset();
+            });
+
+            document.getElementById('formAddScoreTir').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nom = document.getElementById('tirMilitaire').value;
+                const arme = document.getElementById('tirArme').value;
+                const score = document.getElementById('tirScore').value;
+
+                db.ref('tirs').push({ id: Date.now().toString(), nom, arme, score, date: new Date().toLocaleDateString('fr-FR') });
+                addLog('SCORE_TIR', `Score ${score}/100 enregistré pour ${nom} (${arme})`);
+                e.target.reset();
+            });
+
+            document.getElementById('formAddInaptitude').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nom = document.getElementById('inapteMilitaire').value;
+                const type = document.getElementById('inapteType').value;
+                const dateFin = document.getElementById('inapteDateFin').value;
+                const motif = document.getElementById('inapteMotif').value;
+
+                db.ref('inaptitudes').push({ id: Date.now().toString(), nom, type, dateFin, motif });
+                addLog('INAPTITUDE_MEDICALE', `${nom} déclaré inapte (${type}) jusqu'au ${dateFin}`);
                 e.target.reset();
             });
 
@@ -1077,16 +1271,25 @@
             db.ref(`notes/${note._fbKey}`).update({ title, content });
         }
 
+        // Dashboard Statistique Update
         function updateDashboard() {
-            const totalCandidats = new Set(state.effectifs.map(e => e.nom)).size;
+            const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
+            
+            let filteredEff = state.effectifs;
+            if (filterUnite !== 'TOUTES') {
+                filteredEff = state.effectifs.filter(e => e.aff === filterUnite);
+            }
+
+            const totalCandidats = new Set(filteredEff.map(e => e.nom)).size;
             document.getElementById('dashTotalCandidats').textContent = totalCandidats;
             document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
             document.getElementById('dashTotalFiles').textContent = state.files.length;
+            document.getElementById('dashTotalInaptes').textContent = state.inaptitudes.length;
 
-            const evals = state.effectifs.filter(e => e.eval && e.eval.evaluee);
+            const evals = filteredEff.filter(e => e.eval && e.eval.evaluee);
             const admis = evals.filter(e => e.eval.resultat === 'Admis').length;
             const ajournes = evals.filter(e => e.eval.resultat === 'Ajourné').length;
-            const enAttente = state.effectifs.length - evals.length;
+            const enAttente = filteredEff.length - evals.length;
 
             document.getElementById('dashCountAdmis').textContent = admis;
             document.getElementById('dashCountAjournes').textContent = ajournes;
@@ -1102,12 +1305,142 @@
             } else {
                 evals.slice(-4).reverse().forEach(e => {
                     recentContainer.innerHTML += `
-                        <div class="bg-slate-800 p-2 rounded flex justify-between items-center">
+                        <div class="bg-input p-2 rounded flex justify-between items-center">
                             <div>
                                 <p class="font-bold text-white">${e.nom}</p>
                                 <p class="text-[10px] text-blue-400">${e.form}</p>
                             </div>
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${e.eval.resultat} (${e.eval.note}/20)</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // Render Unités
+        function renderUnites() {
+            const container = document.getElementById('unitesListGrid');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const selectedFilter = document.getElementById('uniteFilterSelect')?.value || 'TOUTES';
+            const unites = ["1ère Compagnie", "2ème Compagnie", "Section Appui", "Commando", "État-Major"];
+
+            unites.forEach(u => {
+                if (selectedFilter !== 'TOUTES' && selectedFilter !== u) return;
+
+                const membres = state.effectifs.filter(e => e.aff === u);
+                const uniqueMembres = [];
+                membres.forEach(m => {
+                    if(!uniqueMembres.some(x => x.nom === m.nom)) uniqueMembres.push(m);
+                });
+
+                container.innerHTML += `
+                    <div class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield text-blue-400"></i> ${u}
+                            </h3>
+                            <span class="text-xs px-2 py-0.5 bg-blue-900/40 border border-blue-700 text-blue-300 rounded font-bold">${uniqueMembres.length} membre(s)</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-56 overflow-y-auto custom-scroll text-xs">
+                            ${uniqueMembres.length === 0 ? '<p class="text-slate-500 italic py-2">Aucun militaire assigné.</p>' : uniqueMembres.map(m => `
+                                <div class="bg-input p-2 rounded flex justify-between items-center">
+                                    <div>
+                                        <p class="font-bold text-white">${m.grade}${m.nom}</p>
+                                        <p class="text-[10px] text-slate-400 font-mono">${m.mat}</p>
+                                    </div>
+                                    <button onclick="selectMilitaireAndOpenFiche('${m.nom}')" class="text-blue-400 hover:text-white text-[10px] px-2 py-1 bg-slate-800 rounded">Fiche</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.selectMilitaireAndOpenFiche = (nom) => {
+            document.querySelector('[data-tab="fiches"]').click();
+            document.getElementById('selectFicheMilitaire').value = nom;
+            loadFicheMilitaire();
+        };
+
+        // Render Tirs & Inaptitudes
+        function renderTirs() {
+            const container = document.getElementById('tirsHistoryList');
+            if(!container) return;
+            container.innerHTML = '';
+            if(state.tirs.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 italic">Aucun tir enregistré.</p>`;
+                return;
+            }
+            state.tirs.slice(-6).reverse().forEach(t => {
+                container.innerHTML += `
+                    <div class="bg-input p-2 rounded flex justify-between items-center">
+                        <div>
+                            <span class="font-bold text-white">${t.nom}</span>
+                            <span class="text-slate-400 block text-[10px]">${t.arme} - le ${t.date}</span>
+                        </div>
+                        <span class="font-bold text-red-400 text-sm">${t.score}/100</span>
+                    </div>
+                `;
+            });
+        }
+
+        function renderInaptitudes() {
+            const container = document.getElementById('inaptesActiveList');
+            if(!container) return;
+            container.innerHTML = '';
+            if(state.inaptitudes.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 italic">Aucune inaptitude active.</p>`;
+                return;
+            }
+            state.inaptitudes.forEach(i => {
+                container.innerHTML += `
+                    <div class="bg-input p-2 rounded flex justify-between items-center">
+                        <div>
+                            <span class="font-bold text-amber-400">${i.nom}</span>
+                            <span class="text-slate-300 block text-[10px]">${i.type} (${i.motif})</span>
+                            <span class="text-slate-500 text-[9px]">Jusqu'au ${i.dateFin}</span>
+                        </div>
+                        <button onclick="deleteInaptitude('${i._fbKey}')" class="text-red-400 hover:text-red-300 p-1" title="Lever inaptitude"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        window.deleteInaptitude = (fbKey) => {
+            if(confirm("Lever cette inaptitude médicale ?")) {
+                db.ref('inaptitudes/' + fbKey).remove().then(() => addLog('FIN_INAPTITUDE', 'Inaptitude médicale levée'));
+            }
+        };
+
+        // Notifications System
+        function toggleNotifications() {
+            document.getElementById('notifDropdown').classList.toggle('hidden');
+        }
+
+        function clearNotifications() {
+            db.ref('notifications').remove();
+        }
+
+        function renderNotifications() {
+            const container = document.getElementById('notifList');
+            const badge = document.getElementById('notifBadge');
+            if(!container) return;
+
+            container.innerHTML = '';
+            if(state.notifications.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-2">Aucune alerte récente.</p>`;
+                badge.classList.add('hidden');
+            } else {
+                badge.textContent = state.notifications.length;
+                badge.classList.remove('hidden');
+                state.notifications.slice(-10).reverse().forEach(n => {
+                    container.innerHTML += `
+                        <div class="p-2 bg-input rounded border border-slate-700/50 text-[11px]">
+                            <span class="text-slate-400 text-[9px] block">${n.date || ''}</span>
+                            <span class="text-white">${n.text}</span>
                         </div>
                     `;
                 });
@@ -1139,6 +1472,32 @@
                 opt.value = m.nom;
                 opt.textContent = `${m.grade} ${m.nom}`;
                 select.appendChild(opt);
+            });
+        }
+
+        function updateTirsSelects() {
+            const selectTir = document.getElementById('tirMilitaire');
+            const selectInapte = document.getElementById('inapteMilitaire');
+            if(!selectTir || !selectInapte) return;
+
+            selectTir.innerHTML = '';
+            selectInapte.innerHTML = '';
+
+            const unique = [];
+            state.effectifs.forEach(e => {
+                if (!unique.some(m => m.nom === e.nom)) unique.push(e);
+            });
+
+            unique.forEach(m => {
+                const opt1 = document.createElement('option');
+                opt1.value = m.nom;
+                opt1.textContent = `${m.grade} ${m.nom}`;
+                selectTir.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = m.nom;
+                opt2.textContent = `${m.grade} ${m.nom}`;
+                selectInapte.appendChild(opt2);
             });
         }
 
@@ -1254,12 +1613,21 @@
                 });
             }
 
+            // Inaptitudes sur Fiche
+            const inaptes = state.inaptitudes.filter(i => i.nom === nom);
+            const inapteContainer = document.getElementById('fInaptitudesList');
+            if(inaptes.length === 0) {
+                inapteContainer.innerHTML = `<span class="text-emerald-400 font-bold">Aptitude opérationnelle complète</span>`;
+            } else {
+                inapteContainer.innerHTML = inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif}) jusqu'au ${i.dateFin}</div>`).join('');
+            }
+
             const histoContainer = document.getElementById('fHistoriqueFormations');
             histoContainer.innerHTML = '';
             dossiers.forEach(d => {
                 const isVal = d.eval && d.eval.evaluee;
                 histoContainer.innerHTML += `
-                    <div class="bg-slate-800 p-2.5 rounded border border-slate-700/60 flex justify-between items-center">
+                    <div class="bg-input p-2.5 rounded border border-slate-700/60 flex justify-between items-center">
                         <div>
                             <p class="font-bold text-white">${d.form}</p>
                             <p class="text-[10px] text-slate-400">Demande du ${d.dateDemande}</p>
@@ -1304,7 +1672,7 @@
 
             state.decorations.forEach(d => {
                 container.innerHTML += `
-                    <div class="bg-slate-800/80 border border-slate-700 p-3 rounded-lg flex justify-between items-start">
+                    <div class="bg-input border p-3 rounded-lg flex justify-between items-start">
                         <div class="space-y-1">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-medal text-amber-400 text-base"></i>
@@ -1331,7 +1699,7 @@
 
             state.sessions.forEach(s => {
                 container.innerHTML += `
-                    <div class="bg-slate-800/80 border border-slate-700/80 p-3 rounded-lg flex justify-between items-start space-y-1">
+                    <div class="bg-input border p-3 rounded-lg flex justify-between items-start space-y-1">
                         <div>
                             <span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold border border-blue-700/50">${s.formation}</span>
                             <p class="text-white font-bold mt-1.5"><i class="fa-solid fa-clock text-slate-400 mr-1"></i> ${s.date}</p>
@@ -1359,11 +1727,11 @@
                 const fileNameSafe = file.name ? file.name : 'Fichier';
                 
                 const card = document.createElement('div');
-                card.className = "bg-slate-800 border border-slate-700 rounded-lg p-3 flex flex-col justify-between space-y-2";
+                card.className = "bg-card border rounded-lg p-3 flex flex-col justify-between space-y-2";
                 
                 card.innerHTML = `
                     ${isImage ? `
-                        <div onclick="openImageViewer('${file.content}', '${fileNameSafe.replace(/'/g, "\\'")}')" class="w-full h-24 bg-slate-900 rounded overflow-hidden flex items-center justify-center border border-slate-700/50 cursor-pointer hover:opacity-80 transition" title="Cliquer pour agrandir">
+                        <div onclick="openImageViewer('${file.content}', '${fileNameSafe.replace(/'/g, "\\'")}')" class="w-full h-24 bg-input rounded overflow-hidden flex items-center justify-center border border-slate-700/50 cursor-pointer hover:opacity-80 transition" title="Cliquer pour agrandir">
                             <img src="${file.content}" alt="Aperçu" class="max-h-full max-w-full object-contain">
                         </div>
                     ` : ''}
@@ -1372,7 +1740,7 @@
                     </div>
                     <div class="text-[10px] text-slate-400">${file.size || ''}</div>
                     <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
-                        <a href="${file.content}" download="${fileNameSafe}" class="text-blue-400 hover:text-white text-xs px-2 py-1 bg-slate-900/60 rounded" title="Télécharger">
+                        <a href="${file.content}" download="${fileNameSafe}" class="text-blue-400 hover:text-white text-xs px-2 py-1 bg-input rounded" title="Télécharger">
                             <i class="fa-solid fa-download"></i>
                         </a>
                         <button type="button" class="btn-delete-file text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-900/40 border border-red-700/50 rounded flex items-center gap-1" title="Supprimer">
@@ -1401,7 +1769,7 @@
                 const isActive = note.id === state.activeNoteId;
                 const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\'");
                 container.innerHTML += `
-                    <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-slate-800/60 hover:bg-slate-800 text-slate-300'}">
+                    <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-input hover:opacity-90 text-slate-300'}">
                         <span class="truncate">${note.title || 'Sans titre'}</span>
                         <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${escapedTitle}')" class="text-red-400 hover:text-red-300 ml-2" title="Supprimer"><i class="fa-solid fa-trash text-[11px]"></i></button>
                     </div>
@@ -1445,8 +1813,8 @@
                         <td class="p-2.5 font-bold text-white">${item.nom}</td>
                         <td class="p-2.5">${item.grade}</td>
                         <td class="p-2.5 font-mono text-xs text-blue-400">${item.mat}</td>
+                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] text-slate-300 font-semibold">${item.aff || '1ère Compagnie'}</span></td>
                         <td class="p-2.5">${item.form}</td>
-                        <td class="p-2.5 text-slate-400 text-[11px]">${item.dateDemande}</td>
                         <td class="p-2.5">
                             ${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold border border-green-700">${item.eval.resultat} (${item.eval.note}/20)</span>` : `<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px] border border-amber-700">En attente</span>`}
                         </td>
@@ -1471,7 +1839,7 @@
                 const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom);
                 const escapedNom = (f.nom || '').replace(/'/g, "\\'");
                 container.innerHTML += `
-                    <div class="bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 p-3 rounded-lg transition flex items-center justify-between">
+                    <div class="bg-input border p-3 rounded-lg transition flex items-center justify-between">
                         <div onclick="openFmtStatsModal('${f.id}')" class="cursor-pointer flex-1">
                             <p class="text-xs font-bold text-white">${f.nom}</p>
                             <p class="text-[10px] text-blue-400 font-semibold">${f.role}</p>
@@ -1558,7 +1926,7 @@
             } else {
                 formationsFaites.forEach(item => {
                     historyContainer.innerHTML += `
-                        <div class="bg-slate-800 p-2 rounded flex justify-between items-center">
+                        <div class="bg-input p-2 rounded flex justify-between items-center">
                             <div>
                                 <span class="font-bold text-white">${item.nom}</span>
                                 <span class="text-blue-400 block text-[10px]">${item.form}</span>
