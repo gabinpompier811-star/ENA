@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="slate">
+<html lang="fr" data-theme="slate" data-accent="blue">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,6 +14,13 @@
     <!-- Librairie Export PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        /* Couleurs d'accentuation dynamique */
+        html[data-accent="blue"] { --accent-color: #3b82f6; --accent-light: #60a5fa; --accent-bg: rgba(59, 130, 246, 0.2); }
+        html[data-accent="emerald"] { --accent-color: #10b981; --accent-light: #34d399; --accent-bg: rgba(16, 185, 129, 0.2); }
+        html[data-accent="amber"] { --accent-color: #f59e0b; --accent-light: #fbbf24; --accent-bg: rgba(245, 158, 11, 0.2); }
+        html[data-accent="red"] { --accent-color: #ef4444; --accent-light: #f87171; --accent-bg: rgba(239, 68, 68, 0.2); }
+        html[data-accent="purple"] { --accent-color: #a855f7; --accent-light: #c084fc; --accent-bg: rgba(168, 85, 247, 0.2); }
+
         /* Thème Night Slate (Défaut) */
         html[data-theme="slate"] body { background-color: #020617; color: #f1f5f9; }
         html[data-theme="slate"] .bg-card { background-color: #0f172a; border-color: #1e293b; }
@@ -32,7 +39,9 @@
         html[data-theme="oled"] .bg-header { background-color: #000000; border-color: #262626; }
         html[data-theme="oled"] .bg-input { background-color: #171717; border-color: #404040; color: #fff; }
 
-        .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #60a5fa; background-color: rgba(30, 41, 59, 0.6); }
+        .tab-btn.active { border-bottom: 2px solid var(--accent-color); color: var(--accent-light); background-color: var(--accent-bg); }
+        .text-accent { color: var(--accent-light); }
+        .bg-accent { background-color: var(--accent-color); }
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
@@ -55,7 +64,7 @@
             <form id="authForm" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Identifiant / Email</label>
-                    <input type="text" id="authEmail" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                    <input type="email" id="authEmail" placeholder="gabinpompier811@gmail.com" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
@@ -65,6 +74,44 @@
                     Se connecter / S'inscrire
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Paramètres & Couleurs -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-card border rounded-xl p-6 w-full max-w-md shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-700/60 pb-3">
+                <h3 class="font-bold text-white text-base flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-blue-400"></i> Paramètres du Portail & Apparence
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-300 mb-2">Thème de Fond :</label>
+                    <select id="themeSelector" onchange="changeTheme(this.value)" class="w-full bg-input border rounded p-2 focus:outline-none">
+                        <option value="slate">🌙 Night Slate (Foncé Tactique)</option>
+                        <option value="desert">🏜️ Desert Camo (Nuances Sable / Olive)</option>
+                        <option value="oled">🖤 OLED Black (Noir Absolu)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-2">Couleur d'Accentuation des Onglets :</label>
+                    <div class="grid grid-cols-5 gap-2">
+                        <button onclick="changeAccent('blue')" class="py-2 rounded font-bold text-white bg-blue-600 hover:opacity-90">Bleu</button>
+                        <button onclick="changeAccent('emerald')" class="py-2 rounded font-bold text-white bg-emerald-600 hover:opacity-90">Vert</button>
+                        <button onclick="changeAccent('amber')" class="py-2 rounded font-bold text-white bg-amber-600 hover:opacity-90">Ambre</button>
+                        <button onclick="changeAccent('red')" class="py-2 rounded font-bold text-white bg-red-600 hover:opacity-90">Rouge</button>
+                        <button onclick="changeAccent('purple')" class="py-2 rounded font-bold text-white bg-purple-600 hover:opacity-90">Violet</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-700/60 flex justify-end">
+                <button onclick="closeSettingsModal()" class="px-4 py-1.5 bg-blue-600 text-white font-bold rounded text-xs">Enregistrer & Fermer</button>
+            </div>
         </div>
     </div>
 
@@ -192,12 +239,10 @@
             </div>
             
             <div class="flex items-center space-x-3">
-                <!-- Sélecteur de Thème -->
-                <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-input border rounded px-2 py-1 text-xs focus:outline-none">
-                    <option value="slate">🌙 Night Slate</option>
-                    <option value="desert">🏜️ Desert Camo</option>
-                    <option value="oled">🖤 OLED Black</option>
-                </select>
+                <!-- Bouton Paramètres ⚙️ -->
+                <button onclick="openSettingsModal()" class="p-1.5 bg-input border rounded-lg hover:opacity-80 text-xs flex items-center gap-1.5 text-slate-200" title="Paramètres d'apparence">
+                    <i class="fa-solid fa-gear text-blue-400"></i> <span class="hidden sm:inline">Paramètres</span>
+                </button>
 
                 <!-- Cloche Notifications -->
                 <div class="relative">
@@ -205,7 +250,6 @@
                         <i class="fa-solid fa-bell text-slate-300 text-sm"></i>
                         <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
                     </button>
-                    <!-- Dropdown Notifications -->
                     <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-card border rounded-xl shadow-2xl p-3 z-50 text-xs space-y-2 max-h-80 overflow-y-auto custom-scroll">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
                             <span class="font-bold text-white"><i class="fa-solid fa-bell text-blue-400 mr-1"></i> Notifications Interne</span>
@@ -218,7 +262,7 @@
                 </div>
 
                 <span id="connection-status" class="px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]">Connexion...</span>
-                <span id="userInfo" class="text-xs text-slate-400 hidden sm:inline"></span>
+                <span id="userInfo" class="text-xs text-slate-400 hidden sm:inline font-mono"></span>
                 <button id="btnSaveGlobal" class="text-xs bg-input border px-3 py-1.5 rounded-md flex items-center gap-1.5 hover:opacity-80">
                     <i class="fa-solid fa-download"></i> Backup (JSON)
                 </button>
@@ -246,7 +290,7 @@
                 <i class="fa-solid fa-crosshair"></i> Tirs & Inaptitudes
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
-                <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles
+                <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles & Médicales
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="planning">
                 <i class="fa-solid fa-calendar-days"></i> Planning & Sessions
@@ -260,6 +304,12 @@
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
                 <i class="fa-solid fa-note-sticky"></i> Notes
             </button>
+
+            <!-- Onglet Administrateur Réservé Gabin -->
+            <button id="navAdminBtn" class="tab-btn hidden px-4 py-2.5 text-xs font-medium text-amber-400 flex items-center gap-2 whitespace-nowrap border-l border-amber-500/30 bg-amber-950/20" data-tab="admin">
+                <i class="fa-solid fa-user-gear"></i> Administration Accès (Gabin)
+            </button>
+
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
                 <i class="fa-solid fa-code-commit"></i> Mises à jour
             </button>
@@ -316,7 +366,7 @@
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-red-600/20 text-red-400 rounded-lg"><i class="fa-solid fa-user-slash text-xl"></i></div>
                         <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold">Inaptitudes Medicales</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Inaptitudes Médicales</span>
                             <p id="dashTotalInaptes" class="text-2xl font-black text-red-400">0</p>
                         </div>
                     </div>
@@ -558,14 +608,14 @@
                 </div>
             </section>
 
-            <!-- ONGLET FICHES INDIVIDUELLES -->
+            <!-- ONGLET FICHES INDIVIDUELLES & MÉDICALES -->
             <section id="tab-fiches" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire & Suivi Individuel
+                            <i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire & Suivi Médical (VMA)
                         </h2>
-                        <p class="text-xs text-slate-400">Consultez et complétez les fiches de suivi de chaque élément de la troupe</p>
+                        <p class="text-xs text-slate-400">Consultez le dossier complet, le groupe sanguin et les visites médicales d'aptitude</p>
                     </div>
                     <div class="w-full sm:w-72">
                         <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-input border rounded p-2 text-xs font-bold">
@@ -599,6 +649,62 @@
                         </div>
                     </div>
 
+                    <!-- BLOC MÉDICAL & VISITE D'APTITUDE -->
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h4 class="text-xs font-bold text-red-400 flex items-center gap-2 border-b border-slate-700/60 pb-2">
+                            <i class="fa-solid fa-notes-medical"></i> Fiche Médicale de Combat & Visite d'Aptitude (VMA)
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Groupe Sanguin :</label>
+                                <select id="fSang" class="w-full bg-input border rounded p-2 font-bold text-red-400">
+                                    <option value="Non renseigné">Non renseigné</option>
+                                    <option value="O +">Groupe O + (O Positif)</option>
+                                    <option value="O -">Groupe O - (O Négatif - Donneur Universel)</option>
+                                    <option value="A +">Groupe A +</option>
+                                    <option value="A -">Groupe A -</option>
+                                    <option value="B +">Groupe B +</option>
+                                    <option value="B -">Groupe B -</option>
+                                    <option value="AB +">Groupe AB +</option>
+                                    <option value="AB -">Groupe AB -</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-400 mb-1">Aptitude Médicale (VMA) :</label>
+                                <select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold">
+                                    <option value="Apte Service FS">🟢 Apte Service FS (Forces Spéciales)</option>
+                                    <option value="Apte avec Restrictions">🟡 Apte avec Restrictions Médicales</option>
+                                    <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire (GITA)</option>
+                                    <option value="Visite Médicale à Renouveler">⚪ Visite Médicale à Renouveler</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-400 mb-1">Date Dernière VMA :</label>
+                                <input type="date" id="fDateVMA" class="w-full bg-input border rounded p-2">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Allergies Connues / Traitements :</label>
+                                <input type="text" id="fAllergies" placeholder="ex: Pénicilline, Piqûres de guêpes..." class="w-full bg-input border rounded p-2">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Vaccins Opérationnels :</label>
+                                <input type="text" id="fVaccins" placeholder="ex: Tétanos à jour (2025), Fièvre Jaune ok" class="w-full bg-input border rounded p-2">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-2">
+                            <button onclick="saveMedicalData()" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded shadow">
+                                Enregistrer la Fiche Médicale
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Status Inaptitude / Médaille sur Fiche -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-card p-3 rounded-xl border space-y-1">
@@ -614,7 +720,7 @@
 
                     <div class="flex justify-end">
                         <button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-pdf"></i> Imprimer Fiche Individuelle (PDF)
+                            <i class="fa-solid fa-file-pdf"></i> Imprimer Fiche Individuelle & Médicale (PDF)
                         </button>
                     </div>
 
@@ -777,6 +883,49 @@
                 </div>
             </section>
 
+            <!-- ONGLET ADMIN EXCLUSIF GABIN (gabinpompier811@gmail.com) -->
+            <section id="tab-admin" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="bg-card p-4 rounded-xl border border-amber-500/50 bg-amber-950/10">
+                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-user-shield text-xl"></i> Panneau d'Administration Restreint (Gabin)
+                    </h2>
+                    <p class="text-xs text-slate-400">Espace haute sécurité réservé exclusivement à <span class="text-amber-300 font-mono font-bold">gabinpompier811@gmail.com</span>. Vous pouvez autoriser de nouveaux utilisateurs et attribuer leurs rôles.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Formulaire d'Autorisation de Membre -->
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Autoriser un Nouveau Membre</h3>
+                        <form id="formAddAllowedUser" class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Email du membre :</label>
+                                <input type="email" id="adminUserEmail" placeholder="nom@gmail.com" required class="w-full bg-input border rounded p-2">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Nom / Indicatif :</label>
+                                <input type="text" id="adminUserNom" placeholder="ex: CPT Thomas" required class="w-full bg-input border rounded p-2">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Rôle d'Accès Attribué :</label>
+                                <select id="adminUserRole" class="w-full bg-input border rounded p-2 font-bold text-amber-400">
+                                    <option value="Administrateur">👑 Administrateur (Tous droits)</option>
+                                    <option value="Directeur ENA">🎖️ Directeur ENA</option>
+                                    <option value="Instructeur Référent">🎓 Instructeur Référent</option>
+                                    <option value="Opérateur FS">🪖 Opérateur FS (Lecture / Note)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Ajouter Membre Autorisé</button>
+                        </form>
+                    </div>
+
+                    <!-- Registre des Membres Autorisés -->
+                    <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Liste des Membres Autorisés & Rôles</h3>
+                        <div id="adminUsersList" class="space-y-2 text-xs"></div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ONGLET CHANGELOG / MISES À JOUR -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
@@ -787,6 +936,19 @@
                 </div>
 
                 <div class="space-y-3 max-w-4xl mx-auto">
+                    <!-- VERSION 6.0 -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2 border-amber-500/40">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-crown mr-1"></i> Version 6.0 - Fiche Médicale, Paramètres Couleurs & Onglet Administration Gabin</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Onglet Administration Sécurisé (`tab-admin`) :</strong> Espace réservé uniquement au compte `gabinpompier811@gmail.com` avec gestion des rôles et autorisation des membres.</li>
+                            <li><strong>Fiche Médicale & Visite VMA :</strong> Intégration du groupe sanguin, vaccins, allergies et statut de la visite médicale d'aptitude.</li>
+                            <li><strong>Panneau de Paramètres Couleurs ⚙️ :</strong> Sélection en temps réel des thèmes de fond et des couleurs d'accentuation des onglets.</li>
+                        </ul>
+                    </div>
+
                     <!-- VERSION 5.1 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
@@ -794,7 +956,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Unités Officielles Forces Spéciales :</strong> Restriction de toutes les listes déroulantes et filtres aux 5 unités spécialisées (CPA 10, 4e RHFS, 13e RDP, Commandos Jaubert, GCP).</li>
+                            <li><strong>Unités Officielles Forces Spéciales :</strong> CPA 10, 4e RHFS, 13e RDP, Commandos Jaubert, GCP.</li>
                         </ul>
                     </div>
 
@@ -805,23 +967,8 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Gestion des Unités & Sections (`tab-unites`) :</strong> Organisation des troupes et filtre dynamique.</li>
-                            <li><strong>Carnet de Tir & Inaptitudes GITA (`tab-tirs`) :</strong> Suivi des scores de tir et déclaration des inaptitudes médicales.</li>
-                            <li><strong>Centre de Notifications Interne :</strong> Cloche d'alertes en direct.</li>
-                            <li><strong>Sélecteur de Thèmes Tactiques :</strong> Modes *Night Slate*, *Desert Camo* et *OLED Black*.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 4.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-certificate mr-1"></i> Version 4.0 - Diplômes PDF Officiels, Décorations & Exports Excel</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Générateur de Diplômes (PDF) :</strong> Impression instantanée du brevet officiel ENA pour chaque examen réussi.</li>
-                            <li><strong>Onglet Décorations :</strong> Attribution et registre des médailles militaires.</li>
-                            <li><strong>Exportation Tableur (Excel/CSV) :</strong> Téléchargement direct des effectifs.</li>
+                            <li><strong>Gestion des Unités (`tab-unites`) :</strong> Organisation des troupes et filtres.</li>
+                            <li><strong>Carnet de Tir & Inaptitudes GITA (`tab-tirs`) :</strong> Scores au stand et inaptitudes.</li>
                         </ul>
                     </div>
                 </div>
@@ -885,18 +1032,30 @@
             decorations: [],
             tirs: [],
             inaptitudes: [],
+            allowedUsers: [],
             notifications: [],
             logs: [],
             selectedMilitaireId: null
         };
 
-        // Gestion du Thème
+        // Modals & Paramètres Couleurs
+        function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
+
         function changeTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
             localStorage.setItem('ena_theme', themeName);
         }
+
+        function changeAccent(colorName) {
+            document.documentElement.setAttribute('data-accent', colorName);
+            localStorage.setItem('ena_accent', colorName);
+        }
+
         const savedTheme = localStorage.getItem('ena_theme') || 'slate';
+        const savedAccent = localStorage.getItem('ena_accent') || 'blue';
         changeTheme(savedTheme);
+        changeAccent(savedAccent);
         document.getElementById('themeSelector').value = savedTheme;
 
         // Synchronisation Realtime Database
@@ -959,6 +1118,12 @@
             renderInaptitudes();
             updateDashboard();
             if (state.selectedMilitaireId) loadFicheMilitaire();
+        });
+
+        db.ref('allowedUsers').on('value', (snapshot) => {
+            const val = snapshot.val();
+            state.allowedUsers = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
+            renderAdminUsers();
         });
 
         db.ref('notifications').on('value', (snapshot) => {
@@ -1068,12 +1233,20 @@
             app.classList.remove('hidden');
             app.classList.add('flex');
             document.getElementById('userInfo').textContent = state.user.email;
+
+            // Débloquer l'onglet Administration exclusivement pour gabinpompier811@gmail.com
+            const adminBtn = document.getElementById('navAdminBtn');
+            if (state.user.email.toLowerCase() === 'gabinpompier811@gmail.com') {
+                adminBtn.classList.remove('hidden');
+            } else {
+                adminBtn.classList.add('hidden');
+            }
         }
 
         function setupListeners() {
             document.getElementById('authForm').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const email = document.getElementById('authEmail').value;
+                const email = document.getElementById('authEmail').value.trim();
                 state.user = { email };
                 localStorage.setItem('ena_user', JSON.stringify(state.user));
                 addLog('CONNEXION', `Utilisateur ${email} connecté`);
@@ -1093,6 +1266,17 @@
                     btn.classList.add('active');
                     document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
                 });
+            });
+
+            document.getElementById('formAddAllowedUser')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('adminUserEmail').value.trim();
+                const nom = document.getElementById('adminUserNom').value;
+                const role = document.getElementById('adminUserRole').value;
+
+                db.ref('allowedUsers').push({ id: Date.now().toString(), email, nom, role });
+                addLog('ADMIN_MEMBRE_AJOUTE', `Membre ${email} autorisé avec le rôle ${role}`);
+                e.target.reset();
             });
 
             document.getElementById('formAddPersonnel').addEventListener('submit', (e) => {
@@ -1364,6 +1548,47 @@
             loadFicheMilitaire();
         };
 
+        // Render Admin Membres Autorisés
+        function renderAdminUsers() {
+            const container = document.getElementById('adminUsersList');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            // Toujours afficher Gabin en Administrateur Suprême
+            container.innerHTML += `
+                <div class="bg-amber-950/30 border border-amber-500/50 p-3 rounded-lg flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-amber-300">gabinpompier811@gmail.com (Gabin)</p>
+                        <p class="text-[10px] text-slate-400">Fondateur & Administrateur Suprême</p>
+                    </div>
+                    <span class="px-2 py-0.5 bg-amber-600 text-white rounded text-[10px] font-bold">👑 Admin Suprême</span>
+                </div>
+            `;
+
+            if(state.allowedUsers.length === 0) {
+                container.innerHTML += `<p class="text-slate-500 italic py-2">Aucun autre membre supplémentaire autorisé pour le moment.</p>`;
+                return;
+            }
+
+            state.allowedUsers.forEach(u => {
+                container.innerHTML += `
+                    <div class="bg-input border p-2.5 rounded-lg flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-white">${u.nom} (${u.email})</p>
+                            <p class="text-[10px] text-blue-400">Rôle : ${u.role}</p>
+                        </div>
+                        <button onclick="deleteAllowedUser('${u._fbKey}')" class="text-red-400 hover:text-red-300 text-xs p-1" title="Révoquer accès"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
+                    </div>
+                `;
+            });
+        }
+
+        window.deleteAllowedUser = (fbKey) => {
+            if(confirm("Révoquer l'accès pour ce membre ?")) {
+                db.ref('allowedUsers/' + fbKey).remove().then(() => addLog('ADMIN_MEMBRE_REVOQUE', 'Accès membre révoqué'));
+            }
+        };
+
         // Render Tirs & Inaptitudes
         function renderTirs() {
             const container = document.getElementById('tirsHistoryList');
@@ -1551,7 +1776,7 @@
             }
         };
 
-        // Fiches Individuelles
+        // Fiches Individuelles & Médicales
         function updateFichesSelect() {
             const select = document.getElementById('selectFicheMilitaire');
             const currentValue = select.value;
@@ -1595,6 +1820,13 @@
 
             const formValide = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis');
             document.getElementById('fCountValide').textContent = formValide.length;
+
+            // Données Médicales
+            document.getElementById('fSang').value = mil.sang || 'Non renseigné';
+            document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
+            document.getElementById('fDateVMA').value = mil.dateVMA || '';
+            document.getElementById('fAllergies').value = mil.allergies || '';
+            document.getElementById('fVaccins').value = mil.vaccins || '';
 
             // Décorations obtenues
             const decos = state.decorations.filter(d => d.nom === nom);
@@ -1641,6 +1873,28 @@
 
             document.getElementById('fNotesPerso').value = mil.notesPerso || '';
             container.classList.remove('hidden');
+        };
+
+        window.saveMedicalData = () => {
+            const nom = state.selectedMilitaireId;
+            if (!nom) return;
+
+            const sang = document.getElementById('fSang').value;
+            const aptitudeVMA = document.getElementById('fAptitudeVMA').value;
+            const dateVMA = document.getElementById('fDateVMA').value;
+            const allergies = document.getElementById('fAllergies').value;
+            const vaccins = document.getElementById('fVaccins').value;
+
+            const dossiers = state.effectifs.filter(e => e.nom === nom);
+
+            dossiers.forEach(d => {
+                if (d._fbKey) {
+                    db.ref(`effectifs/${d._fbKey}`).update({ sang, aptitudeVMA, dateVMA, allergies, vaccins });
+                }
+            });
+
+            addLog('MISE_A_JOUR_MEDICALE', `Fiche médicale VMA enregistrée pour : ${nom}`);
+            alert('Fiche médicale enregistrée avec succès !');
         };
 
         window.saveFicheNotes = () => {
@@ -1766,7 +2020,7 @@
             }
             state.notes.forEach(note => {
                 const isActive = note.id === state.activeNoteId;
-                const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\ me");
+                const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\'");
                 container.innerHTML += `
                     <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-input hover:opacity-90 text-slate-300'}">
                         <span class="truncate">${note.title || 'Sans titre'}</span>
