@@ -358,7 +358,7 @@
             logs: []
         };
 
-        // Chargement en temps réel depuis Firebase sans données fictives par défaut
+        // Synchronisation Realtime Database sans fausses données par défaut
         db.ref('files').on('value', (snapshot) => {
             const val = snapshot.val();
             state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
@@ -578,15 +578,16 @@
             db.ref(`notes/${note._fbKey}`).update({ title, content });
         }
 
-        // Fonctions de suppression Firebase directes
-        window.deleteFile = (fbKey, name) => {
-            if (confirm(`Supprimer définitivement le fichier/l'image "${name}" ?`)) {
-                db.ref('files').child(fbKey).remove()
+        // Suppression de fichier propre et sécurisée
+        window.deleteFile = (fbKey) => {
+            if (!fbKey) return;
+            if (confirm("Voulez-vous vraiment supprimer définitivement ce fichier / cette photo ?")) {
+                db.ref('files/' + fbKey).remove()
                     .then(() => {
-                        addLog('SUPPRESSION_FICHIER', `Fichier supprimé : ${name}`);
+                        addLog('SUPPRESSION_FICHIER', `Fichier supprimé`);
                     })
-                    .catch((error) => {
-                        alert("Erreur lors de la suppression : " + error.message);
+                    .catch((err) => {
+                        alert("Erreur de suppression : " + err.message);
                     });
             }
         };
@@ -620,38 +621,49 @@
             }
         };
 
-        // Rendu visuel des documents (Aperçu image inclus)
+        // Rendu des fichiers
         function renderFiles() {
             const container = document.getElementById('fileList');
             container.innerHTML = '';
-            if (state.files.length === 0) {
+            
+            if (!state.files || state.files.length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-500 col-span-full text-center py-4">Aucun fichier importé</p>`;
                 return;
             }
+            
             state.files.forEach(file => {
                 const isImage = file.type && file.type.startsWith('image/');
-                const escapedName = file.name ? file.name.replace(/'/g, "\\'") : 'fichier';
-                container.innerHTML += `
-                    <div class="bg-slate-800 border border-slate-700 rounded-lg p-3 flex flex-col justify-between space-y-2">
-                        ${isImage ? `
-                            <div class="w-full h-24 bg-slate-900 rounded overflow-hidden flex items-center justify-center border border-slate-700/50">
-                                <img src="${file.content}" alt="${file.name}" class="max-h-full max-w-full object-contain">
-                            </div>
-                        ` : ''}
-                        <div class="truncate text-xs font-bold text-slate-200" title="${file.name}">
-                            <i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'} mr-1"></i> ${file.name}
+                const fileNameSafe = file.name ? file.name : 'Fichier';
+                
+                const card = document.createElement('div');
+                card.className = "bg-slate-800 border border-slate-700 rounded-lg p-3 flex flex-col justify-between space-y-2";
+                
+                card.innerHTML = `
+                    ${isImage ? `
+                        <div class="w-full h-24 bg-slate-900 rounded overflow-hidden flex items-center justify-center border border-slate-700/50">
+                            <img src="${file.content}" alt="Aperçu" class="max-h-full max-w-full object-contain">
                         </div>
-                        <div class="text-[10px] text-slate-400">${file.size || ''}</div>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
-                            <a href="${file.content}" download="${file.name}" class="text-blue-400 hover:text-white text-xs px-2 py-1 bg-slate-900/60 rounded" title="Télécharger">
-                                <i class="fa-solid fa-download"></i>
-                            </a>
-                            <button onclick="deleteFile('${file._fbKey}', '${escapedName}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-900/40 border border-red-700/50 rounded" title="Supprimer">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
+                    ` : ''}
+                    <div class="truncate text-xs font-bold text-slate-200" title="${fileNameSafe}">
+                        <i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'} mr-1"></i> ${fileNameSafe}
+                    </div>
+                    <div class="text-[10px] text-slate-400">${file.size || ''}</div>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
+                        <a href="${file.content}" download="${fileNameSafe}" class="text-blue-400 hover:text-white text-xs px-2 py-1 bg-slate-900/60 rounded" title="Télécharger">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                        <button type="button" class="btn-delete-file text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-900/40 border border-red-700/50 rounded flex items-center gap-1" title="Supprimer">
+                            <i class="fa-solid fa-trash"></i> Supprimer
+                        </button>
                     </div>
                 `;
+                
+                const deleteBtn = card.querySelector('.btn-delete-file');
+                deleteBtn.addEventListener('click', () => {
+                    window.deleteFile(file._fbKey);
+                });
+                
+                container.appendChild(card);
             });
         }
 
