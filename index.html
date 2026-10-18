@@ -163,7 +163,7 @@
                 <p class="text-sm text-slate-300">Le Directeur de l'École Nationale de l'Armée atteste que :</p>
                 <p id="dipNomMilitaire" class="text-3xl font-black text-white uppercase tracking-wider underline decoration-amber-500"></p>
                 <p class="text-xs text-slate-400">Matricule : <span id="dipMatricule" class="font-mono text-amber-300"></span></p>
-                <p class="text-sm text-slate-200">A satisfied aux épreuves théoriques et pratiques du brevet :</p>
+                <p class="text-sm text-slate-200">A satisfait aux épreuves théoriques et pratiques du brevet :</p>
                 <p id="dipFormation" class="text-xl font-bold text-blue-400 bg-blue-900/30 px-4 py-1.5 rounded-lg border border-blue-500/50 inline-block"></p>
             </div>
 
@@ -280,11 +280,11 @@
                     </span>
                     <select id="dashUniteFilter" onchange="updateDashboard()" class="bg-input border rounded px-3 py-1.5 text-xs focus:outline-none">
                         <option value="TOUTES">Toutes les Unités</option>
-                        <option value="1ère Compagnie">1ère Compagnie</option>
-                        <option value="2ème Compagnie">2ème Compagnie</option>
-                        <option value="Section Appui">Section Appui</option>
-                        <option value="Commando">Commando / FS</option>
-                        <option value="État-Major">État-Major</option>
+                        <option value="CPA 10">CPA 10</option>
+                        <option value="4e RHFS">4e RHFS</option>
+                        <option value="13e RDP">13e RDP</option>
+                        <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
+                        <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
                     </select>
                 </div>
 
@@ -415,11 +415,11 @@
                         <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         
                         <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                            <option value="1ère Compagnie">1ère Compagnie</option>
-                            <option value="2ème Compagnie">2ème Compagnie</option>
-                            <option value="Section Appui">Section Appui</option>
-                            <option value="Commando">Commando / FS</option>
-                            <option value="État-Major">État-Major</option>
+                            <option value="CPA 10">CPA 10</option>
+                            <option value="4e RHFS">4e RHFS</option>
+                            <option value="13e RDP">13e RDP</option>
+                            <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
+                            <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
                         </select>
                         
                         <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
@@ -449,7 +449,7 @@
                                     <th class="p-2">Militaire</th>
                                     <th class="p-2">Grade</th>
                                     <th class="p-2">Matricule</th>
-                                    <th class="p-2">Unité / Section</th>
+                                    <th class="p-2">Unité / Compagnie</th>
                                     <th class="p-2">Formation Demandée</th>
                                     <th class="p-2">Statut / Note</th>
                                     <th class="p-2 text-right">Action</th>
@@ -466,18 +466,18 @@
                 <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-users-viewfinder text-blue-500"></i> Organisation des Unités & Sections
+                            <i class="fa-solid fa-users-viewfinder text-blue-500"></i> Répertoire des Unités & Forces Spéciales
                         </h2>
-                        <p class="text-xs text-slate-400">Consultez la répartition des militaires par compagnie et section d'affectation</p>
+                        <p class="text-xs text-slate-400">Consultez les effectifs engagés par unité et régiment spécialisé</p>
                     </div>
-                    <div class="w-full sm:w-64">
+                    <div class="w-full sm:w-72">
                         <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-input border rounded p-2 text-xs font-bold">
                             <option value="TOUTES">Toutes les Unités</option>
-                            <option value="1ère Compagnie">1ère Compagnie</option>
-                            <option value="2ème Compagnie">2ème Compagnie</option>
-                            <option value="Section Appui">Section Appui</option>
-                            <option value="Commando">Commando / FS</option>
-                            <option value="État-Major">État-Major</option>
+                            <option value="CPA 10">CPA 10</option>
+                            <option value="4e RHFS">4e RHFS</option>
+                            <option value="13e RDP">13e RDP</option>
+                            <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
+                            <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
                         </select>
                     </div>
                 </div>
@@ -589,7 +589,7 @@
                         </div>
 
                         <div class="bg-card p-4 rounded-xl border flex flex-col justify-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Unité / Section</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Unité / Compagnie</span>
                             <p id="fAff" class="text-sm font-bold text-slate-200 mt-1"></p>
                         </div>
 
@@ -787,17 +787,28 @@
                 </div>
 
                 <div class="space-y-3 max-w-4xl mx-auto">
-                    <!-- VERSION 5.0 -->
+                    <!-- VERSION 5.1 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-cyan-400"><i class="fa-solid fa-crosshair mr-1"></i> Version 5.0 - Unités, Carnet de Tirs, GITA, Notifications & Thèmes</span>
+                            <span class="font-bold text-xs text-cyan-400"><i class="fa-solid fa-shield-halved mr-1"></i> Version 5.1 - Unités Forces Spéciales Exclusives</span>
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Gestion des Unités & Sections (`tab-unites`) :</strong> Organisation des troupes par compagnie (1ère, 2ème, Appui, Commando) et filtre dynamique.</li>
-                            <li><strong>Carnet de Tir & Inaptitudes GITA (`tab-tirs`) :</strong> Suivi des scores de tir au stand (HK416, Glock, SCAR-H) et déclaration des inaptitudes médicales temporaires.</li>
-                            <li><strong>Centre de Notifications Interne :</strong> Cloche d'alertes en direct dans la navigation supérieure.</li>
-                            <li><strong>Sélecteur de Thèmes Tactiques :</strong> Prise en charge des modes *Night Slate*, *Desert Camo* et *OLED Black*.</li>
+                            <li><strong>Unités Officielles Forces Spéciales :</strong> Restriction de toutes les listes déroulantes et filtres aux 5 unités spécialisées (CPA 10, 4e RHFS, 13e RDP, Commandos Jaubert, GCP).</li>
+                        </ul>
+                    </div>
+
+                    <!-- VERSION 5.0 -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-crosshair mr-1"></i> Version 5.0 - Unités, Carnet de Tirs, GITA, Notifications & Thèmes</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Gestion des Unités & Sections (`tab-unites`) :</strong> Organisation des troupes et filtre dynamique.</li>
+                            <li><strong>Carnet de Tir & Inaptitudes GITA (`tab-tirs`) :</strong> Suivi des scores de tir et déclaration des inaptitudes médicales.</li>
+                            <li><strong>Centre de Notifications Interne :</strong> Cloche d'alertes en direct.</li>
+                            <li><strong>Sélecteur de Thèmes Tactiques :</strong> Modes *Night Slate*, *Desert Camo* et *OLED Black*.</li>
                         </ul>
                     </div>
 
@@ -811,18 +822,6 @@
                             <li><strong>Générateur de Diplômes (PDF) :</strong> Impression instantanée du brevet officiel ENA pour chaque examen réussi.</li>
                             <li><strong>Onglet Décorations :</strong> Attribution et registre des médailles militaires.</li>
                             <li><strong>Exportation Tableur (Excel/CSV) :</strong> Téléchargement direct des effectifs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 3.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-rocket mr-1"></i> Version 3.0 - Grand Tableau de Bord & Planning</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite global et indicateurs.</li>
-                            <li><strong>Planning & Sessions :</strong> Module de programmation des examens.</li>
                         </ul>
                     </div>
                 </div>
@@ -1317,14 +1316,14 @@
             }
         }
 
-        // Render Unités
+        // Render Unités Exclusives
         function renderUnites() {
             const container = document.getElementById('unitesListGrid');
             if(!container) return;
             container.innerHTML = '';
 
             const selectedFilter = document.getElementById('uniteFilterSelect')?.value || 'TOUTES';
-            const unites = ["1ère Compagnie", "2ème Compagnie", "Section Appui", "Commando", "État-Major"];
+            const unites = ["CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"];
 
             unites.forEach(u => {
                 if (selectedFilter !== 'TOUTES' && selectedFilter !== u) return;
@@ -1767,7 +1766,7 @@
             }
             state.notes.forEach(note => {
                 const isActive = note.id === state.activeNoteId;
-                const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\'");
+                const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\ me");
                 container.innerHTML += `
                     <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-input hover:opacity-90 text-slate-300'}">
                         <span class="truncate">${note.title || 'Sans titre'}</span>
@@ -1813,7 +1812,7 @@
                         <td class="p-2.5 font-bold text-white">${item.nom}</td>
                         <td class="p-2.5">${item.grade}</td>
                         <td class="p-2.5 font-mono text-xs text-blue-400">${item.mat}</td>
-                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] text-slate-300 font-semibold">${item.aff || '1ère Compagnie'}</span></td>
+                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] text-slate-300 font-semibold">${item.aff || 'CPA 10'}</span></td>
                         <td class="p-2.5">${item.form}</td>
                         <td class="p-2.5">
                             ${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold border border-green-700">${item.eval.resultat} (${item.eval.note}/20)</span>` : `<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px] border border-amber-700">En attente</span>`}
