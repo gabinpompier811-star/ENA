@@ -1,319 +1,837 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portail ENA - Espace de Travail & Formations Militaire</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDK (v9 compat) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <style>
-        .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #60a5fa; background-color: #1e293b; }
-        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portail ENA - Espace de Travail & Formations Militaire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Librairie Export PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Firebase SDKs (Compat v9) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #60a5fa; background-color: #1e293b; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #0f172a; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    .row-valide { background-color: rgba(22, 101, 52, 0.35) !important; border-left: 4px solid #22c55e !important; }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <!-- En-tête -->
-    <header class="bg-slate-800 border-b border-slate-700 p-4 shadow-md flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <i class="fa-solid fa-shield-halved text-blue-500 text-2xl"></i>
-            <div>
-                <h1 class="text-xl font-bold tracking-wider">ENA - École Nationale de l'Armée</h1>
-                <p class="text-xs text-slate-400">Gestion du Personnel, Formations & Instructions</p>
-            </div>
+  <!-- Modal Authentification -->
+  <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 w-full max-w-md shadow-2xl">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-600/20 text-blue-500 rounded-lg mb-2">
+          <i class="fa-solid fa-shield-halved text-2xl"></i>
         </div>
-        <div class="flex items-center space-x-3 text-sm">
-            <span id="connection-status" class="px-3 py-1 rounded-full bg-yellow-600 text-white font-medium text-xs">Connexion...</span>
+        <h2 class="text-xl font-bold text-white">Portail Militaire ENA</h2>
+        <p class="text-xs text-slate-400 mt-1">Identification requise pour l'accès sécurisé</p>
+      </div>
+
+      <form id="authForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Identifiant / Email</label>
+          <input type="text" id="authEmail" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
         </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
+          <input type="password" id="authPassword" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg transition">
+          Se connecter / S'inscrire
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Fiche d'Évaluation -->
+  <div id="evalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="evalModalTitle" class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-check text-blue-500"></i> Fiche d'Évaluation
+        </h3>
+        <button onclick="closeEvalModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="evalForm" class="space-y-3">
+        <input type="hidden" id="evalCandidateId">
+        
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Candidat</label>
+            <input type="text" id="evalCandidateName" readonly class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-slate-300 font-bold">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Formation Evaluée</label>
+            <input type="text" id="evalFormName" readonly class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-blue-400 font-bold">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Résultat Exam</label>
+            <select id="evalResultat" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+              <option value="Admis">Admis</option>
+              <option value="Ajourné">Ajourné</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Note / 20</label>
+            <input type="number" id="evalNote" min="0" max="20" step="0.5" placeholder="15" required class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Mention</label>
+            <select id="evalMention" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white">
+              <option value="Pas de mention">Pas de mention</option>
+              <option value="Assez Bien">Assez Bien</option>
+              <option value="Bien">Bien</option>
+              <option value="Très Bien">Très Bien</option>
+              <option value="Félicitation des Instructeurs">Félicitation des Instructeurs</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Responsable Formateur</label>
+            <select id="evalFormateur" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Commentaires & Remarques</label>
+          <textarea id="evalComments" rows="3" placeholder="Avis de l'instructeur..." class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-xs text-white resize-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeEvalModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-xs rounded hover:bg-slate-700">Annuler</button>
+          <button type="submit" class="px-4 py-1.5 bg-green-600 text-white text-xs font-bold rounded hover:bg-green-500">Valider & Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Statistiques Formateur -->
+  <div id="fmtStatsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="fmtStatsTitle" class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-graduate text-blue-500"></i> Fiche Formateur
+        </h3>
+        <button onclick="closeFmtStatsModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700 text-center space-y-1">
+        <p id="fmtStatsName" class="text-sm font-bold text-white"></p>
+        <p id="fmtStatsRole" class="text-xs text-blue-400"></p>
+        <div class="pt-2">
+          <span class="text-[10px] uppercase text-slate-400 tracking-wider">Total Formations Validées</span>
+          <p id="fmtStatsCount" class="text-3xl font-extrabold text-green-400">0</p>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold text-slate-300 mb-2">Historique des Formations Dispensées :</h4>
+        <div id="fmtStatsHistory" class="max-h-40 overflow-y-auto custom-scroll space-y-1 text-xs"></div>
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeFmtStatsModal()" class="px-4 py-1.5 bg-slate-800 text-slate-300 text-xs rounded hover:bg-slate-700">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Principale -->
+  <div id="app" class="hidden flex-col h-screen">
+    <!-- Navbar Top -->
+    <header class="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-shield-halved text-blue-500 text-xl"></i>
+        <span class="font-bold text-slate-100 text-sm tracking-wide">ENA WORKSPACE (Synchronisé Cloud)</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span id="userInfo" class="text-xs text-slate-400"></span>
+        <button id="btnSaveGlobal" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5">
+          <i class="fa-solid fa-download"></i> Backup (JSON)
+        </button>
+        <button id="btnLogout" class="text-xs bg-red-900/30 text-red-400 hover:bg-red-900/50 border border-red-800/40 px-3 py-1.5 rounded-md">
+          Déconnexion
+        </button>
+      </div>
     </header>
 
-    <!-- Navigation par onglets -->
-    <nav class="bg-slate-800 border-b border-slate-700 flex px-4 space-x-2 overflow-x-auto">
-        <button onclick="switchTab('personnel')" id="btn-personnel" class="tab-btn active px-6 py-3 font-medium transition hover:bg-slate-700 whitespace-nowrap"><i class="fa-solid fa-users mr-2"></i> Personnel</button>
-        <button onclick="switchTab('formations')" id="btn-formations" class="tab-btn px-6 py-3 font-medium transition hover:bg-slate-700 whitespace-nowrap"><i class="fa-solid fa-graduation-cap mr-2"></i> Suivi Formations</button>
-        <button onclick="switchTab('instructeurs')" id="btn-instructeurs" class="tab-btn px-6 py-3 font-medium transition hover:bg-slate-700 whitespace-nowrap"><i class="fa-solid fa-chalkboard-user mr-2"></i> Instructeurs & Hiérarchie</button>
+    <!-- Navigation par Onglets -->
+    <nav class="bg-slate-900/50 border-b border-slate-800 flex items-center px-2 overflow-x-auto custom-scroll">
+      <button class="tab-btn active px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="docs">
+        <i class="fa-solid fa-folder-tree"></i> Documents & Fichiers
+      </button>
+      <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="ena">
+        <i class="fa-solid fa-graduation-cap"></i> ENA & Formations
+      </button>
+      <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
+        <i class="fa-solid fa-note-sticky"></i> Notes & Bloc-notes
+      </button>
+      <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="logs">
+        <i class="fa-solid fa-list-check"></i> Journal des Logs
+      </button>
     </nav>
 
-    <!-- Contenu Principal -->
-    <main class="flex-1 p-6 max-w-7xl mx-auto w-full space-y-6">
-        
-        <!-- Onglet Personnel -->
-        <section id="tab-personnel" class="space-y-6">
-            <div class="flex justify-between items-center flex-wrap gap-4">
-                <h2 class="text-2xl font-bold">Effectifs et Registre Militaire</h2>
-                <button onclick="openModal('personnel')" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg font-medium transition flex items-center space-x-2 shadow">
-                    <i class="fa-solid fa-user-plus"></i> <span>Enregistrer un agent</span>
-                </button>
-            </div>
-            <div class="bg-slate-800 rounded-xl shadow border border-slate-700 overflow-hidden">
-                <div class="overflow-x-auto custom-scroll">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-700 text-slate-300 text-xs uppercase">
-                            <tr>
-                                <th class="p-4">Nom / Prénom</th>
-                                <th class="p-4">Grade</th>
-                                <th class="p-4">Matricule</th>
-                                <th class="p-4">Affectation</th>
-                                <th class="p-4">Spécialisation</th>
-                                <th class="p-4">Formation Demandée</th>
-                                <th class="p-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="personnel-list" class="divide-y divide-slate-700 text-sm">
-                            <!-- Données injectées -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Onglet Formations -->
-        <section id="tab-formations" class="space-y-6 hidden">
-            <div class="flex justify-between items-center flex-wrap gap-4">
-                <h2 class="text-2xl font-bold">Suivi des Formations & Examens</h2>
-                <button onclick="openModal('formation')" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg font-medium transition flex items-center space-x-2 shadow">
-                    <i class="fa-solid fa-folder-plus"></i> <span>Ajouter un suivi de formation</span>
-                </button>
-            </div>
-            <div class="bg-slate-800 rounded-xl shadow border border-slate-700 overflow-hidden">
-                <div class="overflow-x-auto custom-scroll">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-700 text-slate-300 text-xs uppercase">
-                            <tr>
-                                <th class="p-4">Candidat</th>
-                                <th class="p-4">Formation</th>
-                                <th class="p-4">Responsable</th>
-                                <th class="p-4">Date RDV</th>
-                                <th class="p-4">Résultat / Note</th>
-                                <th class="p-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="formations-list" class="divide-y divide-slate-700 text-sm">
-                            <!-- Données injectées -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Onglet Instructeurs -->
-        <section id="tab-instructeurs" class="space-y-6 hidden">
-            <div class="flex justify-between items-center flex-wrap gap-4">
-                <h2 class="text-2xl font-bold">Corps des Instructeurs & Encadrement</h2>
-                <button onclick="openModal('instructeur')" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg font-medium transition flex items-center space-x-2 shadow">
-                    <i class="fa-solid fa-user-tie"></i> <span>Ajouter un cadre / instructeur</span>
-                </button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="instructors-grid">
-                <!-- Cartes instructeurs injectées -->
-            </div>
-        </section>
-    </main>
-
-    <!-- Modale d'ajout générique -->
-    <div id="modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-            <h3 id="modal-title" class="text-xl font-bold text-blue-400">Ajouter</h3>
-            <form id="generic-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                <div id="modal-fields" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2 custom-scroll">
-                    <!-- Champs dynamiques -->
-                </div>
-                <div class="flex justify-end space-x-3 pt-4 border-t border-slate-700">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-medium transition">Annuler</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition shadow">Enregistrer</button>
-                </div>
-            </form>
+    <!-- Contenu des Onglets -->
+    <main class="flex-1 overflow-hidden relative">
+      
+      <!-- ONGLET DOCUMENTS -->
+      <section id="tab-docs" class="tab-content h-full p-4 flex flex-col space-y-4">
+        <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
+          <div class="flex items-center space-x-2">
+            <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
+              <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
+              <input type="file" id="fileInput" multiple class="hidden">
+            </label>
+            <button id="btnNewTextFile" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-lg border border-slate-700 flex items-center gap-2">
+              <i class="fa-solid fa-file-circle-plus"></i> Nouveau fichier texte
+            </button>
+          </div>
+          <span class="text-xs text-slate-500">Sauvegarde en direct active</span>
         </div>
-    </div>
 
-    <!-- Script de gestion Firebase & Logique de l'application -->
-    <script>
-        const firebaseConfig = {
-            databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app"
+        <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-slate-900/30 rounded-xl border border-slate-800/50"></div>
+      </section>
+
+      <!-- ONGLET ENA & FORMATIONS -->
+      <section id="tab-ena" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+        
+        <!-- Gestion des Formateurs -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <h3 class="text-sm font-bold text-white mb-3">Ajouter un Formateur</h3>
+            <form id="formAddFormateur" class="space-y-2">
+              <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+              <input type="text" id="fmtRole" placeholder="Rôle (ex: Instructeur Chef)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+              <input type="text" id="fmtSpec" placeholder="Spécialité (ex: Drones, Tir)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+              <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Ajouter Formateur</button>
+            </form>
+          </div>
+
+          <div class="md:col-span-2 bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <h3 class="text-sm font-bold text-white mb-1">Corps des Formateurs / Instructeurs</h3>
+            <p class="text-[10px] text-slate-400 mb-3">Cliquez sur un formateur pour afficher le nombre de formations qu'il a dispensées</p>
+            <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Suivi des Formations Demandées & Passées -->
+        <div id="pdfContentEffectifs" class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Demandes de Formations & Évaluations</h3>
+            <button id="btnExportEffectifsPDF" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
+              <i class="fa-solid fa-file-pdf"></i> Exporter Tableau (PDF)
+            </button>
+          </div>
+          
+          <!-- Formulaire de Demande de Formation -->
+          <form id="formAddPersonnel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2 mb-3 pt-2">
+            <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+            <input type="text" id="pGrade" placeholder="Grade" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+            <input type="text" id="pMat" placeholder="Matricule" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+            <input type="text" id="pAff" placeholder="Affectation" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+            
+            <select id="pForm" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+              <option value="" disabled selected>-- Formation Demandée --</option>
+              <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
+              <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
+              <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
+              <option value="[CC1] Caporal-Chef de 1ère classe">[CC1] Caporal-Chef de 1ère classe</option>
+              <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
+              <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
+              <option value="[BM2] Brevet Militaire de niveau 2">[BM2] Brevet Militaire de niveau 2</option>
+              <option value="[FG3] Brevet de Major">[FG3] Brevet de Major</option>
+              <option value="[FAE] Formation d'Application">[FAE] Formation d'Application</option>
+              <option value="[CDU] Cursus de Chef d'Unité">[CDU] Cursus de Chef d'Unité</option>
+              <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
+            </select>
+
+            <input type="datetime-local" id="pDateTime" required class="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+
+            <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Inscrire Formation</button>
+          </form>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-2">Militaire</th>
+                  <th class="p-2">Grade</th>
+                  <th class="p-2">Matricule</th>
+                  <th class="p-2">Formation Demandée</th>
+                  <th class="p-2">Date & Heure Demande</th>
+                  <th class="p-2">Statut / Note</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="effectifsTable" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ONGLET NOTES -->
+      <section id="tab-notes" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <button id="btnNewNote" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Nouvelle Note
+            </button>
+            <button id="btnExportNotePDF" class="bg-red-600 hover:bg-red-500 text-white text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf"></i> Exporter Note (PDF)
+            </button>
+          </div>
+          <span class="text-xs text-slate-400">Synchronisation cloud automatique</span>
+        </div>
+        <div class="flex-1 flex gap-4 overflow-hidden">
+          <div id="notesList" class="w-1/3 bg-slate-900 rounded-xl border border-slate-800 p-2 overflow-y-auto custom-scroll space-y-2"></div>
+          <div id="pdfNoteContainer" class="w-2/3 bg-slate-900 rounded-xl border border-slate-800 p-4 flex flex-col">
+            <input type="text" id="noteTitle" placeholder="Titre de la note..." class="bg-transparent border-b border-slate-800 pb-2 text-sm font-bold text-white focus:outline-none mb-3">
+            <textarea id="noteContent" placeholder="Écrivez vos notes ici..." class="flex-1 bg-transparent text-xs text-slate-300 resize-none focus:outline-none custom-scroll"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ONGLET LOGS -->
+      <section id="tab-logs" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-receipt text-blue-500"></i> Historique & Logs d'Activité
+          </h2>
+          <button id="btnExportLogsPDF" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
+            <i class="fa-solid fa-file-pdf"></i> Exporter Logs (PDF)
+          </button>
+        </div>
+        <div id="pdfLogsContainer" class="flex-1 bg-slate-900 rounded-xl border border-slate-800 p-2 overflow-y-auto custom-scroll">
+          <table class="w-full text-left">
+            <thead class="bg-slate-800 text-slate-400 text-[10px] uppercase">
+              <tr>
+                <th class="p-2">Horodatage</th>
+                <th class="p-2">Utilisateur</th>
+                <th class="p-2">Action</th>
+                <th class="p-2">Détails</th>
+              </tr>
+            </thead>
+            <tbody id="logsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Configuration Firebase (Connecté à votre projet Google)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-ljiyhlGBQbatTbnbQEh1KFPdVxCL4",
+      authDomain: "forces-speciales-francaises.firebaseapp.com",
+      databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "forces-speciales-francaises",
+      storageBucket: "forces-speciales-francaises.firebasestorage.app",
+      messagingSenderId: "618860439997",
+      appId: "1:618860439997:web:2242c1f71573c8f5e4ad4",
+      measurementId: "G-H5HJZPYXJG"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // État global synchronisé
+    const state = {
+      user: JSON.parse(localStorage.getItem('ena_user')) || null,
+      files: [],
+      notes: [{ id: '1', title: 'Ordre du jour ENA', content: 'Préparer la session de formation.' }],
+      activeNoteId: '1',
+      effectifs: [],
+      formateurs: [
+        { id: 'f1', nom: 'LCL Alex Girond', role: 'Directeur / Superviseur', specialite: 'Commandement' }
+      ],
+      logs: []
+    };
+
+    // Écoute des données en temps réel depuis Firebase
+    db.ref('ena_data').on('value', (snapshot) => {
+      const cloudData = snapshot.val();
+      if (cloudData) {
+        state.effectifs = cloudData.effectifs || [];
+        state.formateurs = cloudData.formateurs || [];
+        state.notes = cloudData.notes || [{ id: '1', title: 'Ordre du jour ENA', content: 'Préparer la session.' }];
+        state.files = cloudData.files || [];
+        state.logs = cloudData.logs || [];
+        
+        if (!state.activeNoteId && state.notes.length > 0) {
+          state.activeNoteId = state.notes[0].id;
+        }
+
+        renderFiles();
+        renderNotes();
+        loadActiveNote();
+        renderEffectifs();
+        renderFormateurs();
+        renderLogs();
+      }
+    });
+
+    function syncToCloud() {
+      db.ref('ena_data').set({
+        effectifs: state.effectifs,
+        formateurs: state.formateurs,
+        notes: state.notes,
+        files: state.files,
+        logs: state.logs
+      });
+    }
+
+    function addLog(action, details) {
+      const logEntry = {
+        id: Date.now().toString(),
+        date: new Date().toLocaleString('fr-FR'),
+        user: state.user ? state.user.email : 'Anonyme',
+        action, details
+      };
+      state.logs.unshift(logEntry);
+      syncToCloud();
+    }
+
+    function generatePDF(elementId, filename) {
+      const element = document.getElementById(elementId);
+      const opt = {
+        margin:       0.3,
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, backgroundColor: '#0f172a' },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+      };
+      html2pdf().set(opt).from(element).save();
+      addLog('EXPORT_PDF', `Export PDF : ${filename}`);
+    }
+
+    function init() {
+      if (state.user) {
+        showApp();
+      } else {
+        document.getElementById('authModal').classList.remove('hidden');
+      }
+      
+      const dtInput = document.getElementById('pDateTime');
+      if(dtInput) {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dtInput.value = now.toISOString().slice(0,16);
+      }
+
+      setupListeners();
+    }
+
+    function showApp() {
+      document.getElementById('authModal').classList.add('hidden');
+      const app = document.getElementById('app');
+      app.classList.remove('hidden');
+      app.classList.add('flex');
+      document.getElementById('userInfo').textContent = state.user.email;
+    }
+
+    function setupListeners() {
+      document.getElementById('authForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('authEmail').value;
+        state.user = { email };
+        localStorage.setItem('ena_user', JSON.stringify(state.user));
+        addLog('CONNEXION', `Utilisateur ${email} connecté`);
+        showApp();
+      });
+
+      document.getElementById('btnLogout').addEventListener('click', () => {
+        addLog('DECONNEXION', `Déconnexion de ${state.user.email}`);
+        localStorage.removeItem('ena_user');
+        location.reload();
+      });
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+          btn.classList.add('active');
+          document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+        });
+      });
+
+      // Formulaire Demande Formation
+      document.getElementById('formAddPersonnel').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nom = document.getElementById('pNom').value;
+        const grade = document.getElementById('pGrade').value;
+        const mat = document.getElementById('pMat').value;
+        const aff = document.getElementById('pAff').value;
+        const form = document.getElementById('pForm').value;
+        const dtVal = document.getElementById('pDateTime').value;
+
+        const dateObj = dtVal ? new Date(dtVal) : new Date();
+        const dateDemande = `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`;
+
+        state.effectifs.push({
+          id: Date.now().toString(),
+          nom, grade, mat, aff, form, dateDemande,
+          eval: { evaluee: false }
+        });
+
+        syncToCloud();
+        addLog('INSCRIPTION_FORMATION', `Candidat ${nom} inscrit pour ${form}`);
+        e.target.reset();
+      });
+
+      // Soumission Formulaire Évaluation
+      document.getElementById('evalForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const candidateId = document.getElementById('evalCandidateId').value;
+        const candidate = state.effectifs.find(item => item.id === candidateId);
+
+        if (candidate) {
+          candidate.eval = {
+            evaluee: true,
+            resultat: document.getElementById('evalResultat').value,
+            note: document.getElementById('evalNote').value,
+            mention: document.getElementById('evalMention').value,
+            formateur: document.getElementById('evalFormateur').value,
+            comments: document.getElementById('evalComments').value,
+            dateEval: new Date().toLocaleDateString('fr-FR')
+          };
+
+          syncToCloud();
+          closeEvalModal();
+          addLog('EVALUATION_VALIDEE', `Formation ${candidate.form} évaluée pour ${candidate.nom} (Note: ${candidate.eval.note}/20 - ${candidate.eval.resultat})`);
+        }
+      });
+
+      // Exports PDF
+      document.getElementById('btnExportEffectifsPDF').addEventListener('click', () => {
+        generatePDF('pdfContentEffectifs', `Demandes_Formations_ENA_${new Date().toISOString().slice(0,10)}.pdf`);
+      });
+
+      document.getElementById('btnExportNotePDF').addEventListener('click', () => {
+        generatePDF('pdfNoteContainer', `Note_ENA_${new Date().toISOString().slice(0,10)}.pdf`);
+      });
+
+      document.getElementById('btnExportLogsPDF').addEventListener('click', () => {
+        generatePDF('pdfLogsContainer', `Logs_ENA_${new Date().toISOString().slice(0,10)}.pdf`);
+      });
+
+      document.getElementById('fileInput').addEventListener('change', (e) => {
+        Array.from(e.target.files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            state.files.push({
+              id: Date.now().toString(),
+              name: file.name,
+              size: (file.size / 1024).toFixed(1) + ' Ko',
+              type: file.type,
+              content: event.target.result
+            });
+            syncToCloud();
+            addLog('IMPORT_FICHIER', `Import de ${file.name}`);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      document.getElementById('formAddFormateur').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nom = document.getElementById('fmtNom').value;
+        const role = document.getElementById('fmtRole').value;
+        const specialite = document.getElementById('fmtSpec').value;
+        state.formateurs.push({ id: Date.now().toString(), nom, role, specialite });
+        syncToCloud();
+        addLog('AJOUT_FORMATEUR', `Formateur ajouté : ${nom} (${role})`);
+        e.target.reset();
+      });
+
+      document.getElementById('btnNewNote').addEventListener('click', () => {
+        const newNote = { id: Date.now().toString(), title: 'Nouvelle Note', content: '' };
+        state.notes.push(newNote);
+        state.activeNoteId = newNote.id;
+        syncToCloud();
+        addLog('CREATION_NOTE', 'Note créée');
+      });
+
+      document.getElementById('noteTitle').addEventListener('input', () => {
+        saveCurrentNote();
+        syncToCloud();
+      });
+      document.getElementById('noteContent').addEventListener('input', () => {
+        saveCurrentNote();
+        syncToCloud();
+      });
+
+      document.getElementById('btnSaveGlobal').addEventListener('click', () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = `ENA_Backup_${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        addLog('EXPORT_GLOBAL', 'Sauvegarde JSON exportée');
+      });
+    }
+
+    window.openEvalModal = (candidateId) => {
+      const candidate = state.effectifs.find(item => item.id === candidateId);
+      if (!candidate) return;
+
+      document.getElementById('evalCandidateId').value = candidate.id;
+      document.getElementById('evalCandidateName').value = `${candidate.grade} ${candidate.nom}`;
+      document.getElementById('evalFormName').value = candidate.form;
+
+      const selectFmt = document.getElementById('evalFormateur');
+      selectFmt.innerHTML = '';
+      state.formateurs.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.nom;
+        opt.textContent = `${f.nom} (${f.role})`;
+        selectFmt.appendChild(opt);
+      });
+
+      if (candidate.eval && candidate.eval.evaluee) {
+        document.getElementById('evalResultat').value = candidate.eval.resultat || 'Admis';
+        document.getElementById('evalNote').value = candidate.eval.note || '';
+        document.getElementById('evalMention').value = candidate.eval.mention || 'Pas de mention';
+        if (candidate.eval.formateur) selectFmt.value = candidate.eval.formateur;
+        document.getElementById('evalComments').value = candidate.eval.comments || '';
+      } else {
+        document.getElementById('evalResultat').value = 'Admis';
+        document.getElementById('evalNote').value = '';
+        document.getElementById('evalMention').value = 'Pas de mention';
+        document.getElementById('evalComments').value = '';
+      }
+
+      document.getElementById('evalModal').classList.remove('hidden');
+    };
+
+    window.closeEvalModal = () => {
+      document.getElementById('evalModal').classList.add('hidden');
+    };
+
+    window.openFmtStatsModal = (formateurId) => {
+      const fmt = state.formateurs.find(f => f.id === formateurId);
+      if (!fmt) return;
+
+      document.getElementById('fmtStatsName').textContent = fmt.nom;
+      document.getElementById('fmtStatsRole').textContent = `${fmt.role} - Spécialité: ${fmt.specialite}`;
+
+      const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === fmt.nom);
+      document.getElementById('fmtStatsCount').textContent = formationsFaites.length;
+
+      const histContainer = document.getElementById('fmtStatsHistory');
+      histContainer.innerHTML = '';
+
+      if (formationsFaites.length === 0) {
+        histContainer.innerHTML = '<p class="text-slate-500 italic">Aucune formation évaluée par ce formateur pour le moment.</p>';
+      } else {
+        formationsFaites.forEach(f => {
+          const div = document.createElement('div');
+          div.className = 'p-2 bg-slate-800 rounded border border-slate-700/60 flex justify-between items-center';
+          div.innerHTML = `
+            <div>
+              <p class="font-bold text-white">${f.nom} <span class="text-slate-400 font-normal">(${f.grade})</span></p>
+              <p class="text-[10px] text-blue-400">${f.form}</p>
+            </div>
+            <div class="text-right">
+              <span class="px-1.5 py-0.5 bg-green-900/40 text-green-400 border border-green-800 rounded text-[10px] font-bold">${f.eval.note}/20</span>
+              <p class="text-[9px] text-slate-500">${f.eval.dateEval || ''}</p>
+            </div>
+          `;
+          histContainer.appendChild(div);
+        });
+      }
+
+      document.getElementById('fmtStatsModal').classList.remove('hidden');
+    };
+
+    window.closeFmtStatsModal = () => {
+      document.getElementById('fmtStatsModal').classList.add('hidden');
+    };
+
+    function renderEffectifs() {
+      const tbody = document.getElementById('effectifsTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      state.effectifs.forEach(e => {
+        const tr = document.createElement('tr');
+        const isValide = e.eval && e.eval.evaluee && e.eval.resultat === 'Admis';
+        
+        tr.className = `border-b border-slate-800/50 transition ${isValide ? 'row-valide' : 'hover:bg-slate-800/40'}`;
+
+        let statusBadge = `<span class="px-2 py-0.5 bg-yellow-900/30 text-yellow-400 border border-yellow-800/40 rounded text-[10px]">En attente d'évaluation</span>`;
+        if (e.eval && e.eval.evaluee) {
+          if (e.eval.resultat === 'Admis') {
+            statusBadge = `<span class="px-2 py-0.5 bg-green-900/50 text-green-300 border border-green-600 rounded font-bold text-[10px]"><i class="fa-solid fa-check"></i> Admis (${e.eval.note}/20)</span>`;
+          } else {
+            statusBadge = `<span class="px-2 py-0.5 bg-red-900/50 text-red-300 border border-red-600 rounded font-bold text-[10px]"><i class="fa-solid fa-xmark"></i> Ajourné (${e.eval.note}/20)</span>`;
+          }
+        }
+
+        tr.innerHTML = `
+          <td class="p-2 font-medium text-slate-200">${e.nom}</td>
+          <td class="p-2 text-slate-300">${e.grade}</td>
+          <td class="p-2 text-slate-400 font-mono text-[11px]">${e.mat}</td>
+          <td class="p-2 text-blue-400 font-semibold">${e.form}</td>
+          <td class="p-2 text-slate-400 text-[11px]">${e.dateDemande || 'Non renseignée'}</td>
+          <td class="p-2">${statusBadge}</td>
+          <td class="p-2 text-right flex items-center justify-end gap-2">
+            <button onclick="openEvalModal('${e.id}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded text-[11px] flex items-center gap-1 shadow">
+              <i class="fa-solid fa-pen-to-square"></i> Fiche Éval
+            </button>
+            <button onclick="deletePersonnel('${e.id}')" class="text-xs text-red-400 hover:text-red-300 p-1">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.deletePersonnel = (id) => {
+      state.effectifs = state.effectifs.filter(p => p.id !== id);
+      syncToCloud();
+      addLog('SUPPRESSION_DEMANDE', 'Demande de formation supprimée');
+    };
+
+    function renderFormateurs() {
+      const container = document.getElementById('formateursList');
+      if (!container) return;
+      container.innerHTML = '';
+      state.formateurs.forEach(f => {
+        const count = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom).length;
+
+        const card = document.createElement('div');
+        card.className = 'bg-slate-800/60 p-3 rounded-lg border border-slate-700/60 flex items-center justify-between cursor-pointer hover:border-blue-500/80 transition group';
+        card.onclick = (evt) => {
+          if (evt.target.closest('.btn-del-fmt')) return;
+          openFmtStatsModal(f.id);
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        card.innerHTML = `
+          <div>
+            <p class="text-xs font-bold text-slate-100 group-hover:text-blue-400 transition">${f.nom}</p>
+            <p class="text-[11px] text-blue-400 font-medium">${f.role}</p>
+            <p class="text-[10px] text-slate-400">Spécialité : ${f.specialite}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 border border-blue-700/50 rounded-full text-[10px] font-bold">
+              ${count} formation(s)
+            </span>
+            <button onclick="deleteFormateur('${f.id}')" class="btn-del-fmt text-xs text-red-400 hover:text-red-300 p-1">
+              <i class="fa-solid fa-user-xmark"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
 
-        // Indicateur connexion
-        const statusEl = document.getElementById('connection-status');
-        db.ref('.info/connected').on('value', (snap) => {
-            if (snap.val() === true) {
-                statusEl.textContent = "Connecté & Synchronisé";
-                statusEl.className = "px-3 py-1 rounded-full bg-emerald-600 text-white font-medium text-xs shadow";
-            } else {
-                statusEl.textContent = "Hors ligne...";
-                statusEl.className = "px-3 py-1 rounded-full bg-amber-600 text-white font-medium text-xs shadow";
-            }
-        });
+    window.deleteFormateur = (id) => {
+      state.formateurs = state.formateurs.filter(f => f.id !== id);
+      syncToCloud();
+      addLog('SUPPRESSION_FORMATEUR', 'Formateur retiré');
+    };
 
-        let currentModalType = '';
+    function renderFiles() {
+      const fileList = document.getElementById('fileList');
+      if (!fileList) return;
+      fileList.innerHTML = '';
+      state.files.forEach(file => {
+        const card = document.createElement('div');
+        card.className = 'bg-slate-800/60 border border-slate-700/60 p-3 rounded-lg flex flex-col justify-between';
+        card.innerHTML = `
+          <div class="flex items-start space-x-2">
+            <i class="fa-solid fa-file-lines text-slate-400 text-xl mt-0.5"></i>
+            <div class="overflow-hidden flex-1">
+              <p class="text-xs font-medium text-slate-200 truncate">${file.name}</p>
+              <p class="text-[10px] text-slate-400">${file.size}</p>
+            </div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-700/40 flex justify-end">
+            <button onclick="deleteFile('${file.id}')" class="text-[10px] text-red-400 hover:text-red-300">Supprimer</button>
+          </div>
+        `;
+        fileList.appendChild(card);
+      });
+    }
 
-        function switchTab(tabName) {
-            ['personnel', 'formations', 'instructeurs'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`btn-${t}`).classList.remove('active');
-            });
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`btn-${tabName}`).classList.add('active');
-        }
+    window.deleteFile = (id) => {
+      state.files = state.files.filter(f => f.id !== id);
+      syncToCloud();
+      addLog('SUPPRESSION_FICHIER', 'Fichier supprimé');
+    };
 
-        function openModal(type) {
-            currentModalType = type;
-            const modal = document.getElementById('modal');
-            const title = document.getElementById('modal-title');
-            const fields = document.getElementById('modal-fields');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+    function renderLogs() {
+      const tbody = document.getElementById('logsTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      state.logs.forEach(l => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-slate-800/40 text-[11px] hover:bg-slate-800/20';
+        tr.innerHTML = `
+          <td class="p-2 text-slate-500 whitespace-nowrap">${l.date}</td>
+          <td class="p-2 text-slate-400 font-mono">${l.user}</td>
+          <td class="p-2 font-bold text-blue-400">${l.action}</td>
+          <td class="p-2 text-slate-300">${l.details}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
 
-            if (type === 'personnel') {
-                title.textContent = "Enregistrer un agent dans l'ENA";
-                fields.innerHTML = `
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Nom et Prénom</label><input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Grade</label><input type="text" id="p-grade" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: Soldat de 1er classe"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Matricule</label><input type="text" id="p-mat" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: CA-005-FR"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Affectation</label><input type="text" id="p-aff" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: 1e RPIMa"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Spécialisation</label><input type="text" id="p-spec" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: N/A ou Tireur d'élite"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Formation Demandée</label><input type="text" id="p-form" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: [FG1 / BS1] Brevet de Sergent"></div>
-                `;
-            } else if (type === 'formation') {
-                title.textContent = "Ajouter un suivi de formation";
-                fields.innerHTML = `
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Nom du Candidat</label><input type="text" id="f-candidate" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Intitulé de la Formation</label><input type="text" id="f-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Responsable de la formation</label><input type="text" id="f-resp" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: (LTN) Léo Giraud"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Date et Heure du RDV</label><input type="text" id="f-date" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: 08/08/2026 à 17h00"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Résultat / Note</label><input type="text" id="f-res" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: Admis (16/20)"></div>
-                `;
-            } else if (type === 'instructeur') {
-                title.textContent = "Ajouter un cadre ou instructeur";
-                fields.innerHTML = `
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Rôle / Poste</label><input type="text" id="i-role" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: Directeur de l'ENA / Instructeur"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Nom et Grade du Responsable</label><input type="text" id="i-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="ex: (LCL) Alex Girond"></div>
-                    <div><label class="block text-xs uppercase text-slate-400 mb-1">Détails / Missions</label><textarea id="i-desc" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" placeholder="Description des missions..."></textarea></div>
-                `;
-            }
-        }
+    function renderNotes() {
+      const notesList = document.getElementById('notesList');
+      if (!notesList) return;
+      notesList.innerHTML = '';
+      state.notes.notesList = '';
+      state.notes.forEach(note => {
+        const item = document.createElement('div');
+        item.className = `p-2 rounded-lg cursor-pointer text-xs border transition ${state.activeNoteId === note.id ? 'bg-blue-600/20 border-blue-500/50 text-white' : 'bg-slate-800/40 border-slate-700/40 text-slate-400 hover:bg-slate-800'}`;
+        item.innerHTML = `
+          <p class="font-semibold truncate">${note.title || 'Sans titre'}</p>
+          <p class="text-[10px] opacity-60 truncate">${note.content || 'Vide...'}</p>
+        `;
+        item.onclick = () => {
+          state.activeNoteId = note.id;
+          renderNotes();
+          loadActiveNote();
+        };
+        notesList.appendChild(item);
+      });
+    }
 
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
-            document.getElementById('modal').classList.remove('flex');
-            document.getElementById('generic-form').reset();
-        }
+    function loadActiveNote() {
+      const activeNote = state.notes.find(n => n.id === state.activeNoteId);
+      const noteTitle = document.getElementById('noteTitle');
+      const noteContent = document.getElementById('noteContent');
+      if (activeNote && noteTitle && noteContent) {
+        if (document.activeElement !== noteTitle) noteTitle.value = activeNote.title;
+        if (document.activeElement !== noteContent) noteContent.value = activeNote.content;
+      }
+    }
 
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            if (currentModalType === 'personnel') {
-                const data = {
-                    name: document.getElementById('p-name').value,
-                    grade: document.getElementById('p-grade').value,
-                    matricule: document.getElementById('p-mat').value,
-                    affectation: document.getElementById('p-aff').value,
-                    spec: document.getElementById('p-spec').value,
-                    formation: document.getElementById('p-form').value
-                };
-                db.ref('personnel').push(data);
-            } else if (currentModalType === 'formation') {
-                const data = {
-                    candidate: document.getElementById('f-candidate').value,
-                    name: document.getElementById('f-name').value,
-                    resp: document.getElementById('f-resp').value,
-                    date: document.getElementById('f-date').value,
-                    res: document.getElementById('f-res').value
-                };
-                db.ref('formations').push(data);
-            } else if (currentModalType === 'instructeur') {
-                const data = {
-                    role: document.getElementById('i-role').value,
-                    name: document.getElementById('i-name').value,
-                    desc: document.getElementById('i-desc').value
-                };
-                db.ref('instructeurs').push(data);
-            }
-            closeModal();
-        }
+    function saveCurrentNote() {
+      if (!state.activeNoteId) return;
+      const activeNote = state.notes.find(n => n.id === state.activeNoteId);
+      const noteTitle = document.getElementById('noteTitle');
+      const noteContent = document.getElementById('noteContent');
+      if (activeNote && noteTitle && noteContent) {
+        activeNote.title = noteTitle.value;
+        activeNote.content = noteContent.value;
+      }
+    }
 
-        function deleteItem(path, id) {
-            db.ref(`${path}/${id}`).remove();
-        }
-
-        // Synchronisation Firebase en temps réel pour le Personnel
-        db.ref('personnel').on('value', (snapshot) => {
-            const list = document.getElementById('personnel-list');
-            list.innerHTML = '';
-            const data = snapshot.val();
-            if (!data) {
-                list.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">Aucun agent enregistré dans le registre.</td></tr>`;
-                return;
-            }
-            Object.entries(data).forEach(([id, item]) => {
-                list.innerHTML += `
-                    <tr class="hover:bg-slate-750 transition">
-                        <td class="p-4 font-semibold text-white">${item.name}</td>
-                        <td class="p-4 text-slate-300">${item.grade}</td>
-                        <td class="p-4 font-mono text-xs text-blue-400">${item.matricule}</td>
-                        <td class="p-4 text-slate-300">${item.affectation}</td>
-                        <td class="p-4 text-slate-300">${item.spec}</td>
-                        <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-900/40 text-blue-300 border border-blue-700/50">${item.formation}</span></td>
-                        <td class="p-4 text-right"><button onclick="deleteItem('personnel', '${id}')" class="text-red-400 hover:text-red-300 p-1.5 rounded transition bg-slate-700/50"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>
-                `;
-            });
-        });
-
-        // Synchronisation Firebase en temps réel pour les Formations
-        db.ref('formations').on('value', (snapshot) => {
-            const list = document.getElementById('formations-list');
-            list.innerHTML = '';
-            const data = snapshot.val();
-            if (!data) {
-                list.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">Aucun suivi de formation en cours.</td></tr>`;
-                return;
-            }
-            Object.entries(data).forEach(([id, item]) => {
-                list.innerHTML += `
-                    <tr class="hover:bg-slate-750 transition">
-                        <td class="p-4 font-semibold text-white">${item.candidate}</td>
-                        <td class="p-4 text-blue-400 font-medium">${item.name}</td>
-                        <td class="p-4 text-slate-300">${item.resp}</td>
-                        <td class="p-4 text-slate-400 text-xs">${item.date}</td>
-                        <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">${item.res}</span></td>
-                        <td class="p-4 text-right"><button onclick="deleteItem('formations', '${id}')" class="text-red-400 hover:text-red-300 p-1.5 rounded transition bg-slate-700/50"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>
-                `;
-            });
-        });
-
-        // Synchronisation Firebase en temps réel pour les Instructeurs
-        db.ref('instructeurs').on('value', (snapshot) => {
-            const grid = document.getElementById('instructors-grid');
-            grid.innerHTML = '';
-            const data = snapshot.val();
-            if (!data) {
-                grid.innerHTML = `<div class="text-slate-500 col-span-full text-center p-8">Aucun instructeur ou cadre enregistré.</div>`;
-                return;
-            }
-            Object.entries(data).forEach(([id, item]) => {
-                grid.innerHTML += `
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow flex flex-col justify-between space-y-4">
-                        <div>
-                            <span class="text-xs uppercase font-bold text-blue-400 tracking-wider">${item.role}</span>
-                            <h3 class="text-lg font-bold text-white mt-1">${item.name}</h3>
-                            <p class="text-sm text-slate-300 mt-2 whitespace-pre-line">${item.desc}</p>
-                        </div>
-                        <div class="flex justify-end pt-3 border-t border-slate-700">
-                            <button onclick="deleteItem('instructeurs', '${id}')" class="text-red-400 hover:text-red-300 text-xs flex items-center space-x-1.5 bg-slate-700/50 px-3 py-1.5 rounded transition"><i class="fa-solid fa-trash"></i> <span>Supprimer</span></button>
-                        </div>
-                    </div>
-                `;
-            });
-        });
-    </script>
+    init();
+  </script>
 </body>
 </html>
