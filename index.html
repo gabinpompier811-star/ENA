@@ -176,8 +176,14 @@
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="ena">
                 <i class="fa-solid fa-graduation-cap"></i> ENA & Formations
             </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
+                <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles & Suivi
+            </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
                 <i class="fa-solid fa-note-sticky"></i> Notes & Bloc-notes
+            </button>
+            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
+                <i class="fa-solid fa-code-commit"></i> Mises à jour
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="logs">
                 <i class="fa-solid fa-list-check"></i> Journal des Logs
@@ -208,12 +214,21 @@
                 <!-- Gestion des Formateurs -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
-                        <h3 class="text-sm font-bold text-white mb-3">Ajouter un Formateur</h3>
-                        <form id="formAddFormateur" class="space-y-2">
+                        <h3 class="text-sm font-bold text-white mb-3">Ajouter un Instructeur</h3>
+                        <form id="formAddFormateur" class="space-y-3">
                             <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
-                            <input type="text" id="fmtRole" placeholder="Rôle (ex: Instructeur Chef)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
-                            <input type="text" id="fmtSpec" placeholder="Spécialité (ex: Drones, Tir)" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Ajouter Formateur</button>
+                            
+                            <select id="fmtRole" required class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white">
+                                <option value="" disabled selected>-- Sélectionner le Rôle --</option>
+                                <option value="Directeur de l'ENA">Directeur de l'ENA</option>
+                                <option value="Directeur Adjoint de l'ENA">Directeur Adjoint de l'ENA</option>
+                                <option value="Chef des Instructeurs">Chef des Instructeurs</option>
+                                <option value="Formateur Principal">Formateur Principal</option>
+                                <option value="Instructeur">Instructeur</option>
+                                <option value="Aspirant instructeur">Aspirant instructeur</option>
+                            </select>
+
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Ajouter Instructeur</button>
                         </form>
                     </div>
 
@@ -279,6 +294,69 @@
                 </div>
             </section>
 
+            <!-- ONGLET FICHES INDIVIDUELLES -->
+            <section id="tab-fiches" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire & Suivi Individuel
+                        </h2>
+                        <p class="text-xs text-slate-400">Consultez et complétez les fiches de suivi de chaque élément de la troupe</p>
+                    </div>
+                    <div class="w-full sm:w-72">
+                        <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-xs text-white font-bold">
+                            <option value="">-- Sélectionner un Militaire --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="ficheContainer" class="hidden space-y-4">
+                    <!-- Fiche Profil Top -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center space-x-4">
+                            <div class="w-14 h-14 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border border-blue-500/30">
+                                <i class="fa-solid fa-user-large"></i>
+                            </div>
+                            <div>
+                                <h3 id="fNom" class="text-lg font-extrabold text-white"></h3>
+                                <p id="fGrade" class="text-xs font-semibold text-blue-400"></p>
+                                <span id="fMat" class="text-[10px] font-mono bg-slate-800 px-2 py-0.5 rounded text-slate-300 border border-slate-700"></span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Affectation actuelle</span>
+                            <p id="fAff" class="text-sm font-bold text-slate-200 mt-1"></p>
+                        </div>
+
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Brevets & Formations Validées</span>
+                            <p id="fCountValide" class="text-2xl font-black text-emerald-400 mt-0.5">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Historique des formations & Notes personnelles -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-2">
+                                <i class="fa-solid fa-award text-amber-400"></i> Historique des Formations & Évaluations
+                            </h4>
+                            <div id="fHistoriqueFormations" class="space-y-2 max-h-60 overflow-y-auto custom-scroll text-xs"></div>
+                        </div>
+
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3 flex flex-col">
+                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-2">
+                                <i class="fa-solid fa-pen-to-square text-blue-400"></i> Appréciations & Notes du Commandement
+                            </h4>
+                            <textarea id="fNotesPerso" placeholder="Saisissez ici des notes individuelles sur ce soldat (comportement, points forts, sanctions, missions...)" class="w-full flex-1 min-h-[120px] bg-slate-800 border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none resize-none"></textarea>
+                            <button onclick="saveFicheNotes()" class="self-end px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs rounded shadow">
+                                Enregistrer la note de suivi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ONGLET NOTES -->
             <section id="tab-notes" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
                 <div class="flex items-center justify-between">
@@ -297,6 +375,52 @@
                     <div id="pdfNoteContainer" class="w-2/3 bg-slate-900 rounded-xl border border-slate-800 p-4 flex flex-col">
                         <input type="text" id="noteTitle" placeholder="Titre de la note..." class="bg-transparent border-b border-slate-800 pb-2 text-sm font-bold text-white focus:outline-none mb-3">
                         <textarea id="noteContent" placeholder="Écrivez vos notes ici..." class="flex-1 bg-transparent text-xs text-slate-300 resize-none focus:outline-none custom-scroll"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ONGLET CHANGELOG / MISES À JOUR -->
+            <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique des Mises à Jour & Améliorations
+                    </h2>
+                    <p class="text-xs text-slate-400">Journal des évolutions techniques et fonctionnelles du portail ENA</p>
+                </div>
+
+                <div class="space-y-3 max-w-4xl mx-auto">
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-blue-400">Version 2.4 - Fiches Individuelles & Rôles Instructeurs</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li>Création du module **Fiches Individuelles & Suivi Personnel** pour consulter le dossier complet d'un soldat et y ajouter des appréciations du commandement.</li>
+                            <li>Ajustement du formulaire des instructeurs avec liste déroulante verrouillée des rôles officiels (*Directeur, Instructeur Chef...*) sans saisie de spécialité.</li>
+                            <li>Ajout de l'onglet **Mises à jour** pour suivre le journal des développements.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-emerald-400">Version 2.3 - Corrections de Suppression & Firebase</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li>Refonte du système de suppression pour gérer sans bug les noms de fichiers contenant des apostrophes ou caractères spéciaux.</li>
+                            <li>Intégration d'un écouteur d'événements direct JavaScript (`addEventListener`) sur les boutons de suppression d'images.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-slate-300">Version 2.0 - Synchronisation Temps Réel Firebase</span>
+                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li>Migration du stockage local (`localStorage`) vers **Google Firebase Realtime Database**.</li>
+                            <li>Partage et mise à jour instantanée des données entre tous les utilisateurs connectés.</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -355,10 +479,11 @@
             activeNoteId: null,
             effectifs: [],
             formateurs: [],
-            logs: []
+            logs: [],
+            selectedMilitaireId: null
         };
 
-        // Synchronisation Realtime Database sans fausses données par défaut
+        // Synchronisation Realtime Database
         db.ref('files').on('value', (snapshot) => {
             const val = snapshot.val();
             state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
@@ -376,6 +501,8 @@
             state.effectifs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
             renderEffectifs();
             renderFormateurs();
+            updateFichesSelect();
+            if (state.selectedMilitaireId) loadFicheMilitaire();
         });
 
         db.ref('formateurs').on('value', (snapshot) => {
@@ -542,10 +669,9 @@
                 e.preventDefault();
                 const nom = document.getElementById('fmtNom').value;
                 const role = document.getElementById('fmtRole').value;
-                const specialite = document.getElementById('fmtSpec').value;
-                const fmtObj = { id: Date.now().toString(), nom, role, specialite };
+                const fmtObj = { id: Date.now().toString(), nom, role };
                 db.ref('formateurs').push(fmtObj);
-                addLog('AJOUT_FORMATEUR', `Formateur ajouté : ${nom} (${role})`);
+                addLog('AJOUT_FORMATEUR', `Instructeur ajouté : ${nom} (${role})`);
                 e.target.reset();
             });
 
@@ -619,6 +745,95 @@
                 }
                 addLog('SUPPRESSION_NOTE', `Note supprimée : ${title}`);
             }
+        };
+
+        // Gestion Fiches Individuelles
+        function updateFichesSelect() {
+            const select = document.getElementById('selectFicheMilitaire');
+            const currentValue = select.value;
+            select.innerHTML = `<option value="">-- Sélectionner un Militaire --</option>`;
+            
+            // Regrouper par nom pour éviter les doublons
+            const uniqueMilaires = [];
+            state.effectifs.forEach(e => {
+                if (!uniqueMilaires.some(m => m.nom === e.nom)) {
+                    uniqueMilaires.push(e);
+                }
+            });
+
+            uniqueMilaires.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.nom;
+                opt.textContent = `${m.grade} ${m.nom} (${m.mat})`;
+                select.appendChild(opt);
+            });
+            select.value = currentValue;
+        }
+
+        window.loadFicheMilitaire = () => {
+            const select = document.getElementById('selectFicheMilitaire');
+            const nom = select.value;
+            const container = document.getElementById('ficheContainer');
+
+            if (!nom) {
+                container.classList.add('hidden');
+                state.selectedMilitaireId = null;
+                return;
+            }
+
+            const dossiers = state.effectifs.filter(e => e.nom === nom);
+            if (dossiers.length === 0) return;
+
+            const mil = dossiers[0];
+            state.selectedMilitaireId = nom;
+
+            document.getElementById('fNom').textContent = mil.nom;
+            document.getElementById('fGrade').textContent = mil.grade;
+            document.getElementById('fMat').textContent = mil.mat;
+            document.getElementById('fAff').textContent = mil.aff || 'N/A';
+
+            // Formations
+            const formValide = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis');
+            document.getElementById('fCountValide').textContent = formValide.length;
+
+            const histoContainer = document.getElementById('fHistoriqueFormations');
+            histoContainer.innerHTML = '';
+            dossiers.forEach(d => {
+                const isVal = d.eval && d.eval.evaluee;
+                histoContainer.innerHTML += `
+                    <div class="bg-slate-800 p-2.5 rounded border border-slate-700/60 flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-white">${d.form}</p>
+                            <p class="text-[10px] text-slate-400">Demande du ${d.dateDemande}</p>
+                        </div>
+                        <div>
+                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300 border border-green-700' : 'bg-red-900/50 text-red-300 border border-red-700'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : `<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px] border border-amber-700">En cours</span>`}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Remarques / Notes du commandement
+            document.getElementById('fNotesPerso').value = mil.notesPerso || '';
+
+            container.classList.remove('hidden');
+        };
+
+        window.saveFicheNotes = () => {
+            const nom = state.selectedMilitaireId;
+            if (!nom) return;
+
+            const notesText = document.getElementById('fNotesPerso').value;
+            const dossiers = state.effectifs.filter(e => e.nom === nom);
+
+            dossiers.forEach(d => {
+                if (d._fbKey) {
+                    db.ref(`effectifs/${d._fbKey}`).update({ notesPerso: notesText });
+                }
+            });
+
+            addLog('MISE_A_JOUR_FICHE', `Notes enregistrées sur la fiche de : ${nom}`);
+            alert('Notes enregistrées avec succès !');
         };
 
         // Rendu des fichiers
@@ -742,7 +957,7 @@
                     <div class="bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 p-3 rounded-lg transition flex items-center justify-between">
                         <div onclick="openFmtStatsModal('${f.id}')" class="cursor-pointer flex-1">
                             <p class="text-xs font-bold text-white">${f.nom}</p>
-                            <p class="text-[10px] text-blue-400">${f.role} - <span class="text-slate-300">${f.specialite}</span></p>
+                            <p class="text-[10px] text-blue-400 font-semibold">${f.role}</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] px-2 py-1 bg-blue-900/40 border border-blue-700/50 text-blue-300 rounded font-semibold">${formationsFaites.length} formation(s)</span>
@@ -814,7 +1029,7 @@
             if (!fmt) return;
 
             document.getElementById('fmtStatsName').textContent = fmt.nom;
-            document.getElementById('fmtStatsRole').textContent = `${fmt.role} - Spécialité: ${fmt.specialite}`;
+            document.getElementById('fmtStatsRole').textContent = fmt.role;
 
             const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === fmt.nom);
             document.getElementById('fmtStatsCount').textContent = formationsFaites.length;
