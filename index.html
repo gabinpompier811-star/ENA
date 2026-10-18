@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Librairie Export PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Firebase SDKs (Compat v9) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
     .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #60a5fa; background-color: #1e293b; }
     .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -149,7 +152,7 @@
     <header class="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <i class="fa-solid fa-shield-halved text-blue-500 text-xl"></i>
-        <span class="font-bold text-slate-100 text-sm tracking-wide">ENA WORKSPACE</span>
+        <span class="font-bold text-slate-100 text-sm tracking-wide">ENA WORKSPACE (Synchronisé Cloud)</span>
       </div>
       <div class="flex items-center space-x-4">
         <span id="userInfo" class="text-xs text-slate-400"></span>
@@ -193,7 +196,7 @@
               <i class="fa-solid fa-file-circle-plus"></i> Nouveau fichier texte
             </button>
           </div>
-          <span class="text-xs text-slate-500">Sauvegarde rapide : <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">Ctrl + S</kbd></span>
+          <span class="text-xs text-slate-500">Sauvegarde en direct active</span>
         </div>
 
         <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-slate-900/30 rounded-xl border border-slate-800/50"></div>
@@ -287,7 +290,7 @@
               <i class="fa-solid fa-file-pdf"></i> Exporter Note (PDF)
             </button>
           </div>
-          <span class="text-xs text-slate-400">Sauvegarde automatique / <kbd class="px-1 bg-slate-800 border border-slate-700 rounded">Ctrl+S</kbd></span>
+          <span class="text-xs text-slate-400">Synchronisation cloud automatique</span>
         </div>
         <div class="flex-1 flex gap-4 overflow-hidden">
           <div id="notesList" class="w-1/3 bg-slate-900 rounded-xl border border-slate-800 p-2 overflow-y-auto custom-scroll space-y-2"></div>
@@ -327,34 +330,66 @@
   </div>
 
   <script>
+    // Configuration Firebase (Connecté à votre projet Google)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-ljiyhlGBQbatTbnbQEh1KFPdVxCL4",
+      authDomain: "forces-speciales-francaises.firebaseapp.com",
+      databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "forces-speciales-francaises",
+      storageBucket: "forces-speciales-francaises.firebasestorage.app",
+      messagingSenderId: "618860439997",
+      appId: "1:618860439997:web:2242c1f71573c8f5e4ad4",
+      measurementId: "G-H5HJZPYXJG"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // État global synchronisé
     const state = {
       user: JSON.parse(localStorage.getItem('ena_user')) || null,
-      files: JSON.parse(localStorage.getItem('ena_files')) || [],
-      notes: JSON.parse(localStorage.getItem('ena_notes')) || [
-        { id: '1', title: 'Ordre du jour ENA', content: 'Préparer la session de formation FGI pour la nouvelle promotion.' }
+      files: [],
+      notes: [{ id: '1', title: 'Ordre du jour ENA', content: 'Préparer la session de formation.' }],
+      activeNoteId: '1',
+      effectifs: [],
+      formateurs: [
+        { id: 'f1', nom: 'LCL Alex Girond', role: 'Directeur / Superviseur', specialite: 'Commandement' }
       ],
-      activeNoteId: null,
-      effectifs: JSON.parse(localStorage.getItem('ena_effectifs')) || [
-        { 
-          id: '1', nom: 'Croft Anthony', grade: 'Soldat 1er Cl.', mat: 'CA-005-FR', aff: '1er RPIMa', 
-          form: '[FG1 / BS1] Brevet de Sergent', dateDemande: '18/10/2026 à 09:30', 
-          eval: { evaluee: true, note: '16.5', resultat: 'Admis', mention: 'Bien', formateur: 'LTN Léo Giraud', dateEval: '18/10/2026' } 
-        },
-        { 
-          id: '2', nom: 'Rosier Mathis', grade: 'Lieutenant', mat: 'RM-002-FR', aff: 'CPA 10', 
-          form: '[FAE] Formation d\'Application', dateDemande: '18/10/2026 à 10:15', 
-          eval: { evaluee: false } 
-        }
-      ],
-      formateurs: JSON.parse(localStorage.getItem('ena_formateurs')) || [
-        { id: 'f1', nom: 'LCL Alex Girond', role: 'Directeur / Superviseur', specialite: 'Commandement' },
-        { id: 'f2', nom: 'LTN Mathis Rosier', role: 'Formateur Principal', specialite: 'Drones / Transmissions' },
-        { id: 'f3', nom: 'LTN Léo Giraud', role: 'Instructeur', specialite: 'Tir de précision' }
-      ],
-      logs: JSON.parse(localStorage.getItem('ena_logs')) || [
-        { id: 'l1', date: new Date().toLocaleString(), user: 'Système', action: 'INITIALISATION', details: 'Démarrage du portail ENA' }
-      ]
+      logs: []
     };
+
+    // Écoute des données en temps réel depuis Firebase
+    db.ref('ena_data').on('value', (snapshot) => {
+      const cloudData = snapshot.val();
+      if (cloudData) {
+        state.effectifs = cloudData.effectifs || [];
+        state.formateurs = cloudData.formateurs || [];
+        state.notes = cloudData.notes || [{ id: '1', title: 'Ordre du jour ENA', content: 'Préparer la session.' }];
+        state.files = cloudData.files || [];
+        state.logs = cloudData.logs || [];
+        
+        if (!state.activeNoteId && state.notes.length > 0) {
+          state.activeNoteId = state.notes[0].id;
+        }
+
+        renderFiles();
+        renderNotes();
+        loadActiveNote();
+        renderEffectifs();
+        renderFormateurs();
+        renderLogs();
+      }
+    });
+
+    function syncToCloud() {
+      db.ref('ena_data').set({
+        effectifs: state.effectifs,
+        formateurs: state.formateurs,
+        notes: state.notes,
+        files: state.files,
+        logs: state.logs
+      });
+    }
 
     function addLog(action, details) {
       const logEntry = {
@@ -364,8 +399,7 @@
         action, details
       };
       state.logs.unshift(logEntry);
-      localStorage.setItem('ena_logs', JSON.stringify(state.logs));
-      renderLogs();
+      syncToCloud();
     }
 
     function generatePDF(elementId, filename) {
@@ -388,7 +422,6 @@
         document.getElementById('authModal').classList.remove('hidden');
       }
       
-      // Ajuster le champ date/heure par défaut à maintenant
       const dtInput = document.getElementById('pDateTime');
       if(dtInput) {
         const now = new Date();
@@ -397,11 +430,6 @@
       }
 
       setupListeners();
-      renderFiles();
-      renderNotes();
-      renderEffectifs();
-      renderFormateurs();
-      renderLogs();
     }
 
     function showApp() {
@@ -456,8 +484,7 @@
           eval: { evaluee: false }
         });
 
-        localStorage.setItem('ena_effectifs', JSON.stringify(state.effectifs));
-        renderEffectifs();
+        syncToCloud();
         addLog('INSCRIPTION_FORMATION', `Candidat ${nom} inscrit pour ${form}`);
         e.target.reset();
       });
@@ -479,8 +506,7 @@
             dateEval: new Date().toLocaleDateString('fr-FR')
           };
 
-          localStorage.setItem('ena_effectifs', JSON.stringify(state.effectifs));
-          renderEffectifs();
+          syncToCloud();
           closeEvalModal();
           addLog('EVALUATION_VALIDEE', `Formation ${candidate.form} évaluée pour ${candidate.nom} (Note: ${candidate.eval.note}/20 - ${candidate.eval.resultat})`);
         }
@@ -510,8 +536,7 @@
               type: file.type,
               content: event.target.result
             });
-            localStorage.setItem('ena_files', JSON.stringify(state.files));
-            renderFiles();
+            syncToCloud();
             addLog('IMPORT_FICHIER', `Import de ${file.name}`);
           };
           reader.readAsDataURL(file);
@@ -524,8 +549,7 @@
         const role = document.getElementById('fmtRole').value;
         const specialite = document.getElementById('fmtSpec').value;
         state.formateurs.push({ id: Date.now().toString(), nom, role, specialite });
-        localStorage.setItem('ena_formateurs', JSON.stringify(state.formateurs));
-        renderFormateurs();
+        syncToCloud();
         addLog('AJOUT_FORMATEUR', `Formateur ajouté : ${nom} (${role})`);
         e.target.reset();
       });
@@ -534,14 +558,18 @@
         const newNote = { id: Date.now().toString(), title: 'Nouvelle Note', content: '' };
         state.notes.push(newNote);
         state.activeNoteId = newNote.id;
-        saveNotes();
-        renderNotes();
-        loadActiveNote();
+        syncToCloud();
         addLog('CREATION_NOTE', 'Note créée');
       });
 
-      document.getElementById('noteTitle').addEventListener('input', saveCurrentNote);
-      document.getElementById('noteContent').addEventListener('input', saveCurrentNote);
+      document.getElementById('noteTitle').addEventListener('input', () => {
+        saveCurrentNote();
+        syncToCloud();
+      });
+      document.getElementById('noteContent').addEventListener('input', () => {
+        saveCurrentNote();
+        syncToCloud();
+      });
 
       document.getElementById('btnSaveGlobal').addEventListener('click', () => {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
@@ -553,7 +581,6 @@
       });
     }
 
-    // Modal Évaluation
     window.openEvalModal = (candidateId) => {
       const candidate = state.effectifs.find(item => item.id === candidateId);
       if (!candidate) return;
@@ -562,7 +589,6 @@
       document.getElementById('evalCandidateName').value = `${candidate.grade} ${candidate.nom}`;
       document.getElementById('evalFormName').value = candidate.form;
 
-      // Charger la liste des formateurs dans le select
       const selectFmt = document.getElementById('evalFormateur');
       selectFmt.innerHTML = '';
       state.formateurs.forEach(f => {
@@ -592,7 +618,6 @@
       document.getElementById('evalModal').classList.add('hidden');
     };
 
-    // Modal Statistiques Formateur
     window.openFmtStatsModal = (formateurId) => {
       const fmt = state.formateurs.find(f => f.id === formateurId);
       if (!fmt) return;
@@ -600,9 +625,7 @@
       document.getElementById('fmtStatsName').textContent = fmt.nom;
       document.getElementById('fmtStatsRole').textContent = `${fmt.role} - Spécialité: ${fmt.specialite}`;
 
-      // Compter combien de formations ce formateur a évaluées/dispensées
       const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === fmt.nom);
-      
       document.getElementById('fmtStatsCount').textContent = formationsFaites.length;
 
       const histContainer = document.getElementById('fmtStatsHistory');
@@ -635,9 +658,9 @@
       document.getElementById('fmtStatsModal').classList.add('hidden');
     };
 
-    // Rendu des Effectifs & Formations
     function renderEffectifs() {
       const tbody = document.getElementById('effectifsTable');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       state.effectifs.forEach(e => {
@@ -677,22 +700,20 @@
 
     window.deletePersonnel = (id) => {
       state.effectifs = state.effectifs.filter(p => p.id !== id);
-      localStorage.setItem('ena_effectifs', JSON.stringify(state.effectifs));
-      renderEffectifs();
+      syncToCloud();
       addLog('SUPPRESSION_DEMANDE', 'Demande de formation supprimée');
     };
 
     function renderFormateurs() {
       const container = document.getElementById('formateursList');
+      if (!container) return;
       container.innerHTML = '';
       state.formateurs.forEach(f => {
-        // Calculer combien de formations évaluées par ce formateur
         const count = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom).length;
 
         const card = document.createElement('div');
         card.className = 'bg-slate-800/60 p-3 rounded-lg border border-slate-700/60 flex items-center justify-between cursor-pointer hover:border-blue-500/80 transition group';
         card.onclick = (evt) => {
-          // Ignorer si clic sur bouton suppression
           if (evt.target.closest('.btn-del-fmt')) return;
           openFmtStatsModal(f.id);
         };
@@ -704,7 +725,7 @@
             <p class="text-[10px] text-slate-400">Spécialité : ${f.specialite}</p>
           </div>
           <div class="flex items-center gap-3">
-            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 border border-blue-700/50 rounded-full text-[10px] font-bold" title="Formations effectuées">
+            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 border border-blue-700/50 rounded-full text-[10px] font-bold">
               ${count} formation(s)
             </span>
             <button onclick="deleteFormateur('${f.id}')" class="btn-del-fmt text-xs text-red-400 hover:text-red-300 p-1">
@@ -718,13 +739,13 @@
 
     window.deleteFormateur = (id) => {
       state.formateurs = state.formateurs.filter(f => f.id !== id);
-      localStorage.setItem('ena_formateurs', JSON.stringify(state.formateurs));
-      renderFormateurs();
+      syncToCloud();
       addLog('SUPPRESSION_FORMATEUR', 'Formateur retiré');
     };
 
     function renderFiles() {
       const fileList = document.getElementById('fileList');
+      if (!fileList) return;
       fileList.innerHTML = '';
       state.files.forEach(file => {
         const card = document.createElement('div');
@@ -747,8 +768,7 @@
 
     window.deleteFile = (id) => {
       state.files = state.files.filter(f => f.id !== id);
-      localStorage.setItem('ena_files', JSON.stringify(state.files));
-      renderFiles();
+      syncToCloud();
       addLog('SUPPRESSION_FICHIER', 'Fichier supprimé');
     };
 
@@ -771,7 +791,9 @@
 
     function renderNotes() {
       const notesList = document.getElementById('notesList');
+      if (!notesList) return;
       notesList.innerHTML = '';
+      state.notes.notesList = '';
       state.notes.forEach(note => {
         const item = document.createElement('div');
         item.className = `p-2 rounded-lg cursor-pointer text-xs border transition ${state.activeNoteId === note.id ? 'bg-blue-600/20 border-blue-500/50 text-white' : 'bg-slate-800/40 border-slate-700/40 text-slate-400 hover:bg-slate-800'}`;
@@ -790,25 +812,23 @@
 
     function loadActiveNote() {
       const activeNote = state.notes.find(n => n.id === state.activeNoteId);
-      if (activeNote) {
-        document.getElementById('noteTitle').value = activeNote.title;
-        document.getElementById('noteContent').value = activeNote.content;
+      const noteTitle = document.getElementById('noteTitle');
+      const noteContent = document.getElementById('noteContent');
+      if (activeNote && noteTitle && noteContent) {
+        if (document.activeElement !== noteTitle) noteTitle.value = activeNote.title;
+        if (document.activeElement !== noteContent) noteContent.value = activeNote.content;
       }
     }
 
     function saveCurrentNote() {
       if (!state.activeNoteId) return;
       const activeNote = state.notes.find(n => n.id === state.activeNoteId);
-      if (activeNote) {
-        activeNote.title = document.getElementById('noteTitle').value;
-        activeNote.content = document.getElementById('noteContent').value;
-        saveNotes();
-        renderNotes();
+      const noteTitle = document.getElementById('noteTitle');
+      const noteContent = document.getElementById('noteContent');
+      if (activeNote && noteTitle && noteContent) {
+        activeNote.title = noteTitle.value;
+        activeNote.content = noteContent.value;
       }
-    }
-
-    function saveNotes() {
-      localStorage.setItem('ena_notes', JSON.stringify(state.notes));
     }
 
     init();
