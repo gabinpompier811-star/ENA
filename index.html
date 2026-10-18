@@ -602,7 +602,7 @@
                 </div>
             </section>
 
-            <!-- ONGLET CHANGELOG / MISES À JOUR COMPLET -->
+           <!-- ONGLET CHANGELOG / MISES À JOUR COMPLET -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
@@ -610,9 +610,9 @@
                     </h2>
                     <p class="text-xs text-slate-400">Suivi chronologique de tous les ajouts, modifications et correctifs du portail</p>
                 </div>
-
+            
                 <div class="space-y-3 max-w-4xl mx-auto">
-
+            
                     <!-- VERSION 4.0 -->
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -625,7 +625,7 @@
                             <li><strong>Exportation Tableur (Excel / CSV) :</strong> Téléchargement du registre des candidats et évaluations au format CSV/Excel.</li>
                         </ul>
                     </div>
-
+            
                     <!-- VERSION 3.0 -->
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -633,13 +633,13 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite global, total candidats, échecs/reussites, instructeurs actifs.</li>
+                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite global, total candidats, échecs/réussites, instructeurs actifs.</li>
                             <li><strong>Onglet Planning & Sessions :</strong> Module de programmation d'examens et convocations avec lieu et instructeur référent.</li>
                             <li><strong>Visionneuse d'Images Modale :</strong> Agrandissement des photos en plein écran sans téléchargement.</li>
                             <li><strong>Moteur de Recherche Dynamique :</strong> Recherche instantanée par nom, grade ou matricule.</li>
                         </ul>
                     </div>
-
+            
                     <!-- VERSION 2.4 -->
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -651,19 +651,42 @@
                             <li><strong>Formulaire Instructeur Révisé :</strong> Menu déroulant fixe avec les rôles officiels ENA (Directeur, Chef Instructeur...).</li>
                         </ul>
                     </div>
-
+            
+                    <!-- VERSION 2.3 -->
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-wrench mr-1"></i> Version 2.3 - Correction de la Suppression d'Images</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Fix Suppression d'Images :</strong> Correction du bug bloquant la suppression des fichiers avec caractères spéciaux ou espaces.</li>
+                        </ul>
+                    </div>
+            
                     <!-- VERSION 2.0 -->
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-database mr-1"></i> Version 2.0 - Migration Cloud Firebase Realtime Database</span>
+                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-database mr-1"></i> Version 2.0 - Migration Cloud Firebase Realtime Database</span>
                             <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Synchronisation Cloud :</strong> Passage au stockage Firebase en temps réel.</li>
-                            <li><strong>Boutons de Suppression :</strong> Suppression instantanée des fichiers, instructeurs et notes.</li>
+                            <li><strong>Synchronisation Cloud :</strong> Passage au stockage Firebase en temps réel pour tous les utilisateurs.</li>
+                            <li><strong>Boutons de Suppression :</strong> Suppression instantanée des fichiers, instructeurs, notes et demandes.</li>
                         </ul>
                     </div>
-
+            
+                    <!-- VERSION 1.0 -->
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-flag mr-1"></i> Version 1.0 - Lancement du Portail ENA Workspace</span>
+                            <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li>Création de l'interface principale ENA (design somptueux sombre/tactique sous Tailwind CSS).</li>
+                            <li>Gestion des demandes de formations, fiches d'évaluations et journal des logs.</li>
+                        </ul>
+                    </div>
+            
                 </div>
             </section>
 
