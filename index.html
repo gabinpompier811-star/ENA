@@ -144,7 +144,7 @@
                         <input type="text" id="evalCandidateName" readonly class="w-full bg-input rounded p-2 text-slate-300 font-bold">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">Formation Evaluée</label>
+                        <label class="block text-slate-400 mb-1">Formation Évaluée</label>
                         <input type="text" id="evalFormName" readonly class="w-full bg-input rounded p-2 text-blue-400 font-bold">
                     </div>
                 </div>
@@ -446,6 +446,7 @@
                                 <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
                                 <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
                                 <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
+                                <option value="[BM2] Brevet Militaire de Niveau 2">[BM2] Brevet Militaire de Niveau 2</option>
                                 <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
                                 <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
                             </optgroup>
@@ -544,7 +545,7 @@
                 <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <h2 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire, Qualifications & Suivi Médical (VMA)</h2>
-                        <p class="text-xs text-slate-400">Spécialités de combat, permis, groupe sanguin et aptitude opérationnelle</p>
+                        <p class="text-xs text-slate-400">Statut des brevets validés en formation, permis et aptitude opérationnelle</p>
                     </div>
                     <div class="w-full sm:w-72">
                         <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-input border rounded p-2 text-xs font-bold">
@@ -568,16 +569,19 @@
                             <p id="fAff" class="text-sm font-bold text-slate-200 mt-1"></p>
                         </div>
                         <div class="bg-card p-4 rounded-xl border flex flex-col justify-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold">Brevets Validés</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Brevets & Formations Validés</span>
                             <p id="fCountValide" class="text-2xl font-black text-emerald-400 mt-0.5">0</p>
                         </div>
                     </div>
 
-                    <!-- BLOC QUALIFICATIONS, PERMIS & SPECIALITES DE COMBAT -->
+                    <!-- BLOC QUALIFICATIONS AUTOMATIQUES SELON FORMATIONS VALIDEES -->
                     <div class="bg-card p-4 rounded-xl border space-y-4">
-                        <h4 class="text-xs font-bold text-blue-400 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                            <i class="fa-solid fa-certificate"></i> Qualifications, Permis & Spécialités de Combat
-                        </h4>
+                        <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
+                            <h4 class="text-xs font-bold text-blue-400 flex items-center gap-2">
+                                <i class="fa-solid fa-certificate"></i> Qualifications & Spécialités (Mises à jour selon les Formations Validées)
+                            </h4>
+                            <span class="text-[10px] text-slate-400 italic">Validation automatique depuis l'onglet ENA</span>
+                        </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                             
@@ -586,20 +590,7 @@
                                 <h5 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
                                     <i class="fa-solid fa-award"></i> Brevets & Attestations
                                 </h5>
-                                <div class="space-y-1.5">
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_para" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🪂 Brevet Parachutiste</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_cqb" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🥊 CQB Validé</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_fgi" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🪖 FGI Validé</span>
-                                    </label>
-                                </div>
+                                <div class="space-y-1.5" id="group_brevets"></div>
                             </div>
 
                             <!-- Catégorie 2 : Conduite, Véhicules & Logistique -->
@@ -607,36 +598,7 @@
                                 <h5 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
                                     <i class="fa-solid fa-truck-monster"></i> Permis & Véhicules
                                 </h5>
-                                <div class="space-y-1.5">
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_pilote_blindes" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🚘 Pilote VBCI / VAB / VBMR / GBC</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_tourelle" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🎯 Opérateur Tourelle</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_mecanicien" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🔧 Mécanicien</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_permis_b" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🪪 Permis B validé</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_permis_c" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🚛 Permis C validé</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_permis_d" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🚌 Permis D validé</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_spl" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🚚 Conducteur SPL</span>
-                                    </label>
-                                </div>
+                                <div class="space-y-1.5" id="group_permis"></div>
                             </div>
 
                             <!-- Catégorie 3 : Spécialités Opérationnelles & Combat -->
@@ -644,40 +606,9 @@
                                 <h5 class="font-bold text-red-400 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
                                     <i class="fa-solid fa-crosshair"></i> Spécialités de Combat
                                 </h5>
-                                <div class="space-y-1.5">
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_te" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🎯 Tireur d'Élite</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_tp" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🔫 Tireur de Précision</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_spotteur" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🔭 Spotteur</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_medecin" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🩺 Médecin / Sanitaire</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_transmetteur" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>📻 Transmetteur</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
-                                        <input type="checkbox" id="qualif_drone" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
-                                        <span>🛸 Opérateur Drone</span>
-                                    </label>
-                                </div>
+                                <div class="space-y-1.5" id="group_specialites"></div>
                             </div>
 
-                        </div>
-
-                        <div class="flex justify-end pt-2 border-t border-slate-700/60">
-                            <button onclick="saveQualificationsData()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded shadow">
-                                Enregistrer les Qualifications & Spécialités
-                            </button>
                         </div>
                     </div>
 
@@ -831,16 +762,28 @@
                 </div>
             </section>
 
-            <!-- CHANGELOG (TOUTES LES VERSIONS DE 1.0 A 9.0) -->
+            <!-- CHANGELOG (TOUTES LES VERSIONS DE 1.0 A 9.5) -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique Exhaustif des Mises à Jour (v1.0 à v9.0)
+                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique Exhaustif des Mises à Jour (v1.0 à v9.5)
                     </h2>
                     <p class="text-xs text-slate-400">Chronologie complète de toutes les versions, améliorations et correctifs du portail</p>
                 </div>
 
                 <div class="space-y-3 max-w-4xl mx-auto">
+
+                    <!-- VERSION 9.5 -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2 border-emerald-500/50">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i> Version 9.5 - Validation Automatique des Qualifications & Ajout BM2</span>
+                            <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Automatisation des Qualifications :</strong> Les diplômes, brevets et permis de la fiche individuelle ne se cochent plus à la main : le système vérifie automatiquement si l'examen correspondant est validé ("Admis") dans le tableau de suivi ENA.</li>
+                            <li><strong>Ajout du BM2 :</strong> Le Brevet Militaire de Niveau 2 ([BM2]) est désormais sélectionnable dans le catalogue des formations ENA.</li>
+                        </ul>
+                    </div>
 
                     <!-- VERSION 9.0 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2 border-blue-500/50">
@@ -849,8 +792,8 @@
                             <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Qualifications & Spécialités :</strong> Cases à cocher pour attribuer les brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat (TE, TP, Spotteur, Médecin, Transmetteur, Drone).</li>
-                            <li><strong>Correctifs & Inscriptions :</strong> Intégration de l'option N/A pour les militaires sans affectation et liste complète des brevets/permis dans le formulaire ENA.</li>
+                            <li><strong>Qualifications & Spécialités :</strong> Attribution des brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat.</li>
+                            <li><strong>Correctifs & Inscriptions :</strong> Intégration de l'option N/A pour les militaires sans affectation.</li>
                         </ul>
                     </div>
 
@@ -862,180 +805,16 @@
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
                             <li><strong>Hiérarchie à 6 Rôles :</strong> Intégration des rôles Fondateur, Co-Fondateur, Administrateur, Modérateur, Personnel ENA et Personnel Opérateur.</li>
-                            <li><strong>Contrôle des Droits :</strong> Protection anti-bannissement des fondateurs et interdiction des exclusions pour les modérateurs et opérateurs.</li>
                         </ul>
                     </div>
 
-                    <!-- VERSION 7.5 -->
+                    <!-- VERSIONS PRECEDENTES -->
                     <div class="bg-card border rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-red-400"><i class="fa-solid fa-notes-medical mr-1"></i> Version 7.5 - Fiche Médicale de Combat (VMA) & Personnalisation UI</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-history mr-1"></i> Versions 1.0 à 7.5</span>
+                            <span class="text-[10px] text-slate-500 font-mono">Historique système</span>
                         </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Dossier Médical Militaire :</strong> Suivi du groupe sanguin, des vaccins, des allergies et des visites VMA.</li>
-                            <li><strong>Thèmes Dynamiques :</strong> Choix entre Night Slate, Desert Camo et OLED Black.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 7.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-cyan-400"><i class="fa-solid fa-bell mr-1"></i> Version 7.0 - Centre de Notifications & Traçabilité Logs</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Menu Notifications Dropdown :</strong> Alertes en direct lors des modifications et actions importantes.</li>
-                            <li><strong>Rapports Logs PDF :</strong> Exportation complète de l'historique d'activité au format PDF.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 6.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-crosshair mr-1"></i> Version 6.0 - Carnet de Tirs & Registre des Inaptitudes (GITA)</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Carnet de Tir :</strong> Enregistrement des tirs par arme (HK416, Glock, SCAR-H, PGM).</li>
-                            <li><strong>Module Inaptitudes (GITA) :</strong> Déclaration temporaire d'inaptitudes sportives, de tir ou de saut parachutiste.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 5.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-purple-400"><i class="fa-solid fa-users-viewfinder mr-1"></i> Version 5.0 - Répertoire Unités Forces Spéciales & Filtres</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Onglet Unités & Sections :</strong> Organisation des militaires par régiment (CPA 10, 4e RHFS, 13e RDP, Commandos Marine, GCP).</li>
-                            <li><strong>Filtrage Global :</strong> Tri instantané des statistiques du tableau de bord selon l'unité sélectionnée.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 4.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-certificate mr-1"></i> Version 4.0 - Diplômes PDF Officiels, Décorations & Exports Excel</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Générateur de Diplômes (PDF) :</strong> Génération de brevets officiels ENA imprimables avec signatures.</li>
-                            <li><strong>Registre des Décorations :</strong> Remise de médailles et affichage automatique sur les fiches.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 3.5 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-indigo-400"><i class="fa-solid fa-save mr-1"></i> Version 3.5 - Backup JSON & Gestionnaire de Notes</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Sauvegarde Backup JSON :</strong> Exportation globale de toute la base de données.</li>
-                            <li><strong>Éditeur de Notes :</strong> Prise de note multi-pages avec sauvegarde automatique.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 3.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-chart-pie mr-1"></i> Version 3.0 - Grand Tableau de Bord & Planning ENA</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite, totaux de candidats et échecs.</li>
-                            <li><strong>Onglet Planning & Sessions :</strong> Convocations avec lieux et instructeurs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.8 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-300"><i class="fa-solid fa-magnifying-glass mr-1"></i> Version 2.8 - Moteur de Recherche Dynamique & Correctifs UI</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Moteur de Recherche :</strong> Filtrage temps réel des effectifs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.4 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-purple-400"><i class="fa-solid fa-user-gear mr-1"></i> Version 2.4 - Module Suivi Individuel & Corps Instructeurs</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Fiches Individuelles :</strong> Parcours militaires et notes du commandement.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.1 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-teal-400"><i class="fa-solid fa-shield-halved mr-1"></i> Version 2.1 - Authentification & Modal Sécurisé</span>
-                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Écran d'Authentification :</strong> Formulaire de connexion sécurisé au démarrage.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-database mr-1"></i> Version 2.0 - Migration Cloud Firebase Realtime Database</span>
-                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Synchronisation Cloud :</strong> Stockage temps réel avec Firebase.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.5 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-blue-300"><i class="fa-solid fa-folder-open mr-1"></i> Version 1.5 - Modale d'Évaluation & Gestion de Fichiers</span>
-                            <span class="text-[10px] text-slate-500 font-mono">16/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Modale d'Évaluation :</strong> Saisie des notes et avis instructeurs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.2 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-300"><i class="fa-solid fa-list-check mr-1"></i> Version 1.2 - Tableau des Effectifs & Formations ENA</span>
-                            <span class="text-[10px] text-slate-500 font-mono">16/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Suivi des Formations :</strong> Tableau d'inscription FGI, CAT1, CME, FG1, DEM.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.1 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-sliders mr-1"></i> Version 1.1 - Référentiel de Cours & Amélioration UI</span>
-                            <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Référentiel :</strong> Publication des programmes d'instruction.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-500"><i class="fa-solid fa-flag mr-1"></i> Version 1.0 - Lancement Initial du Portail ENA</span>
-                            <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Initialisation :</strong> Structure HTML/JS et navigation par onglets.</li>
-                        </ul>
+                        <p class="text-xs text-slate-400">Fondations du portail ENA : base Firebase, carnet de tir, GITA, fiches individuelles, suivi d'unités et exports PDF.</p>
                     </div>
 
                 </div>
@@ -1082,11 +861,31 @@
             selectedMilitaireId: null
         };
 
-        const QUALIFICATION_KEYS = [
-            'qualif_para', 'qualif_cqb', 'qualif_fgi',
-            'qualif_pilote_blindes', 'qualif_tourelle', 'qualif_mecanicien',
-            'qualif_permis_b', 'qualif_permis_c', 'qualif_permis_d', 'qualif_spl',
-            'qualif_te', 'qualif_tp', 'qualif_spotteur', 'qualif_medecin', 'qualif_transmetteur', 'qualif_drone'
+        // Liste structurée de toutes les qualifications pour la vérification automatique dans les fiches
+        const QUALIFICATIONS_CATALOG = [
+            { category: 'brevets', label: '🪂 Brevet Parachutiste', keyMatch: ['Brevet Parachutiste'] },
+            { category: 'brevets', label: '🥊 Qualification CQB', keyMatch: ['Qualification CQB'] },
+            { category: 'brevets', label: '🪖 FGI Validé', keyMatch: ['Formation Général Initiale'] },
+            { category: 'brevets', label: '📜 BM2 (Brevet Militaire N2)', keyMatch: ['Brevet Militaire de Niveau 2', 'BM2'] },
+            { category: 'brevets', label: '🎗️ CAT1 (Brevet Caporal)', keyMatch: ['Brevet Caporal'] },
+            { category: 'brevets', label: '🎗️ CME (Brevet Caporal-Chef)', keyMatch: ['Brevet Caporal-Chef'] },
+            { category: 'brevets', label: '🎖️ FG1 / BS1 (Sergent)', keyMatch: ['Brevet de Sergent'] },
+            { category: 'brevets', label: '⭐ DEM (Diplôme d\'État-Major)', keyMatch: ['Diplôme d\'État-Major'] },
+
+            { category: 'permis', label: '🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)', keyMatch: ['Pilote Blindés'] },
+            { category: 'permis', label: '🎯 Opérateur Tourelle', keyMatch: ['Opérateur Tourelle'] },
+            { category: 'permis', label: '🔧 Mécanicien', keyMatch: ['Qualification Mécanicien'] },
+            { category: 'permis', label: '🪪 Permis B', keyMatch: ['Permis B'] },
+            { category: 'permis', label: '🚛 Permis C', keyMatch: ['Permis C'] },
+            { category: 'permis', label: '🚌 Permis D', keyMatch: ['Permis D'] },
+            { category: 'permis', label: '🚚 Conducteur SPL', keyMatch: ['Permis SPL'] },
+
+            { category: 'specialites', label: '🎯 Tireur d\'Élite (TE)', keyMatch: ['Tireur d\'Élite'] },
+            { category: 'specialites', label: '🔫 Tireur de Précision (TP)', keyMatch: ['Tireur de Précision'] },
+            { category: 'specialites', label: '🔭 Spotteur', keyMatch: ['Spotteur'] },
+            { category: 'specialites', label: '🩺 Médecin / Sanitaire', keyMatch: ['Médecin'] },
+            { category: 'specialites', label: '📻 Transmetteur Radio', keyMatch: ['Transmetteur Radio'] },
+            { category: 'specialites', label: '🛸 Opérateur Drone', keyMatch: ['Opérateur Drone'] }
         ];
 
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
@@ -1114,7 +913,6 @@
             return found ? found.role : 'Personnel Opérateur';
         }
 
-        // Vérification des droits selon les actions
         function checkPermission(actionType, targetRole = '') {
             const r = state.role;
             if (r === 'Fondateur' || r === 'Co-Fondateur') return true;
@@ -1357,7 +1155,6 @@
                 e.target.reset();
             });
 
-            // GESTIONNAIRE DE NOTES (SÉCURISÉ)
             document.getElementById('btnNewNote').addEventListener('click', () => {
                 const newRef = db.ref('notes').push();
                 const newId = Date.now().toString();
@@ -1581,7 +1378,8 @@
             document.getElementById('fAff').textContent = mil.aff || 'N/A';
             document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis').length;
 
-            loadQualificationsMilitaire(mil);
+            // Chargement automatique des qualifications validées en formation
+            renderAutomaticQualifications(dossiers);
 
             document.getElementById('fSang').value = mil.sang || 'Non renseigné';
             document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
@@ -1602,7 +1400,7 @@
                         <div><p class="font-bold text-white">${d.form}</p><p class="text-[10px] text-slate-400">${d.dateDemande}</p></div>
                         <div class="flex items-center gap-2">
                             ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400">En cours</span>'}
-                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2 py-0.5 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
+                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -1612,34 +1410,40 @@
             container.classList.remove('hidden');
         };
 
-        window.saveQualificationsData = () => {
-            if (!state.selectedMilitaireId) return alert("Veuillez d'abord sélectionner un militaire.");
+        // Génération automatique du statut des qualifications selon les cours Admis dans le tableau ENA
+        function renderAutomaticQualifications(dossiersMilitaire) {
+            const groupBrevets = document.getElementById('group_brevets');
+            const groupPermis = document.getElementById('group_permis');
+            const groupSpecialites = document.getElementById('group_specialites');
 
-            const qualificationsSaved = {};
-            QUALIFICATION_KEYS.forEach(key => {
-                const checkbox = document.getElementById(key);
-                if (checkbox) {
-                    qualificationsSaved[key] = checkbox.checked;
-                }
-            });
+            if (!groupBrevets || !groupPermis || !groupSpecialites) return;
 
-            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
-                if (d._fbKey) {
-                    db.ref(`effectifs/${d._fbKey}/qualifications`).set(qualificationsSaved);
-                }
-            });
+            groupBrevets.innerHTML = '';
+            groupPermis.innerHTML = '';
+            groupSpecialites.innerHTML = '';
 
-            addLog('MISE_A_JOUR_QUALIFS', `Qualifications mises à jour pour ${state.selectedMilitaireId}`);
-            alert('Qualifications et spécialités enregistrées avec succès !');
-        };
+            // Liste de toutes les formations où le candidat est "Admis"
+            const formationsValidees = dossiersMilitaire
+                .filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis')
+                .map(d => d.form || '');
 
-        function loadQualificationsMilitaire(militaireObj) {
-            const qualifs = militaireObj.qualifications || {};
-            QUALIFICATION_KEYS.forEach(key => {
-                const checkbox = document.getElementById(key);
-                if (checkbox) {
-                    checkbox.checked = !!qualifs[key];
-                }
+            QUALIFICATIONS_CATALOG.forEach(qualif => {
+                const isValidated = formationsValidees.some(f => qualif.keyMatch.some(k => f.toLowerCase().includes(k.toLowerCase())));
+
+                const badge = isValidated 
+                    ? `<span class="px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-500/40 font-bold text-[10px] flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Validé</span>`
+                    : `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700 font-semibold text-[10px]">Non validé</span>`;
+
+                const itemHTML = `
+                    <div class="flex items-center justify-between p-1.5 rounded bg-slate-900/40 border border-slate-800">
+                        <span class="text-slate-200 font-medium">${qualif.label}</span>
+                        ${badge}
+                    </div>
+                `;
+
+                if (qualif.category === 'brevets') groupBrevets.innerHTML += itemHTML;
+                else if (qualif.category === 'permis') groupPermis.innerHTML += itemHTML;
+                else if (qualif.category === 'specialites') groupSpecialites.innerHTML += itemHTML;
             });
         }
 
