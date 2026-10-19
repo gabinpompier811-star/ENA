@@ -115,6 +115,119 @@
         </div>
     </div>
 
+    <!-- Modal Visionneuse d'Image Plein Écran -->
+    <div id="imageViewerModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
+            <button onclick="closeImageViewer()" class="absolute -top-10 right-0 text-white hover:text-red-400 text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="viewerImage" src="" alt="Image plein écran" class="max-h-[80vh] max-w-full rounded-lg shadow-2xl object-contain border border-slate-700">
+            <p id="viewerTitle" class="text-sm font-bold text-slate-200 mt-3"></p>
+        </div>
+    </div>
+
+    <!-- Modal Fiche d'Évaluation -->
+    <div id="evalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-card border rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 id="evalModalTitle" class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-blue-500"></i> Fiche d'Évaluation
+                </h3>
+                <button onclick="closeEvalModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="evalForm" class="space-y-3">
+                <input type="hidden" id="evalCandidateId">
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Candidat</label>
+                        <input type="text" id="evalCandidateName" readonly class="w-full bg-input rounded p-2 text-slate-300 font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Formation Évaluée</label>
+                        <input type="text" id="evalFormName" readonly class="w-full bg-input rounded p-2 text-blue-400 font-bold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Résultat Exam</label>
+                        <select id="evalResultat" class="w-full bg-input rounded p-2">
+                            <option value="Admis">Admis</option>
+                            <option value="Ajourné">Ajourné</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Note / 20</label>
+                        <input type="number" id="evalNote" min="0" max="20" step="0.5" placeholder="15" required class="w-full bg-input rounded p-2">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Mention</label>
+                        <select id="evalMention" class="w-full bg-input rounded p-2">
+                            <option value="Pas de mention">Pas de mention</option>
+                            <option value="Assez Bien">Assez Bien</option>
+                            <option value="Bien">Bien</option>
+                            <option value="Très Bien">Très Bien</option>
+                            <option value="Félicitation des Instructeurs">Félicitation des Instructeurs</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Responsable Formateur</label>
+                        <select id="evalFormateur" class="w-full bg-input rounded p-2"></select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Commentaires & Remarques</label>
+                    <textarea id="evalComments" rows="3" placeholder="Avis de l'instructeur..." class="w-full bg-input rounded p-2 text-xs resize-none"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                    <button type="button" onclick="closeEvalModal()" class="px-3 py-1.5 bg-input text-slate-300 text-xs rounded hover:opacity-80">Annuler</button>
+                    <button type="submit" class="px-4 py-1.5 bg-green-600 text-white text-xs font-bold rounded hover:bg-green-500">Valider & Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Modèle du Diplôme Officiel PDF -->
+    <div id="diplomePrintContainer" class="hidden">
+        <div id="diplomeContent" class="p-10 bg-slate-950 text-white border-8 border-amber-500/80 rounded-2xl w-[900px] h-[630px] flex flex-col justify-between items-center text-center font-serif relative">
+            <div class="space-y-2">
+                <div class="inline-flex items-center gap-3 text-amber-400">
+                    <i class="fa-solid fa-shield-halved text-4xl"></i>
+                    <h1 class="text-3xl font-extrabold tracking-widest uppercase">ÉCOLE NATIONALE DE L'ARMÉE</h1>
+                </div>
+                <p class="text-xs text-slate-400 tracking-widest uppercase border-b border-amber-500/40 pb-2">Direction des Études & de l'Instruction Militaire</p>
+            </div>
+
+            <div class="space-y-4 my-2">
+                <h2 class="text-2xl font-bold italic text-amber-300">DIPLÔME DE BREVET MILITAIRE</h2>
+                <p class="text-sm text-slate-300">Le Directeur de l'École Nationale de l'Armée atteste que :</p>
+                <p id="dipNomMilitaire" class="text-3xl font-black text-white uppercase tracking-wider underline decoration-amber-500"></p>
+                <p class="text-xs text-slate-400">Matricule : <span id="dipMatricule" class="font-mono text-amber-300"></span></p>
+                <p class="text-sm text-slate-200">A satisfait aux épreuves théoriques et pratiques du brevet :</p>
+                <p id="dipFormation" class="text-xl font-bold text-blue-400 bg-blue-900/30 px-4 py-1.5 rounded-lg border border-blue-500/50 inline-block"></p>
+            </div>
+
+            <div class="flex justify-between w-full px-12 border-t border-slate-800 pt-4 text-xs font-sans">
+                <div class="text-left space-y-1">
+                    <p class="text-slate-400">Mention : <span id="dipMention" class="font-bold text-amber-400"></span></p>
+                    <p class="text-slate-400">Note finale : <span id="dipNote" class="font-bold text-emerald-400"></span> / 20</p>
+                    <p class="text-slate-400">Délivré le : <span id="dipDate" class="text-white"></span></p>
+                </div>
+                <div class="text-right space-y-1">
+                    <p class="text-slate-400">Instructeur Référent :</p>
+                    <p id="dipInstructeur" class="font-bold text-white"></p>
+                    <p class="text-[10px] text-slate-500 italic mt-2">Signature & Cachet Officiel ENA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Application Principale -->
     <div id="app" class="hidden flex-col h-screen">
         <!-- Navbar Top -->
@@ -162,12 +275,6 @@
             <button class="tab-btn active px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="dashboard">
                 <i class="fa-solid fa-chart-pie"></i> Tableau de Bord
             </button>
-            
-            <!-- NOUVEL ONGLET CRÉER DOSSIER DIRECTEMENT -->
-            <button class="tab-btn px-4 py-2.5 text-xs font-bold text-emerald-400 flex items-center gap-2 whitespace-nowrap bg-emerald-950/20 border-r border-emerald-500/30" data-tab="creerdossier">
-                <i class="fa-solid fa-user-plus text-emerald-400"></i> 📁 Créer Dossier
-            </button>
-
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="docs">
                 <i class="fa-solid fa-folder-tree"></i> Documents & Fichiers
             </button>
@@ -178,7 +285,7 @@
                 <i class="fa-solid fa-users-viewfinder"></i> Unités & Sections
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="tirs">
-                <i class="fa-solid fa-crosshair"></i> Tirs, Médical & Inaptitudes
+                <i class="fa-solid fa-crosshair"></i> Tirs & Inaptitudes
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
                 <i class="fa-solid fa-user-id-card"></i> Fiches & Médical
@@ -195,8 +302,9 @@
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
                 <i class="fa-solid fa-note-sticky"></i> Notes
             </button>
+            <!-- Onglet Administrateur Hiérarchique -->
             <button id="navAdminBtn" class="tab-btn hidden px-4 py-2.5 text-xs font-medium text-amber-400 flex items-center gap-2 whitespace-nowrap border-l border-amber-500/30 bg-amber-950/20" data-tab="admin">
-                <i class="fa-solid fa-user-gear"></i> Administration
+                <i class="fa-solid fa-user-gear"></i> Administration & Hiérarchie
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
                 <i class="fa-solid fa-code-commit"></i> Mises à jour
@@ -230,7 +338,7 @@
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-blue-600/20 text-blue-400 rounded-lg"><i class="fa-solid fa-users text-xl"></i></div>
                         <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold">Total Militaires</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Total Candidats</span>
                             <p id="dashTotalCandidats" class="text-2xl font-black text-white">0</p>
                         </div>
                     </div>
@@ -271,137 +379,6 @@
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <!-- NOUEVAL ONGLET : CREER DIRECTEMENT UN DOSSIER ANCIEN OU NOUVEAU MILITAIRE -->
-            <section id="tab-creerdossier" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <div class="bg-card border border-emerald-500/40 p-4 rounded-xl bg-emerald-950/10">
-                    <h2 class="text-base font-bold text-emerald-400 flex items-center gap-2">
-                        <i class="fa-solid fa-user-plus text-xl"></i> Créer / Mettre à Jour un Dossier Militaire Complet
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-1">
-                        Utilisez cet outil pour saisir un militaire ayant déjà validé des formations par le passé. Cochez simplement toutes les formations déjà obtenues et le site se mettra entièrement à jour automatiquement.
-                    </p>
-                </div>
-
-                <form id="formFullDossier" class="bg-card p-5 rounded-xl border space-y-5 text-xs">
-                    <!-- Section 1 : Etat Civil & Affectation -->
-                    <div>
-                        <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-id-card text-blue-400"></i> 1. État Civil & Affectation
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Nom & Prénom *</label>
-                                <input type="text" id="fullNom" placeholder="ex: CPT Jean Dupont" required class="w-full bg-input border rounded p-2 text-white">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Grade *</label>
-                                <input type="text" id="fullGrade" placeholder="ex: Capitaine" required class="w-full bg-input border rounded p-2 text-white">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Matricule *</label>
-                                <input type="text" id="fullMat" placeholder="ex: MAT-8890" required class="w-full bg-input border rounded p-2 text-white">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Unité / Affectation</label>
-                                <select id="fullUnite" class="w-full bg-input border rounded p-2 font-bold text-blue-300">
-                                    <option value="N/A">N/A (Sans affectation)</option>
-                                    <option value="CPA 10">CPA 10</option>
-                                    <option value="4e RHFS">4e RHFS</option>
-                                    <option value="13e RDP">13e RDP</option>
-                                    <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                                    <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 2 : Sélection des Formations déjà Validées -->
-                    <div>
-                        <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-400"></i> 2. Formations, Brevets & Qualifications Déjà Validés
-                        </h3>
-                        <p class="text-slate-400 mb-3 text-[11px]">Cochez toutes les formations que ce militaire a déjà réussies :</p>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Diplômes Militaires -->
-                            <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
-                                <h4 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1">🎓 Diplômes & Brevets ENA</h4>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FGI] Formation Général Initiale"> <span>[FGI] Formation Général Initiale</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CAT1] Brevet Caporal"> <span>[CAT1] Brevet Caporal</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CME] Brevet Caporal-Chef"> <span>[CME] Brevet Caporal-Chef</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG1 / BS1] Brevet de Sergent"> <span>[FG1 / BS1] Brevet de Sergent</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[BM2] Brevet Militaire de Niveau 2"> <span>[BM2] Brevet Militaire N2</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste"> <span>[FG2 / BSTAT] Brevet d'Adjoint</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[DEM] Diplôme d'État-Major"> <span>[DEM] Diplôme d'État-Major</span></label>
-                            </div>
-
-                            <!-- Brevets & Conduite -->
-                            <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
-                                <h4 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1">🚘 Permis & Brevets</h4>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🪂 Brevet Parachutiste"> <span>🪂 Brevet Parachutiste</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🥊 Qualification CQB"> <span>🥊 Qualification CQB</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)"> <span>🚘 Pilote Blindés (VBCI/VAB)</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🎯 Opérateur Tourelle"> <span>🎯 Opérateur Tourelle</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🔧 Qualification Mécanicien"> <span>🔧 Qualification Mécanicien</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🪪 Permis B"> <span>🪪 Permis B</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚛 Permis C"> <span>🚛 Permis C</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚌 Permis D"> <span>🚌 Permis D</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚚 Permis SPL (Conducteur SPL)"> <span>🚚 Permis SPL</span></label>
-                            </div>
-
-                            <!-- Spécialités de Combat -->
-                            <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
-                                <h4 class="font-bold text-red-400 border-b border-slate-700/40 pb-1">🎯 Spécialités de Combat</h4>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🎯 Qualification Tireur d'Élite (TE)"> <span>🎯 Tireur d'Élite (TE)</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🔫 Qualification Tireur de Précision (TP)"> <span>🔫 Tireur de Précision (TP)</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🔭 Qualification Spotteur"> <span>🔭 Spotteur</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🩺 Qualification Médecin / Sanitaire"> <span>🩺 Médecin / Sanitaire</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="📻 Qualification Transmetteur Radio"> <span>📻 Transmetteur Radio</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🛸 Qualification Opérateur Drone"> <span>🛸 Opérateur Drone</span></label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 3 : Médical & Notes -->
-                    <div>
-                        <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-notes-medical text-red-400"></i> 3. Informations Médicales & Notes
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Groupe Sanguin</label>
-                                <select id="fullSang" class="w-full bg-input border rounded p-2 text-red-400 font-bold">
-                                    <option value="Non renseigné">Non renseigné</option>
-                                    <option value="O +">O +</option><option value="O -">O - (Universel)</option>
-                                    <option value="A +">A +</option><option value="A -">A -</option>
-                                    <option value="B +">B +</option><option value="B -">B -</option>
-                                    <option value="AB +">AB +</option><option value="AB -">AB -</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Aptitude Opérationnelle</label>
-                                <select id="fullAptitude" class="w-full bg-input border rounded p-2 font-bold">
-                                    <option value="Apte Service FS">🟢 Apte Service FS</option>
-                                    <option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option>
-                                    <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Notes du Commandement</label>
-                                <input type="text" id="fullNotes" placeholder="Remarques et appréciations..." class="w-full bg-input border rounded p-2">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-3 border-t border-slate-700 flex justify-end gap-3">
-                        <button type="reset" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded">Effacer</button>
-                        <button type="submit" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded shadow-lg text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> Enregistrer Dossier Rétroactif
-                        </button>
-                    </div>
-                </form>
             </section>
 
             <!-- DOCUMENTS -->
@@ -531,89 +508,22 @@
                 <div id="unitesListGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </section>
 
-            <!-- TIRS, MÉDICAL & INAPTITUDES GITA -->
+            <!-- TIRS & INAPTITUDES GITA -->
             <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <!-- BLOC FICHE MEDICALE COMPLÈTE -->
-                <div class="bg-card p-4 rounded-xl border space-y-3">
-                    <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                        <i class="fa-solid fa-heart-pulse text-red-500"></i> Formulaire de Visite Médicale (Aptitude VMA & Bilan Sanitaire)
-                    </h3>
-                    <form id="formFullVisiteMedicale" class="space-y-3 text-xs">
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Militaire Concerné *</label>
-                                <select id="medMilitaire" required class="w-full bg-input border rounded p-2 font-bold text-white"></select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Tension Artérielle (ex: 12/8)</label>
-                                <input type="text" id="medTension" placeholder="12/8" class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Taille (cm) & Poids (kg)</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="number" id="medTaille" placeholder="180 cm" class="bg-input border rounded p-2">
-                                    <input type="number" id="medPoids" placeholder="78 kg" class="bg-input border rounded p-2">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Test Vision (/10)</label>
-                                <input type="text" id="medVision" placeholder="10/10" class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Test Auditif</label>
-                                <select id="medAudition" class="w-full bg-input border rounded p-2">
-                                    <option value="Bonne">🟢 Audition Normale</option>
-                                    <option value="Moyenne">🟡 Légère baisse</option>
-                                    <option value="Inapte">🔴 Inapte Auditif</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Aptitude Décidée</label>
-                                <select id="medAptitudeFinal" class="w-full bg-input border rounded p-2 font-bold text-emerald-400">
-                                    <option value="Apte Service FS">🟢 Apte Service FS</option>
-                                    <option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option>
-                                    <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire (GITA)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Médecin Examinateur</label>
-                                <input type="text" id="medMedecin" placeholder="ex: Dr. CPT Martin" required class="w-full bg-input border rounded p-2">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-slate-400 mb-1 font-semibold">Avis du Médecin & Remarques</label>
-                            <input type="text" id="medRemarques" placeholder="Observations médicales..." class="w-full bg-input border rounded p-2">
-                        </div>
-
-                        <div class="flex justify-end pt-1">
-                            <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded shadow flex items-center gap-2">
-                                <i class="fa-solid fa-notes-medical"></i> Valider Visite Médicale
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- TIRS AVEC CHOIX DU BAREME -->
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir</h3>
                         <form id="formAddScoreTir" class="space-y-3 text-xs">
                             <div><label class="block text-slate-400 mb-1">Tireur</label><select id="tirMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-2 gap-2">
                                 <div><label class="block text-slate-400 mb-1">Arme</label><select id="tirArme" required class="w-full bg-input border rounded p-2"><option value="HK416">HK416</option><option value="PAMAS / Glock">Glock / PAMAS</option><option value="SCAR-H">SCAR-H</option><option value="Sniper / PGM">Sniper PGM</option></select></div>
-                                <div><label class="block text-slate-400 mb-1">Bareme</label><select id="tirBareme" required class="w-full bg-input border rounded p-2 font-bold text-amber-300"><option value="20">/ 20</option><option value="50">/ 50</option><option value="100" selected>/ 100</option><option value="10">/ 10</option></select></div>
-                                <div><label class="block text-slate-400 mb-1">Score Obtenu</label><input type="number" id="tirScore" min="0" placeholder="18" required class="w-full bg-input border rounded p-2"></div>
+                                <div><label class="block text-slate-400 mb-1">Score / 100</label><input type="number" id="tirScore" min="0" max="100" placeholder="85" required class="w-full bg-input border rounded p-2"></div>
                             </div>
                             <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded">+ Enregistrer Tir</button>
                         </form>
                         <div class="border-t border-slate-700/60 pt-3"><h4 class="text-xs font-bold text-slate-200 mb-2">Derniers Scores :</h4><div id="tirsHistoryList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div></div>
                     </div>
 
-                    <!-- INAPTITUDES TEMPORAIRES -->
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
                         <form id="formAddInaptitude" class="space-y-3 text-xs">
@@ -630,7 +540,7 @@
                 </div>
             </section>
 
-            <!-- FICHES INDIVIDUELLES -->
+            <!-- FICHES INDIVIDUELLES, QUALIFICATIONS & MÉDICAL -->
             <section id="tab-fiches" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
@@ -674,18 +584,31 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            
+                            <!-- Catégorie 1 : Brevets & Qualifications -->
                             <div class="bg-input p-3 rounded-lg border border-slate-700/50 space-y-2">
-                                <h5 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5"><i class="fa-solid fa-award"></i> Brevets & Attestations</h5>
+                                <h5 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-award"></i> Brevets & Attestations
+                                </h5>
                                 <div class="space-y-1.5" id="group_brevets"></div>
                             </div>
+
+                            <!-- Catégorie 2 : Conduite, Véhicules & Logistique -->
                             <div class="bg-input p-3 rounded-lg border border-slate-700/50 space-y-2">
-                                <h5 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5"><i class="fa-solid fa-truck-monster"></i> Permis & Véhicules</h5>
+                                <h5 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-truck-monster"></i> Permis & Véhicules
+                                </h5>
                                 <div class="space-y-1.5" id="group_permis"></div>
                             </div>
+
+                            <!-- Catégorie 3 : Spécialités Opérationnelles & Combat -->
                             <div class="bg-input p-3 rounded-lg border border-slate-700/50 space-y-2">
-                                <h5 class="font-bold text-red-400 border-b border-slate-700/40 pb-1 flex items-center gap-1.5"><i class="fa-solid fa-crosshair"></i> Spécialités de Combat</h5>
+                                <h5 class="font-bold text-red-400 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-crosshair"></i> Spécialités de Combat
+                                </h5>
                                 <div class="space-y-1.5" id="group_specialites"></div>
                             </div>
+
                         </div>
                     </div>
 
@@ -695,18 +618,21 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                             <div><label class="block text-slate-400 mb-1">Groupe Sanguin</label><select id="fSang" class="w-full bg-input border rounded p-2 font-bold text-red-400"><option value="Non renseigné">Non renseigné</option><option value="O +">O +</option><option value="O -">O - (Universel)</option><option value="A +">A +</option><option value="A -">A -</option><option value="B +">B +</option><option value="B -">B -</option><option value="AB +">AB +</option><option value="AB -">AB -</option></select></div>
                             <div><label class="block text-slate-400 mb-1">Aptitude VMA</label><select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold"><option value="Apte Service FS">🟢 Apte Service FS</option><option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option><option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option></select></div>
-                            <div><label class="block text-slate-400 mb-1">Dernière Visite</label><input type="text" id="fDateVMA" readonly class="w-full bg-input border rounded p-2 text-slate-400"></div>
+                            <div><label class="block text-slate-400 mb-1">Date VMA</label><input type="date" id="fDateVMA" class="w-full bg-input border rounded p-2"></div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
-                            <div><label class="block text-slate-400 mb-1">Détails Visite Médicale</label><input type="text" id="fDetailsMed" readonly class="w-full bg-input border rounded p-2 text-slate-300"></div>
-                            <div><label class="block text-slate-400 mb-1">Médecin Examinateur</label><input type="text" id="fMedecinExam" readonly class="w-full bg-input border rounded p-2 text-slate-300"></div>
+                            <div><label class="block text-slate-400 mb-1">Allergies / Traitements</label><input type="text" id="fAllergies" placeholder="ex: Pénicilline" class="w-full bg-input border rounded p-2"></div>
+                            <div><label class="block text-slate-400 mb-1">Vaccins Opérationnels</label><input type="text" id="fVaccins" placeholder="ex: Tétanos à jour" class="w-full bg-input border rounded p-2"></div>
                         </div>
+                        <div class="flex justify-end pt-2"><button onclick="saveMedicalData()" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded shadow">Enregistrer Fiche Médicale</button></div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-card p-3 rounded-xl border space-y-1"><h4 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-award"></i> Décorations :</h4><div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs"></div></div>
                         <div class="bg-card p-3 rounded-xl border space-y-1"><h4 class="text-xs font-bold text-red-400"><i class="fa-solid fa-notes-medical"></i> Inaptitude :</h4><div id="fInaptitudesList" class="text-xs text-slate-300">Aptitude opérationnelle complète</div></div>
                     </div>
+
+                    <div class="flex justify-end"><button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Imprimer Fiche PDF</button></div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-card p-4 rounded-xl border space-y-3">
@@ -774,12 +700,15 @@
                 </div>
             </section>
 
-            <!-- NOTES -->
+            <!-- NOTES (VERSION SÉCURISÉE & FONCTIONNELLE) -->
             <section id="tab-notes" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <button id="btnNewNote" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Nouvelle Note
+                        </button>
+                        <button id="btnExportNotePDF" onclick="exportActiveNotePDF()" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-pdf"></i> Imprimer Note (PDF)
                         </button>
                     </div>
                 </div>
@@ -792,26 +721,102 @@
                 </div>
             </section>
 
-            <!-- CHANGELOG -->
+            <!-- ADMINISTRATION HIERARCHIQUE STRICTE (6 RÔLES) -->
+            <section id="tab-admin" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="bg-card p-4 rounded-xl border border-amber-500/50 bg-amber-950/10">
+                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1"><i class="fa-solid fa-user-shield text-xl"></i> Administration & Hiérarchie Sécurisée</h2>
+                    <p class="text-xs text-slate-400">
+                        Gestion des 6 rôles : 
+                        <span class="text-amber-300 font-semibold">1. Fondateur</span> (Tous les droits), 
+                        <span class="text-purple-300 font-semibold">2. Co-Fondateur</span> (Tous les droits), 
+                        <span class="text-red-300 font-semibold">3. Administrateur</span> (Tous droits sauf exclure les fondateurs), 
+                        <span class="text-emerald-300 font-semibold">4. Modérateur</span> (Pas d'exclusion ni de ban), 
+                        <span class="text-cyan-300 font-semibold">5. Personnel ENA</span> (Gestion fiches/cours/inscriptions), 
+                        <span class="text-slate-300 font-semibold">6. Personnel Opérateur</span> (Lecture et notes).
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Attribuer un Rôle</h3>
+                        <form id="formAddAllowedUser" class="space-y-3 text-xs">
+                            <div><label class="block text-slate-400 mb-1">Email</label><input type="email" id="adminUserEmail" placeholder="nom@gmail.com" required class="w-full bg-input border rounded p-2"></div>
+                            <div><label class="block text-slate-400 mb-1">Nom / Grade</label><input type="text" id="adminUserNom" placeholder="CPT Thomas" required class="w-full bg-input border rounded p-2"></div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Rôle Hiérarchique</label>
+                                <select id="adminUserRole" class="w-full bg-input border rounded p-2 font-bold text-amber-300">
+                                    <option value="Fondateur">👑 1. Fondateur (Tous les droits)</option>
+                                    <option value="Co-Fondateur">👑 2. Co-Fondateur (Tous les droits)</option>
+                                    <option value="Administrateur">⭐ 3. Administrateur (Tous droits sauf exclure fonda)</option>
+                                    <option value="Modérateur">🛡️ 4. Modérateur (Pas d'exclusion ni de ban)</option>
+                                    <option value="Personnel ENA">🎓 5. Personnel ENA (Gestion fiches, cours, ENA)</option>
+                                    <option value="Personnel Opérateur">🪖 6. Personnel Opérateur (Lecture et notes)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2 rounded">+ Valider le Rôle</button>
+                        </form>
+                    </div>
+                    <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres & Privilèges Actifs</h3>
+                        <div id="adminUsersList" class="space-y-2 text-xs"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHANGELOG (TOUTES LES VERSIONS DE 1.0 A 9.5) -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique des Mises à Jour (v1.0 à v10.0)
+                        <i class="fa-solid fa-code-branch text-blue-500"></i> Historique Exhaustif des Mises à Jour (v1.0 à v9.5)
                     </h2>
+                    <p class="text-xs text-slate-400">Chronologie complète de toutes les versions, améliorations et correctifs du portail</p>
                 </div>
 
                 <div class="space-y-3 max-w-4xl mx-auto">
+
+                    <!-- VERSION 9.5 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2 border-emerald-500/50">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-star mr-1"></i> Version 10.0 - Fiche Visite Médicale VMA & Onglet Dossier Rétroactif</span>
+                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i> Version 9.5 - Validation Automatique des Qualifications & Ajout BM2</span>
                             <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>📁 Onglet "Créer Dossier" :</strong> Enregistrement rapide d'un militaire avec sélection multiple de toutes les formations qu'il a déjà validées par le passé pour mise à jour globale.</li>
-                            <li><strong>🩺 Fiche Visite Médicale VMA :</strong> Bilan médical complet (Tension, Vision, Audition, Taille/Poids, Avis) enregistrable directement.</li>
-                            <li><strong>🎯 Choix du Barème de Tir :</strong> Sélection de la note max (`/100`, `/50`, `/20`, `/10`).</li>
+                            <li><strong>Automatisation des Qualifications :</strong> Les diplômes, brevets et permis de la fiche individuelle ne se cochent plus à la main : le système vérifie automatiquement si l'examen correspondant est validé ("Admis") dans le tableau de suivi ENA.</li>
+                            <li><strong>Ajout du BM2 :</strong> Le Brevet Militaire de Niveau 2 ([BM2]) est désormais sélectionnable dans le catalogue des formations ENA.</li>
                         </ul>
                     </div>
+
+                    <!-- VERSION 9.0 -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2 border-blue-500/50">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-certificate mr-1"></i> Version 9.0 - Module Qualifications, Permis & Spécialités de Combat</span>
+                            <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Qualifications & Spécialités :</strong> Attribution des brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat.</li>
+                            <li><strong>Correctifs & Inscriptions :</strong> Intégration de l'option N/A pour les militaires sans affectation.</li>
+                        </ul>
+                    </div>
+
+                    <!-- VERSION 8.0 -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2 border-amber-500/40">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-amber-400"><i class="fa-solid fa-user-shield mr-1"></i> Version 8.0 - Hiérarchie Stricte à 6 Rôles (RBAC) & Sécurité</span>
+                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
+                        </div>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>Hiérarchie à 6 Rôles :</strong> Intégration des rôles Fondateur, Co-Fondateur, Administrateur, Modérateur, Personnel ENA et Personnel Opérateur.</li>
+                        </ul>
+                    </div>
+
+                    <!-- VERSIONS PRECEDENTES -->
+                    <div class="bg-card border rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-history mr-1"></i> Versions 1.0 à 7.5</span>
+                            <span class="text-[10px] text-slate-500 font-mono">Historique système</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Fondations du portail ENA : base Firebase, carnet de tir, GITA, fiches individuelles, suivi d'unités et exports PDF.</p>
+                    </div>
+
                 </div>
             </section>
 
@@ -819,6 +824,7 @@
             <section id="tab-logs" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
                 <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
                     <h2 class="text-sm font-bold text-white"><i class="fa-solid fa-receipt text-blue-500"></i> Logs d'Activité</h2>
+                    <button id="btnExportLogsPDF" onclick="generatePDF('pdfLogsContainer', 'Logs_Activites_ENA.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                 </div>
                 <div id="pdfLogsContainer" class="flex-1 bg-card rounded-xl border p-2 overflow-y-auto custom-scroll">
                     <table class="w-full text-left">
@@ -840,11 +846,22 @@
         const state = {
             user: JSON.parse(localStorage.getItem('ena_user')) || null,
             role: 'Personnel Opérateur',
-            files: [], notes: [], activeNoteId: null,
-            effectifs: [], formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [],
-            allowedUsers: [], notifications: [], logs: [], selectedMilitaireId: null
+            files: [],
+            notes: [],
+            activeNoteId: null,
+            effectifs: [],
+            formateurs: [],
+            sessions: [],
+            decorations: [],
+            tirs: [],
+            inaptitudes: [],
+            allowedUsers: [],
+            notifications: [],
+            logs: [],
+            selectedMilitaireId: null
         };
 
+        // Liste structurée de toutes les qualifications pour la vérification automatique dans les fiches
         const QUALIFICATIONS_CATALOG = [
             { category: 'brevets', label: '🪂 Brevet Parachutiste', keyMatch: ['Brevet Parachutiste'] },
             { category: 'brevets', label: '🥊 Qualification CQB', keyMatch: ['Qualification CQB'] },
@@ -873,8 +890,21 @@
 
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
-        function changeTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('ena_theme', t); }
-        function changeAccent(c) { document.documentElement.setAttribute('data-accent', c); localStorage.setItem('ena_accent', c); }
+
+        function changeTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('ena_theme', themeName);
+        }
+        function changeAccent(colorName) {
+            document.documentElement.setAttribute('data-accent', colorName);
+            localStorage.setItem('ena_accent', colorName);
+        }
+
+        const savedTheme = localStorage.getItem('ena_theme') || 'slate';
+        const savedAccent = localStorage.getItem('ena_accent') || 'blue';
+        changeTheme(savedTheme);
+        changeAccent(savedAccent);
+        document.getElementById('themeSelector').value = savedTheme;
 
         function getUserRole(email) {
             if (!email) return 'Personnel Opérateur';
@@ -883,15 +913,112 @@
             return found ? found.role : 'Personnel Opérateur';
         }
 
+        function checkPermission(actionType, targetRole = '') {
+            const r = state.role;
+            if (r === 'Fondateur' || r === 'Co-Fondateur') return true;
+            if (r === 'Administrateur') {
+                if ((actionType === 'EXCLURE' || actionType === 'BAN') && (targetRole === 'Fondateur' || targetRole === 'Co-Fondateur')) {
+                    alert("⛔ Un Administrateur ne peut pas exclure ou bannir un Fondateur ou un Co-Fondateur !");
+                    return false;
+                }
+                return true;
+            }
+            if (r === 'Modérateur' && (actionType === 'EXCLURE' || actionType === 'BAN')) {
+                alert("⛔ Les modérateurs n'ont pas le droit d'exclure ou de bannir de membres !");
+                return false;
+            }
+            if (r === 'Personnel ENA') {
+                if (actionType === 'BAN' || actionType === 'ADMIN_USER') {
+                    alert("⛔ Le personnel ENA ne peut pas gérer les rôles administratifs.");
+                    return false;
+                }
+                return true;
+            }
+            if (r === 'Personnel Opérateur' && actionType !== 'NOTE' && actionType !== 'LECTURE') {
+                alert("⛔ Le personnel opérateur n'a accès qu'à la lecture et aux notes !");
+                return false;
+            }
+            return true;
+        }
+
+        // Synchronisations Firebase
+        db.ref('.info/connected').on('value', (snap) => {
+            const statusEl = document.getElementById('connection-status');
+            if (snap.val() === true) {
+                statusEl.textContent = "Connecté";
+                statusEl.className = "px-2.5 py-1 rounded-full bg-emerald-600 text-white font-medium text-[10px]";
+            } else {
+                statusEl.textContent = "Hors ligne";
+                statusEl.className = "px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]";
+            }
+        });
+
         db.ref('files').on('value', snap => { state.files = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFiles(); updateDashboard(); });
         db.ref('notes').on('value', snap => { state.notes = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderNotes(); });
         db.ref('effectifs').on('value', snap => { state.effectifs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderEffectifs(); renderFormateurs(); renderUnites(); updateFichesSelect(); updateDecorationsSelects(); updateTirsSelects(); updateDashboard(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
-        db.ref('formateurs').on('value', snap => { state.formateurs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFormateurs(); updateInstructeursSelects(); });
+        db.ref('formateurs').on('value', snap => { state.formateurs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFormateurs(); updateInstructeursSelects(); updateDashboard(); });
+        db.ref('sessions').on('value', snap => { state.sessions = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderSessions(); });
+        db.ref('decorations').on('value', snap => { state.decorations = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderDecorations(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
         db.ref('tirs').on('value', snap => { state.tirs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderTirs(); });
         db.ref('inaptitudes').on('value', snap => { state.inaptitudes = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderInaptitudes(); updateDashboard(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
+        db.ref('allowedUsers').on('value', snap => { state.allowedUsers = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; if(state.user) { state.role = getUserRole(state.user.email); document.getElementById('userRoleBadge').textContent = state.role; } renderAdminUsers(); });
+        db.ref('notifications').on('value', snap => { state.notifications = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderNotifications(); });
+        db.ref('logs').on('value', snap => { state.logs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderLogs(); });
+
+        function addLog(action, details) {
+            db.ref('logs').push({ id: Date.now().toString(), date: new Date().toLocaleString('fr-FR'), user: state.user ? state.user.email : 'Anonyme', action, details });
+            db.ref('notifications').push({ text: `${action} : ${details}`, date: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) });
+        }
+
+        function generatePDF(elementId, filename) {
+            html2pdf().set({ margin: 0.3, filename, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, backgroundColor: '#020617' }, jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } }).from(document.getElementById(elementId)).save();
+            addLog('EXPORT_PDF', `Export PDF : ${filename}`);
+        }
+
+        function exportToCSV() {
+            if (state.effectifs.length === 0) return alert("Aucune donnée.");
+            let csv = "Militaire;Grade;Matricule;Unite;Formation;Statut;Note\n";
+            state.effectifs.forEach(e => {
+                const isVal = e.eval && e.eval.evaluee;
+                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.aff || 'N/A'}";"${e.form}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}"\n`;
+            });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+            a.download = `Effectifs_ENA_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            addLog('EXPORT_CSV', 'Export CSV effectué');
+        }
+
+        window.printDiplome = (candidateId) => {
+            const cand = state.effectifs.find(e => e.id === candidateId);
+            if (!cand || !cand.eval) return;
+            document.getElementById('dipNomMilitaire').textContent = `${cand.grade} ${cand.nom}`;
+            document.getElementById('dipMatricule').textContent = cand.mat;
+            document.getElementById('dipFormation').textContent = cand.form;
+            document.getElementById('dipMention').textContent = cand.eval.mention || 'Pas de mention';
+            document.getElementById('dipNote').textContent = cand.eval.note || 'N/A';
+            document.getElementById('dipDate').textContent = cand.eval.dateEval || new Date().toLocaleDateString('fr-FR');
+            document.getElementById('dipInstructeur').textContent = cand.eval.formateur || 'Instructeur ENA';
+
+            const container = document.getElementById('diplomePrintContainer');
+            container.classList.remove('hidden');
+            html2pdf().set({ margin: 0.2, filename: `Diplome_${cand.nom}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } }).from(document.getElementById('diplomeContent')).save().then(() => {
+                container.classList.add('hidden');
+                addLog('IMPRESSION_DIPLOME', `Diplôme imprimé pour ${cand.nom}`);
+            });
+        };
 
         function init() {
-            if (state.user) { showApp(); } else { document.getElementById('authModal').classList.remove('hidden'); }
+            if (state.user) {
+                showApp();
+            } else {
+                document.getElementById('authModal').classList.remove('hidden');
+            }
+            const dtInput = document.getElementById('pDateTime');
+            if (dtInput) {
+                const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                dtInput.value = now.toISOString().slice(0,16);
+            }
             setupListeners();
         }
 
@@ -899,9 +1026,15 @@
             state.role = getUserRole(state.user.email);
             document.getElementById('userRoleBadge').textContent = state.role;
             document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('app').classList.remove('hidden');
-            document.getElementById('app').classList.add('flex');
+            const app = document.getElementById('app');
+            app.classList.remove('hidden'); app.classList.add('flex');
             document.getElementById('userInfo').textContent = state.user.email;
+
+            if (['Fondateur', 'Co-Fondateur', 'Administrateur'].includes(state.role) || state.user.email.toLowerCase() === 'gabinpompier811@gmail.com') {
+                document.getElementById('navAdminBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('navAdminBtn').classList.add('hidden');
+            }
         }
 
         function setupListeners() {
@@ -909,10 +1042,13 @@
                 e.preventDefault();
                 state.user = { email: document.getElementById('authEmail').value.trim() };
                 localStorage.setItem('ena_user', JSON.stringify(state.user));
+                addLog('CONNEXION', `Connexion de ${state.user.email}`);
                 showApp();
             });
 
-            document.getElementById('btnLogout').addEventListener('click', () => { localStorage.removeItem('ena_user'); location.reload(); });
+            document.getElementById('btnLogout').addEventListener('click', () => {
+                localStorage.removeItem('ena_user'); location.reload();
+            });
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -923,112 +1059,139 @@
                 });
             });
 
-            // LOGIQUE DE CRÉATION DE DOSSIER RÉTROACTIF COMPLET
-            document.getElementById('formFullDossier').addEventListener('submit', (e) => {
+            document.getElementById('formAddAllowedUser')?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('fullNom').value.trim();
-                const grade = document.getElementById('fullGrade').value.trim();
-                const mat = document.getElementById('fullMat').value.trim();
-                const aff = document.getElementById('fullUnite').value;
-                const sang = document.getElementById('fullSang').value;
-                const aptitude = document.getElementById('fullAptitude').value;
-                const notes = document.getElementById('fullNotes').value;
-
-                const selectedForms = Array.from(document.querySelectorAll('.full-form-check:checked')).map(cb => cb.value);
-
-                if (selectedForms.length === 0) {
-                    if(!confirm("Aucune formation sélectionnée. Créer quand même la fiche militaire ?")) return;
-                }
-
-                const today = new Date().toLocaleDateString('fr-FR');
-
-                if (selectedForms.length > 0) {
-                    selectedForms.forEach(formName => {
-                        db.ref('effectifs').push({
-                            id: Date.now().toString() + Math.floor(Math.random()*1000),
-                            nom, grade, mat, aff, form: formName,
-                            dateDemande: today,
-                            sang, aptitudeVMA: aptitude, notesPerso: notes,
-                            eval: { evaluee: true, resultat: 'Admis', note: '20', mention: 'Validation Rétroactive', dateEval: today, formateur: 'Commandement' }
-                        });
-                    });
-                } else {
-                    db.ref('effectifs').push({
-                        id: Date.now().toString(),
-                        nom, grade, mat, aff, form: '[FGI] Formation Général Initiale',
-                        dateDemande: today, sang, aptitudeVMA: aptitude, notesPerso: notes,
-                        eval: { evaluee: false }
-                    });
-                }
-
-                alert(`Dossier militaire de ${grade} ${nom} créé / mis à jour avec succès ! Tout le site a été synchronisé.`);
-                e.target.reset();
-                document.querySelector('[data-tab="fiches"]').click();
-                document.getElementById('selectFicheMilitaire').value = nom;
-                loadFicheMilitaire();
-            });
-
-            // FICHE VISITE MEDICALE VOISINE DE TIRS
-            document.getElementById('formFullVisiteMedicale').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const nom = document.getElementById('medMilitaire').value;
-                if (!nom) return alert("Sélectionnez un militaire.");
-
-                const tension = document.getElementById('medTension').value;
-                const taille = document.getElementById('medTaille').value;
-                const poids = document.getElementById('medPoids').value;
-                const vision = document.getElementById('medVision').value;
-                const audition = document.getElementById('medAudition').value;
-                const aptitude = document.getElementById('medAptitudeFinal').value;
-                const medecin = document.getElementById('medMedecin').value;
-                const remarques = document.getElementById('medRemarques').value;
-                const dateToday = new Date().toLocaleDateString('fr-FR');
-
-                const detailsText = `TA: ${tension || 'N/A'}, T/P: ${taille || '?'}cm/${poids || '?'}kg, Vision: ${vision || 'N/A'}, Audition: ${audition}. Obs: ${remarques || 'RAS'}`;
-
-                state.effectifs.filter(m => m.nom === nom).forEach(m => {
-                    if(m._fbKey) {
-                        db.ref(`effectifs/${m._fbKey}`).update({
-                            aptitudeVMA: aptitude,
-                            dateVMA: dateToday,
-                            detailsMedicalExam: detailsText,
-                            medecinExaminateur: medecin
-                        });
-                    }
-                });
-
-                alert(`Visite médicale enregistrée pour ${nom} !`);
+                if (!checkPermission('ADMIN')) return;
+                db.ref('allowedUsers').push({ email: document.getElementById('adminUserEmail').value.trim(), nom: document.getElementById('adminUserNom').value, role: document.getElementById('adminUserRole').value });
                 e.target.reset();
             });
 
-            // SCORE DE TIR AVEC BAREME BAREME /100 /50 /20
-            document.getElementById('formAddScoreTir').addEventListener('submit', (e) => {
+            document.getElementById('formAddPersonnel').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('tirMilitaire').value;
-                const arme = document.getElementById('tirArme').value;
-                const bareme = document.getElementById('tirBareme').value;
-                const scoreObtenu = document.getElementById('tirScore').value;
-
-                db.ref('tirs').push({
+                if (!checkPermission('MOD')) return;
+                const dt = document.getElementById('pDateTime').value;
+                const dateObj = dt ? new Date(dt) : new Date();
+                db.ref('effectifs').push({
                     id: Date.now().toString(),
-                    nom, arme, score: scoreObtenu, bareme,
+                    nom: document.getElementById('pNom').value,
+                    grade: document.getElementById('pGrade').value,
+                    mat: document.getElementById('pMat').value,
+                    aff: document.getElementById('pUnite').value || 'N/A',
+                    form: document.getElementById('pForm').value,
+                    dateDemande: `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`,
+                    eval: { evaluee: false }
+                });
+                e.target.reset();
+            });
+
+            document.getElementById('formAddSession').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const d = new Date(document.getElementById('sessDate').value);
+                db.ref('sessions').push({
+                    id: Date.now().toString(),
+                    formation: document.getElementById('sessForm').value,
+                    date: `${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`,
+                    lieu: document.getElementById('sessLieu').value,
+                    instructeur: document.getElementById('sessInstructeur').value
+                });
+                e.target.reset();
+            });
+
+            document.getElementById('formAddDecoration').addEventListener('submit', (e) => {
+                e.preventDefault();
+                db.ref('decorations').push({
+                    id: Date.now().toString(),
+                    nom: document.getElementById('decoMilitaire').value,
+                    titre: document.getElementById('decoTitre').value,
+                    motif: document.getElementById('decoMotif').value,
                     date: new Date().toLocaleDateString('fr-FR')
                 });
                 e.target.reset();
             });
 
-            document.getElementById('formAddInaptitude').addEventListener('submit', (e) => {
+            document.getElementById('formAddScoreTir').addEventListener('submit', (e) => {
                 e.preventDefault();
-                db.ref('inaptitudes').push({
-                    id: Date.now().toString(),
-                    nom: document.getElementById('inapteMilitaire').value,
-                    type: document.getElementById('inapteType').value,
-                    dateFin: document.getElementById('inapteDateFin').value,
-                    motif: document.getElementById('inapteMotif').value
-                });
+                db.ref('tirs').push({ id: Date.now().toString(), nom: document.getElementById('tirMilitaire').value, arme: document.getElementById('tirArme').value, score: document.getElementById('tirScore').value, date: new Date().toLocaleDateString('fr-FR') });
                 e.target.reset();
             });
+
+            document.getElementById('formAddInaptitude').addEventListener('submit', (e) => {
+                e.preventDefault();
+                db.ref('inaptitudes').push({ id: Date.now().toString(), nom: document.getElementById('inapteMilitaire').value, type: document.getElementById('inapteType').value, dateFin: document.getElementById('inapteDateFin').value, motif: document.getElementById('inapteMotif').value });
+                e.target.reset();
+            });
+
+            document.getElementById('evalForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const candidateId = document.getElementById('evalCandidateId').value;
+                const candidate = state.effectifs.find(item => item.id === candidateId);
+                if (candidate && candidate._fbKey) {
+                    db.ref(`effectifs/${candidate._fbKey}/eval`).set({
+                        evaluee: true,
+                        resultat: document.getElementById('evalResultat').value,
+                        note: document.getElementById('evalNote').value,
+                        mention: document.getElementById('evalMention').value,
+                        formateur: document.getElementById('evalFormateur').value,
+                        comments: document.getElementById('evalComments').value,
+                        dateEval: new Date().toLocaleDateString('fr-FR')
+                    });
+                    closeEvalModal();
+                }
+            });
+
+            document.getElementById('fileInput').addEventListener('change', (e) => {
+                Array.from(e.target.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        db.ref('files').push({ id: Date.now().toString(), name: file.name, size: (file.size / 1024).toFixed(1) + ' Ko', type: file.type, content: event.target.result });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            document.getElementById('formAddFormateur').addEventListener('submit', (e) => {
+                e.preventDefault();
+                db.ref('formateurs').push({ id: Date.now().toString(), nom: document.getElementById('fmtNom').value, role: document.getElementById('fmtRole').value });
+                e.target.reset();
+            });
+
+            document.getElementById('btnNewNote').addEventListener('click', () => {
+                const newRef = db.ref('notes').push();
+                const newId = Date.now().toString();
+                newRef.set({ id: newId, title: 'Nouvelle Note', content: '' }).then(() => {
+                    selectNote(newId);
+                });
+            });
+
+            document.getElementById('noteTitle').addEventListener('input', saveCurrentNote);
+            document.getElementById('noteContent').addEventListener('input', saveCurrentNote);
+
+            document.getElementById('btnSaveGlobal').addEventListener('click', () => {
+                const a = document.createElement('a');
+                a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+                a.download = `ENA_Backup_${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+            });
         }
+
+        function saveCurrentNote() {
+            if (!state.activeNoteId) return;
+            const note = state.notes.find(n => n.id === state.activeNoteId);
+            if (note && note._fbKey) {
+                const updatedTitle = document.getElementById('noteTitle').value;
+                const updatedContent = document.getElementById('noteContent').value;
+                db.ref(`notes/${note._fbKey}`).update({
+                    title: updatedTitle,
+                    content: updatedContent
+                });
+            }
+        }
+
+        window.exportActiveNotePDF = () => {
+            if (!state.activeNoteId) return alert("Aucune note sélectionnée.");
+            const title = document.getElementById('noteTitle').value || 'Note';
+            generatePDF('pdfNoteContainer', `Note_${title.replace(/\s+/g, '_')}.pdf`);
+        };
 
         function updateDashboard() {
             const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
@@ -1044,6 +1207,14 @@
             document.getElementById('dashCountAjournes').textContent = evals.filter(e => e.eval.resultat === 'Ajourné').length;
             document.getElementById('dashCountAttente').textContent = filteredEff.length - evals.length;
             document.getElementById('dashTauxReussite').textContent = (evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0) + '%';
+
+            const recentContainer = document.getElementById('dashRecentEvals');
+            recentContainer.innerHTML = evals.length === 0 ? '<p class="text-slate-500 text-center py-2">Aucune évaluation.</p>' : evals.slice(-4).reverse().map(e => `
+                <div class="bg-input p-2 rounded flex justify-between items-center">
+                    <div><p class="font-bold text-white">${e.nom}</p><p class="text-[10px] text-blue-400">${e.form}</p></div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${e.eval.resultat} (${e.eval.note}/20)</span>
+                </div>
+            `).join('');
         }
 
         function renderUnites() {
@@ -1072,6 +1243,43 @@
 
         window.selectMilitaireAndOpenFiche = (nom) => { document.querySelector('[data-tab="fiches"]').click(); document.getElementById('selectFicheMilitaire').value = nom; loadFicheMilitaire(); };
 
+        function renderAdminUsers() {
+            const container = document.getElementById('adminUsersList');
+            if(!container) return;
+            container.innerHTML = `
+                <div class="bg-amber-950/40 border border-amber-500/60 p-3 rounded-lg flex justify-between items-center">
+                    <div><p class="font-bold text-amber-300">gabinpompier811@gmail.com (Gabin)</p><p class="text-[10px] text-slate-400">Fondateur Principal</p></div>
+                    <span class="px-2.5 py-1 bg-amber-500 text-black rounded text-[10px] font-extrabold uppercase">👑 Fondateur</span>
+                </div>
+            `;
+            state.allowedUsers.forEach(u => {
+                let badgeColor = "bg-blue-600 text-white";
+                if(u.role === "Co-Fondateur") badgeColor = "bg-purple-600 text-white";
+                if(u.role === "Administrateur") badgeColor = "bg-red-600 text-white";
+                if(u.role === "Modérateur") badgeColor = "bg-emerald-600 text-white";
+                if(u.role === "Personnel ENA") badgeColor = "bg-cyan-600 text-white";
+                if(u.role === "Personnel Opérateur") badgeColor = "bg-slate-700 text-slate-200";
+
+                container.innerHTML += `
+                    <div class="bg-input border p-2.5 rounded-lg flex justify-between items-center">
+                        <div><p class="font-bold text-white">${u.nom} <span class="text-slate-400">(${u.email})</span></p><p class="text-[10px] text-slate-400">Rôle : ${u.role}</p></div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${u.role}</span>
+                            <button onclick="deleteAllowedUser('${u._fbKey}', '${u.role}', '${u.email}')" class="text-red-400 text-xs p-1"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.deleteAllowedUser = (fbKey, targetRole, targetEmail) => {
+            if (!checkPermission('EXCLURE', targetRole)) return;
+            if (confirm(`Révoquer les accès de ${targetEmail} ?`)) {
+                db.ref('allowedUsers/' + fbKey).remove();
+                addLog('ADMIN_REVOCATION', `Accès révoqués pour ${targetEmail}`);
+            }
+        };
+
         function renderTirs() {
             const container = document.getElementById('tirsHistoryList');
             if(!container) return; container.innerHTML = state.tirs.length === 0 ? '<p class="text-slate-500 italic">Aucun tir.</p>' : state.tirs.slice(-6).reverse().map(t => `
@@ -1081,12 +1289,19 @@
                         <span class="text-slate-400 block text-[10px]">${t.arme} (${t.date})</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="font-bold text-red-400 text-sm">${t.score} / ${t.bareme || 100}</span>
-                        <button onclick="db.ref('tirs/${t._fbKey}').remove()" class="text-red-400 hover:text-red-300 text-xs p-1" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                        <span class="font-bold text-red-400 text-sm">${t.score}/100</span>
+                        <button onclick="deleteTir('${t._fbKey}')" class="text-red-400 hover:text-red-300 text-xs p-1" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
+
+        window.deleteTir = (fbKey) => {
+            if(confirm("Voulez-vous vraiment supprimer ce score de tir ?")) {
+                db.ref('tirs/' + fbKey).remove();
+                addLog('SUPPRESSION_TIR', 'Score de tir supprimé');
+            }
+        };
 
         function renderInaptitudes() {
             const container = document.getElementById('inaptesActiveList');
@@ -1095,13 +1310,51 @@
             `).join('');
         }
 
+        function toggleNotifications() { document.getElementById('notifDropdown').classList.toggle('hidden'); }
+        function clearNotifications() { db.ref('notifications').remove(); }
+        function renderNotifications() {
+            const container = document.getElementById('notifList');
+            const badge = document.getElementById('notifBadge');
+            if(!container) return;
+            if(state.notifications.length === 0) { container.innerHTML = '<p class="text-slate-500 text-center py-2">Aucune alerte.</p>'; badge.classList.add('hidden'); }
+            else { badge.textContent = state.notifications.length; badge.classList.remove('hidden'); container.innerHTML = state.notifications.slice(-10).reverse().map(n => `<div class="p-2 bg-input rounded text-[11px]"><span class="text-slate-400 text-[9px] block">${n.date}</span>${n.text}</div>`).join(''); }
+        }
+
+        function updateInstructeursSelects() {
+            const selectSess = document.getElementById('sessInstructeur'); if(!selectSess) return;
+            selectSess.innerHTML = state.formateurs.map(f => `<option value="${f.nom}">${f.nom} (${f.role})</option>`).join('');
+        }
+        function updateDecorationsSelects() {
+            const select = document.getElementById('decoMilitaire'); if(!select) return;
+            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
+            select.innerHTML = unique.map(m => `<option value="${m.nom}">${m.grade} ${m.nom}</option>`).join('');
+        }
         function updateTirsSelects() {
-            const s1 = document.getElementById('tirMilitaire'), s2 = document.getElementById('inapteMilitaire'), s3 = document.getElementById('medMilitaire');
-            if(!s1 || !s2 || !s3) return;
+            const s1 = document.getElementById('tirMilitaire'), s2 = document.getElementById('inapteMilitaire'); if(!s1 || !s2) return;
             const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
             const html = unique.map(m => `<option value="${m.nom}">${m.grade} ${m.nom}</option>`).join('');
-            s1.innerHTML = html; s2.innerHTML = html; s3.innerHTML = html;
+            s1.innerHTML = html; s2.innerHTML = html;
         }
+
+        window.openImageViewer = (src, title) => { document.getElementById('viewerImage').src = src; document.getElementById('viewerTitle').textContent = title; document.getElementById('imageViewerModal').classList.remove('hidden'); };
+        window.closeImageViewer = () => document.getElementById('imageViewerModal').classList.add('hidden');
+        window.deleteFile = (k) => { if(confirm("Supprimer ce fichier ?")) db.ref('files/' + k).remove(); };
+        window.deleteSession = (k) => { if(confirm("Supprimer cette session ?")) db.ref('sessions/' + k).remove(); };
+        window.deleteDecoration = (k) => { if(confirm("Supprimer cette décoration ?")) db.ref('decorations/' + k).remove(); };
+        window.deleteFormateur = (k, name) => { if(confirm(`Supprimer ${name} ?`)) db.ref('formateurs/' + k).remove(); };
+        window.deleteEffectif = (k, name) => { if(!checkPermission('EXCLURE')) return; if(confirm(`Supprimer ${name} ?`)) db.ref('effectifs/' + k).remove(); };
+
+        window.deleteNote = (k, title) => {
+            if (confirm(`Supprimer la note "${title}" ?`)) {
+                db.ref('notes/' + k).remove().then(() => {
+                    if (state.activeNoteId) {
+                        state.activeNoteId = null;
+                        document.getElementById('noteTitle').value = '';
+                        document.getElementById('noteContent').value = '';
+                    }
+                });
+            }
+        };
 
         function updateFichesSelect() {
             const select = document.getElementById('selectFicheMilitaire'); if(!select) return;
@@ -1125,13 +1378,17 @@
             document.getElementById('fAff').textContent = mil.aff || 'N/A';
             document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis').length;
 
+            // Chargement automatique des qualifications validées en formation
             renderAutomaticQualifications(dossiers);
 
             document.getElementById('fSang').value = mil.sang || 'Non renseigné';
             document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
-            document.getElementById('fDateVMA').value = mil.dateVMA || 'Non effectuée';
-            document.getElementById('fDetailsMed').value = mil.detailsMedicalExam || 'Aucun bilan récent';
-            document.getElementById('fMedecinExam').value = mil.medecinExaminateur || 'Non renseigné';
+            document.getElementById('fDateVMA').value = mil.dateVMA || '';
+            document.getElementById('fAllergies').value = mil.allergies || '';
+            document.getElementById('fVaccins').value = mil.vaccins || '';
+
+            const decos = state.decorations.filter(d => d.nom === nom);
+            document.getElementById('fDecorationsList').innerHTML = decos.length === 0 ? '<span class="text-slate-500 italic">Aucune.</span>' : decos.map(d => `<span class="px-2.5 py-1 bg-amber-900/40 text-amber-300 rounded-full font-bold"><i class="fa-solid fa-medal"></i> ${d.titre}</span>`).join('');
 
             const inaptes = state.inaptitudes.filter(i => i.nom === nom);
             document.getElementById('fInaptitudesList').innerHTML = inaptes.length === 0 ? '<span class="text-emerald-400 font-bold">Aptitude complète</span>' : inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif})</div>`).join('');
@@ -1141,7 +1398,10 @@
                 return `
                     <div class="bg-input p-2 rounded flex justify-between items-center text-xs">
                         <div><p class="font-bold text-white">${d.form}</p><p class="text-[10px] text-slate-400">${d.dateDemande}</p></div>
-                        <div>${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400">En cours</span>'}</div>
+                        <div class="flex items-center gap-2">
+                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400">En cours</span>'}
+                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1150,6 +1410,7 @@
             container.classList.remove('hidden');
         };
 
+        // Génération automatique du statut des qualifications selon les cours Admis dans le tableau ENA
         function renderAutomaticQualifications(dossiersMilitaire) {
             const groupBrevets = document.getElementById('group_brevets');
             const groupPermis = document.getElementById('group_permis');
@@ -1157,8 +1418,11 @@
 
             if (!groupBrevets || !groupPermis || !groupSpecialites) return;
 
-            groupBrevets.innerHTML = ''; groupPermis.innerHTML = ''; groupSpecialites.innerHTML = '';
+            groupBrevets.innerHTML = '';
+            groupPermis.innerHTML = '';
+            groupSpecialites.innerHTML = '';
 
+            // Liste de toutes les formations où le candidat est "Admis"
             const formationsValidees = dossiersMilitaire
                 .filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis')
                 .map(d => d.form || '');
@@ -1183,6 +1447,93 @@
             });
         }
 
+        window.saveMedicalData = () => {
+            if(!state.selectedMilitaireId) return;
+            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
+                if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({
+                    sang: document.getElementById('fSang').value,
+                    aptitudeVMA: document.getElementById('fAptitudeVMA').value,
+                    dateVMA: document.getElementById('fDateVMA').value,
+                    allergies: document.getElementById('fAllergies').value,
+                    vaccins: document.getElementById('fVaccins').value
+                });
+            });
+            alert('Fiche médicale enregistrée !');
+        };
+
+        window.saveFicheNotes = () => {
+            if(!state.selectedMilitaireId) return;
+            const notes = document.getElementById('fNotesPerso').value;
+            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
+                if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({ notesPerso: notes });
+            });
+            alert('Notes enregistrées !');
+        };
+
+        function renderDecorations() {
+            const container = document.getElementById('decorationsRegistry'); if(!container) return;
+            container.innerHTML = state.decorations.length === 0 ? '<p class="text-slate-500 text-center py-4">Aucune décoration.</p>' : state.decorations.map(d => `
+                <div class="bg-input border p-3 rounded-lg flex justify-between items-start">
+                    <div><div class="flex items-center gap-2"><i class="fa-solid fa-medal text-amber-400"></i><span class="font-bold text-white text-sm">${d.titre}</span></div><p class="text-blue-400 font-bold">Récipiendaire : ${d.nom}</p><p class="text-slate-300 italic">« ${d.motif} »</p></div>
+                    <button onclick="deleteDecoration('${d._fbKey}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function renderSessions() {
+            const container = document.getElementById('sessionsList'); if(!container) return;
+            container.innerHTML = state.sessions.length === 0 ? '<p class="text-slate-500 col-span-full py-4 text-center">Aucune session.</p>' : state.sessions.map(s => `
+                <div class="bg-input border p-3 rounded-lg flex justify-between items-start">
+                    <div><span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${s.formation}</span><p class="text-white font-bold mt-1.5"><i class="fa-solid fa-clock"></i> ${s.date}</p><p class="text-slate-300"><i class="fa-solid fa-location-dot"></i> ${s.lieu}</p></div>
+                    <button onclick="deleteSession('${s._fbKey}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function renderFiles() {
+            const container = document.getElementById('fileList'); if(!container) return;
+            container.innerHTML = state.files.length === 0 ? '<p class="text-xs text-slate-500 col-span-full text-center py-4">Aucun fichier</p>' : state.files.map(file => {
+                const isImage = file.type && file.type.startsWith('image/');
+                return `
+                    <div class="bg-card border rounded-lg p-3 flex flex-col justify-between space-y-2">
+                        ${isImage ? `<div onclick="openImageViewer('${file.content}', '${file.name}')" class="w-full h-24 bg-input rounded overflow-hidden flex items-center justify-center cursor-pointer"><img src="${file.content}" class="max-h-full max-w-full object-contain"></div>` : ''}
+                        <div class="truncate text-xs font-bold text-slate-200"><i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'}"></i> ${file.name}</div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
+                            <a href="${file.content}" download="${file.name}" class="text-blue-400 text-xs px-2 py-1 bg-input rounded"><i class="fa-solid fa-download"></i></a>
+                            <button onclick="deleteFile('${file._fbKey}')" class="text-red-400 text-xs px-2 py-1 bg-red-900/40 rounded"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderNotes() {
+            const container = document.getElementById('notesList'); if(!container) return;
+            container.innerHTML = state.notes.length === 0 ? '<p class="text-xs text-slate-500 text-center py-4">Aucune note enregistrée</p>' : state.notes.map(note => `
+                <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer text-xs flex justify-between items-center transition ${note.id === state.activeNoteId ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-input text-slate-300 hover:bg-slate-800'}">
+                    <span class="truncate">${note.title || 'Sans titre'}</span>
+                    <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${note.title || 'Note'}')" class="text-red-400 hover:text-red-300 ml-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            if (!state.activeNoteId && state.notes.length > 0) {
+                selectNote(state.notes[0].id);
+            }
+        }
+
+        window.selectNote = (id) => {
+            state.activeNoteId = id;
+            const note = state.notes.find(n => n.id === id);
+            if (note) { 
+                document.getElementById('noteTitle').value = note.title || ''; 
+                document.getElementById('noteContent').value = note.content || ''; 
+            } else {
+                document.getElementById('noteTitle').value = '';
+                document.getElementById('noteContent').value = '';
+            }
+            renderNotes();
+        };
+
         function renderEffectifs() {
             const tbody = document.getElementById('effectifsTable'); if(!tbody) return;
             const search = (document.getElementById('searchTable')?.value || '').toLowerCase();
@@ -1199,7 +1550,9 @@
                         <td class="p-2.5">${item.form}</td>
                         <td class="p-2.5">${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold">${item.eval.resultat} (${item.eval.note}/20)</span>` : '<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px]">En attente</span>'}</td>
                         <td class="p-2.5 text-right space-x-1">
-                            <button onclick="db.ref('effectifs/${item._fbKey}').remove()" class="px-2 py-1 bg-red-900/40 text-red-300 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="openEvalModal('${item.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px]">Évaluer</button>
+                            ${isValide && item.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${item.id}')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
+                            <button onclick="deleteEffectif('${item._fbKey}', '${item.nom}')" class="px-2 py-1 bg-red-900/40 text-red-300 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -1211,15 +1564,35 @@
             container.innerHTML = state.formateurs.length === 0 ? '<p class="text-xs text-slate-500 col-span-full py-2">Aucun formateur.</p>' : state.formateurs.map(f => `
                 <div class="bg-input border p-3 rounded-lg flex items-center justify-between">
                     <div><p class="text-xs font-bold text-white">${f.nom}</p><p class="text-[10px] text-blue-400">${f.role}</p></div>
-                    <button onclick="db.ref('formateurs/${f._fbKey}').remove()" class="text-red-400 text-xs"><i class="fa-solid fa-user-minus"></i></button>
+                    <button onclick="deleteFormateur('${f._fbKey}', '${f.nom}')" class="text-red-400 text-xs"><i class="fa-solid fa-user-minus"></i></button>
                 </div>
             `).join('');
         }
 
-        function updateInstructeursSelects() {}
-        function updateDecorationsSelects() {}
-        function renderFiles() {}
-        function renderNotes() {}
+        function renderLogs() {
+            const tbody = document.getElementById('logsTable'); if(!tbody) return;
+            tbody.innerHTML = state.logs.length === 0 ? '<tr><td colspan="4" class="p-4 text-center text-slate-500">Aucun log.</td></tr>' : state.logs.map(log => `
+                <tr class="hover:bg-slate-800/40 text-[11px]"><td class="p-2 text-slate-400 font-mono">${log.date}</td><td class="p-2 text-blue-300">${log.user}</td><td class="p-2 font-bold text-white">${log.action}</td><td class="p-2 text-slate-300">${log.details}</td></tr>
+            `).join('');
+        }
+
+        window.openEvalModal = (candidateId) => {
+            const candidate = state.effectifs.find(item => item.id === candidateId); if(!candidate) return;
+            document.getElementById('evalCandidateId').value = candidate.id;
+            document.getElementById('evalCandidateName').value = `${candidate.grade} ${candidate.nom}`;
+            document.getElementById('evalFormName').value = candidate.form;
+            const selectFmt = document.getElementById('evalFormateur');
+            selectFmt.innerHTML = state.formateurs.map(f => `<option value="${f.nom}">${f.nom} (${f.role})</option>`).join('');
+            if (candidate.eval && candidate.eval.evaluee) {
+                document.getElementById('evalResultat').value = candidate.eval.resultat || 'Admis';
+                document.getElementById('evalNote').value = candidate.eval.note || '';
+                document.getElementById('evalMention').value = candidate.eval.mention || 'Pas de mention';
+                if (candidate.eval.formateur) selectFmt.value = candidate.eval.formateur;
+                document.getElementById('evalComments').value = candidate.eval.comments || '';
+            }
+            document.getElementById('evalModal').classList.remove('hidden');
+        };
+        window.closeEvalModal = () => document.getElementById('evalModal').classList.add('hidden');
 
         window.onload = init;
     </script>
