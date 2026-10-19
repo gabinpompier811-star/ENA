@@ -138,7 +138,6 @@
 
             <form id="evalForm" class="space-y-3">
                 <input type="hidden" id="evalCandidateId">
-                
                 <div class="grid grid-cols-2 gap-3 text-xs">
                     <div>
                         <label class="block text-slate-400 mb-1">Candidat</label>
@@ -236,10 +235,11 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-shield-halved text-blue-500 text-xl"></i>
                 <span class="font-bold text-sm tracking-wide">ENA WORKSPACE</span>
+                <span id="userRoleBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-900 text-blue-200">Opérateur</span>
             </div>
             
             <div class="flex items-center space-x-3">
-                <button onclick="openSettingsModal()" class="p-1.5 bg-input border rounded-lg hover:opacity-80 text-xs flex items-center gap-1.5 text-slate-200" title="Paramètres d'apparence">
+                <button onclick="openSettingsModal()" class="p-1.5 bg-input border rounded-lg hover:opacity-80 text-xs flex items-center gap-1.5 text-slate-200" title="Paramètres">
                     <i class="fa-solid fa-gear text-blue-400"></i> <span class="hidden sm:inline">Paramètres</span>
                 </button>
 
@@ -250,7 +250,7 @@
                     </button>
                     <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-card border rounded-xl shadow-2xl p-3 z-50 text-xs space-y-2 max-h-80 overflow-y-auto custom-scroll">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-white"><i class="fa-solid fa-bell text-blue-400 mr-1"></i> Notifications Interne</span>
+                            <span class="font-bold text-white"><i class="fa-solid fa-bell text-blue-400 mr-1"></i> Notifications</span>
                             <button onclick="clearNotifications()" class="text-[10px] text-slate-400 hover:text-red-400">Effacer</button>
                         </div>
                         <div id="notifList" class="space-y-1.5">
@@ -262,7 +262,7 @@
                 <span id="connection-status" class="px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]">Connexion...</span>
                 <span id="userInfo" class="text-xs text-slate-400 hidden sm:inline font-mono"></span>
                 <button id="btnSaveGlobal" class="text-xs bg-input border px-3 py-1.5 rounded-md flex items-center gap-1.5 hover:opacity-80">
-                    <i class="fa-solid fa-download"></i> Backup (JSON)
+                    <i class="fa-solid fa-download"></i> Backup
                 </button>
                 <button id="btnLogout" class="text-xs bg-red-900/30 text-red-400 hover:bg-red-900/50 border border-red-800/40 px-3 py-1.5 rounded-md">
                     Déconnexion
@@ -288,7 +288,7 @@
                 <i class="fa-solid fa-crosshair"></i> Tirs & Inaptitudes
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
-                <i class="fa-solid fa-user-id-card"></i> Fiches Individuelles & Médicales
+                <i class="fa-solid fa-user-id-card"></i> Fiches & Médical
             </button>
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="planning">
                 <i class="fa-solid fa-calendar-days"></i> Planning & Sessions
@@ -302,12 +302,10 @@
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
                 <i class="fa-solid fa-note-sticky"></i> Notes
             </button>
-
-            <!-- Onglet Administrateur Réservé Gabin -->
+            <!-- Onglet Administrateur Hiérarchique -->
             <button id="navAdminBtn" class="tab-btn hidden px-4 py-2.5 text-xs font-medium text-amber-400 flex items-center gap-2 whitespace-nowrap border-l border-amber-500/30 bg-amber-950/20" data-tab="admin">
                 <i class="fa-solid fa-user-gear"></i> Administration & Hiérarchie
             </button>
-
             <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
                 <i class="fa-solid fa-code-commit"></i> Mises à jour
             </button>
@@ -319,7 +317,7 @@
         <!-- Contenu des Onglets -->
         <main class="flex-1 overflow-hidden relative">
             
-            <!-- ONGLET TABLEAU DE BORD -->
+            <!-- TABLEAU DE BORD -->
             <section id="tab-dashboard" class="tab-content h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="bg-card border p-3 rounded-xl flex items-center justify-between gap-4">
                     <span class="text-xs font-bold text-white flex items-center gap-2">
@@ -343,7 +341,6 @@
                             <p id="dashTotalCandidats" class="text-2xl font-black text-white">0</p>
                         </div>
                     </div>
-
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-emerald-600/20 text-emerald-400 rounded-lg"><i class="fa-solid fa-circle-check text-xl"></i></div>
                         <div>
@@ -351,7 +348,6 @@
                             <p id="dashTauxReussite" class="text-2xl font-black text-emerald-400">0%</p>
                         </div>
                     </div>
-
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-amber-600/20 text-amber-400 rounded-lg"><i class="fa-solid fa-user-graduate text-xl"></i></div>
                         <div>
@@ -359,7 +355,6 @@
                             <p id="dashTotalInstructeurs" class="text-2xl font-black text-amber-400">0</p>
                         </div>
                     </div>
-
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
                         <div class="p-3 bg-red-600/20 text-red-400 rounded-lg"><i class="fa-solid fa-user-slash text-xl"></i></div>
                         <div>
@@ -374,52 +369,38 @@
                         <h3 class="text-xs font-bold text-white border-b border-slate-700/60 pb-2"><i class="fa-solid fa-clock-rotate-left text-blue-400"></i> Dernières Formations Évaluées</h3>
                         <div id="dashRecentEvals" class="space-y-2 max-h-56 overflow-y-auto custom-scroll text-xs"></div>
                     </div>
-
                     <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-xs font-bold text-white border-b border-slate-700/60 pb-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Résumé de l'Aptitude Opérationnelle</h3>
+                        <h3 class="text-xs font-bold text-white border-b border-slate-700/60 pb-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Résumé Opérationnel</h3>
                         <div class="space-y-2 text-xs">
-                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50">
-                                <span>Formations Validées (Admis)</span>
-                                <span id="dashCountAdmis" class="font-bold text-green-400">0</span>
-                            </div>
-                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50">
-                                <span>Formations Ajournées (Échecs)</span>
-                                <span id="dashCountAjournes" class="font-bold text-red-400">0</span>
-                            </div>
-                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50">
-                                <span>Demandes en Attente d'Examen</span>
-                                <span id="dashCountAttente" class="font-bold text-amber-400">0</span>
-                            </div>
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Formations Validées (Admis)</span><span id="dashCountAdmis" class="font-bold text-green-400">0</span></div>
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Formations Ajournées (Échecs)</span><span id="dashCountAjournes" class="font-bold text-red-400">0</span></div>
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Demandes en Attente d'Examen</span><span id="dashCountAttente" class="font-bold text-amber-400">0</span></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ONGLET DOCUMENTS -->
+            <!-- DOCUMENTS -->
             <section id="tab-docs" class="tab-content hidden h-full p-4 flex flex-col space-y-4">
                 <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
-                    <div class="flex items-center space-x-2">
-                        <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
-                            <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
-                            <input type="file" id="fileInput" multiple class="hidden">
-                        </label>
-                    </div>
+                    <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
+                        <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
+                        <input type="file" id="fileInput" multiple class="hidden">
+                    </label>
                     <span class="text-xs text-slate-500">Sauvegarde synchro Firebase active</span>
                 </div>
-
                 <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-card/30 rounded-xl border"></div>
             </section>
 
-            <!-- ONGLET ENA & FORMATIONS -->
+            <!-- ENA & FORMATIONS -->
             <section id="tab-ena" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-card p-4 rounded-xl border">
                         <h3 class="text-sm font-bold text-white mb-3">Ajouter un Instructeur</h3>
                         <form id="formAddFormateur" class="space-y-3">
                             <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-input rounded px-2.5 py-1.5 text-xs">
-                            
                             <select id="fmtRole" required class="w-full bg-input rounded px-2.5 py-1.5 text-xs">
-                                <option value="" disabled selected>-- Sélectionner le Rôle --</option>
+                                <option value="" disabled selected>-- Rôle Instructeur --</option>
                                 <option value="Directeur de l'ENA">Directeur de l'ENA</option>
                                 <option value="Directeur Adjoint de l'ENA">Directeur Adjoint de l'ENA</option>
                                 <option value="Chef des Instructeurs">Chef des Instructeurs</option>
@@ -427,37 +408,28 @@
                                 <option value="Instructeur">Instructeur</option>
                                 <option value="Aspirant instructeur">Aspirant instructeur</option>
                             </select>
-
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Ajouter Instructeur</button>
                         </form>
                     </div>
-
                     <div class="md:col-span-2 bg-card p-4 rounded-xl border">
                         <h3 class="text-sm font-bold text-white mb-1">Corps des Formateurs / Instructeurs</h3>
-                        <p class="text-[10px] text-slate-400 mb-3">Cliquez sur un formateur pour voir ses statistiques ou utilisez l'icône rouge pour le supprimer</p>
-                        <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+                        <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2"></div>
                     </div>
                 </div>
 
                 <div id="pdfContentEffectifs" class="bg-card p-4 rounded-xl border space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
-                        <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Demandes de Formations & Évaluations</h3>
+                        <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Formations & Évaluations</h3>
                         <div class="flex items-center gap-2">
                             <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="🔍 Rechercher nom, grade..." class="bg-input border rounded px-2.5 py-1 text-xs focus:outline-none">
-                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center gap-1" title="Exporter en Tableur Excel/CSV">
-                                <i class="fa-solid fa-file-excel"></i> Export Excel
-                            </button>
-                            <button id="btnExportEffectifsPDF" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pdf"></i> PDF
-                            </button>
+                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center gap-1"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                            <button id="btnExportEffectifsPDF" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                         </div>
                     </div>
-                    
                     <form id="formAddPersonnel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2 mb-3 pt-2">
                         <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        
                         <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs">
                             <option value="CPA 10">CPA 10</option>
                             <option value="4e RHFS">4e RHFS</option>
@@ -465,39 +437,22 @@
                             <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
                             <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
                         </select>
-                        
                         <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                            <option value="" disabled selected>-- Formation Demandée --</option>
+                            <option value="" disabled selected>-- Formation --</option>
                             <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
                             <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
                             <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
-                            <option value="[CC1] Caporal-Chef de 1ère classe">[CC1] Caporal-Chef de 1ère classe</option>
                             <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
                             <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
-                            <option value="[BM2] Brevet Militaire de niveau 2">[BM2] Brevet Militaire de niveau 2</option>
-                            <option value="[FG3] Brevet de Major">[FG3] Brevet de Major</option>
-                            <option value="[FAE] Formation d'Application">[FAE] Formation d'Application</option>
-                            <option value="[CDU] Cursus de Chef d'Unité">[CDU] Cursus de Chef d'Unité</option>
                             <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
                         </select>
-
                         <input type="datetime-local" id="pDateTime" required class="bg-input border rounded px-2 py-1.5 text-xs">
-
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Inscrire Formation</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Inscrire</button>
                     </form>
-
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-input text-slate-400 uppercase text-[10px] tracking-wider">
-                                <tr>
-                                    <th class="p-2">Militaire</th>
-                                    <th class="p-2">Grade</th>
-                                    <th class="p-2">Matricule</th>
-                                    <th class="p-2">Unité / Compagnie</th>
-                                    <th class="p-2">Formation Demandée</th>
-                                    <th class="p-2">Statut / Note</th>
-                                    <th class="p-2 text-right">Action</th>
-                                </tr>
+                            <thead class="bg-input text-slate-400 uppercase text-[10px]">
+                                <tr><th class="p-2">Militaire</th><th class="p-2">Grade</th><th class="p-2">Matricule</th><th class="p-2">Unité</th><th class="p-2">Formation</th><th class="p-2">Statut / Note</th><th class="p-2 text-right">Action</th></tr>
                             </thead>
                             <tbody id="effectifsTable" class="divide-y divide-slate-800"></tbody>
                         </table>
@@ -505,14 +460,12 @@
                 </div>
             </section>
 
-            <!-- ONGLET UNITÉS & SECTIONS -->
+            <!-- UNITÉS & SECTIONS -->
             <section id="tab-unites" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-users-viewfinder text-blue-500"></i> Répertoire des Unités & Forces Spéciales
-                        </h2>
-                        <p class="text-xs text-slate-400">Consultez les effectifs engagés par unité et régiment spécialisé</p>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users-viewfinder text-blue-500"></i> Répertoire des Unités Forces Spéciales</h2>
+                        <p class="text-xs text-slate-400">Effectifs engagés par régiment spécialisé</p>
                     </div>
                     <div class="w-full sm:w-72">
                         <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-input border rounded p-2 text-xs font-bold">
@@ -525,89 +478,47 @@
                         </select>
                     </div>
                 </div>
-
                 <div id="unitesListGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </section>
 
-            <!-- ONGLET TIRS & INAPTITUDES (GITA) -->
+            <!-- TIRS & INAPTITUDES GITA -->
             <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir</h3>
                         <form id="formAddScoreTir" class="space-y-3 text-xs">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Tireur</label>
-                                <select id="tirMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select>
-                            </div>
+                            <div><label class="block text-slate-400 mb-1">Tireur</label><select id="tirMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
                             <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="block text-slate-400 mb-1">Arme Utilisée</label>
-                                    <select id="tirArme" required class="w-full bg-input border rounded p-2">
-                                        <option value="HK416">HK416 (Fusil d'assaut)</option>
-                                        <option value="PAMAS / Glock">PAMAS / Glock (PA)</option>
-                                        <option value="SCAR-H">SCAR-H (Tir de précision)</option>
-                                        <option value="Sniper / PGM">Sniper / PGM (TELD)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-slate-400 mb-1">Score / 100</label>
-                                    <input type="number" id="tirScore" min="0" max="100" placeholder="85" required class="w-full bg-input border rounded p-2">
-                                </div>
+                                <div><label class="block text-slate-400 mb-1">Arme</label><select id="tirArme" required class="w-full bg-input border rounded p-2"><option value="HK416">HK416</option><option value="PAMAS / Glock">Glock / PAMAS</option><option value="SCAR-H">SCAR-H</option><option value="Sniper / PGM">Sniper PGM</option></select></div>
+                                <div><label class="block text-slate-400 mb-1">Score / 100</label><input type="number" id="tirScore" min="0" max="100" placeholder="85" required class="w-full bg-input border rounded p-2"></div>
                             </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded">+ Enregistrer le Tir</button>
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded">+ Enregistrer Tir</button>
                         </form>
-
-                        <div class="border-t border-slate-700/60 pt-3">
-                            <h4 class="text-xs font-bold text-slate-200 mb-2">Derniers Scores au Stand :</h4>
-                            <div id="tirsHistoryList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div>
-                        </div>
+                        <div class="border-t border-slate-700/60 pt-3"><h4 class="text-xs font-bold text-slate-200 mb-2">Derniers Scores :</h4><div id="tirsHistoryList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div></div>
                     </div>
 
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
                         <form id="formAddInaptitude" class="space-y-3 text-xs">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Militaire Concerné</label>
-                                <select id="inapteMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select>
-                            </div>
+                            <div><label class="block text-slate-400 mb-1">Militaire</label><select id="inapteMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
                             <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="block text-slate-400 mb-1">Type d'Inaptitude</label>
-                                    <select id="inapteType" required class="w-full bg-input border rounded p-2">
-                                        <option value="Sport & Examens Physiques">Sport & Examens Physiques</option>
-                                        <option value="Inapte Tir de Combat">Inapte Tir de Combat</option>
-                                        <option value="Inapte Saut Parachutiste">Inapte Saut Parachutiste</option>
-                                        <option value="Inaptitude Totale (GITA)">Inaptitude Totale (GITA)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-slate-400 mb-1">Fin d'Inaptitude</label>
-                                    <input type="date" id="inapteDateFin" required class="w-full bg-input border rounded p-2">
-                                </div>
+                                <div><label class="block text-slate-400 mb-1">Type</label><select id="inapteType" required class="w-full bg-input border rounded p-2"><option value="Sport & Examens Physiques">Sport</option><option value="Inapte Tir de Combat">Tir de Combat</option><option value="Inapte Saut Parachutiste">Saut Para</option><option value="Inaptitude Totale (GITA)">Totale (GITA)</option></select></div>
+                                <div><label class="block text-slate-400 mb-1">Fin</label><input type="date" id="inapteDateFin" required class="w-full bg-input border rounded p-2"></div>
                             </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Motif / Remarque Médicale</label>
-                                <input type="text" id="inapteMotif" placeholder="ex: Entorse cheville droite" required class="w-full bg-input border rounded p-2">
-                            </div>
+                            <div><label class="block text-slate-400 mb-1">Motif</label><input type="text" id="inapteMotif" placeholder="ex: Entorse" required class="w-full bg-input border rounded p-2"></div>
                             <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Déclarer Inapte</button>
                         </form>
-
-                        <div class="border-t border-slate-700/60 pt-3">
-                            <h4 class="text-xs font-bold text-slate-200 mb-2">Militaire Actuellement Inaptes :</h4>
-                            <div id="inaptesActiveList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div>
-                        </div>
+                        <div class="border-t border-slate-700/60 pt-3"><h4 class="text-xs font-bold text-slate-200 mb-2">Actuellement Inaptes :</h4><div id="inaptesActiveList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div></div>
                     </div>
                 </div>
             </section>
 
-            <!-- ONGLET FICHES INDIVIDUELLES & MÉDICALES -->
+            <!-- FICHES INDIVIDUELLES, QUALIFICATIONS & MÉDICAL -->
             <section id="tab-fiches" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire & Suivi Médical (VMA)
-                        </h2>
-                        <p class="text-xs text-slate-400">Consultez le dossier complet, le groupe sanguin et les visites médicales d'aptitude</p>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire, Qualifications & Suivi Médical (VMA)</h2>
+                        <p class="text-xs text-slate-400">Spécialités de combat, permis, groupe sanguin et aptitude opérationnelle</p>
                     </div>
                     <div class="w-full sm:w-72">
                         <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-input border rounded p-2 text-xs font-bold">
@@ -619,302 +530,282 @@
                 <div id="ficheContainer" class="hidden space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="bg-card p-4 rounded-xl border flex items-center space-x-4 md:col-span-2">
-                            <div class="w-14 h-14 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border border-blue-500/30">
-                                <i class="fa-solid fa-user-large"></i>
-                            </div>
+                            <div class="w-14 h-14 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border border-blue-500/30"><i class="fa-solid fa-user-large"></i></div>
                             <div>
                                 <h3 id="fNom" class="text-lg font-extrabold text-white"></h3>
                                 <p id="fGrade" class="text-xs font-semibold text-blue-400"></p>
                                 <span id="fMat" class="text-[10px] font-mono bg-input px-2 py-0.5 rounded border"></span>
                             </div>
                         </div>
-
                         <div class="bg-card p-4 rounded-xl border flex flex-col justify-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Unité / Compagnie</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Unité</span>
                             <p id="fAff" class="text-sm font-bold text-slate-200 mt-1"></p>
                         </div>
-
                         <div class="bg-card p-4 rounded-xl border flex flex-col justify-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Brevets Validés</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Brevets Validés</span>
                             <p id="fCountValide" class="text-2xl font-black text-emerald-400 mt-0.5">0</p>
                         </div>
                     </div>
 
-                    <!-- BLOC MÉDICAL & VISITE D'APTITUDE -->
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h4 class="text-xs font-bold text-red-400 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                            <i class="fa-solid fa-notes-medical"></i> Fiche Médicale de Combat & Visite d'Aptitude (VMA)
+                    <!-- BLOC QUALIFICATIONS, PERMIS & SPECIALITES DE COMBAT -->
+                    <div class="bg-card p-4 rounded-xl border space-y-4">
+                        <h4 class="text-xs font-bold text-blue-400 flex items-center gap-2 border-b border-slate-700/60 pb-2">
+                            <i class="fa-solid fa-certificate"></i> Qualifications, Permis & Spécialités de Combat
                         </h4>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Groupe Sanguin :</label>
-                                <select id="fSang" class="w-full bg-input border rounded p-2 font-bold text-red-400">
-                                    <option value="Non renseigné">Non renseigné</option>
-                                    <option value="O +">Groupe O + (O Positif)</option>
-                                    <option value="O -">Groupe O - (O Négatif - Donneur Universel)</option>
-                                    <option value="A +">Groupe A +</option>
-                                    <option value="A -">Groupe A -</option>
-                                    <option value="B +">Groupe B +</option>
-                                    <option value="B -">Groupe B -</option>
-                                    <option value="AB +">Groupe AB +</option>
-                                    <option value="AB -">Groupe AB -</option>
-                                </select>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            
+                            <!-- Catégorie 1 : Brevets & Qualifications -->
+                            <div class="bg-input p-3 rounded-lg border border-slate-700/50 space-y-2">
+                                <h5 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-award"></i> Brevets & Attestations
+                                </h5>
+                                <div class="space-y-1.5">
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_para" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🪂 Brevet Parachutiste</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_cqb" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🥊 CQB Validé</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_fgi" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🪖 FGI Validé</span>
+                                    </label>
+                                </div>
                             </div>
 
-                            <div>
-                                <label class="block text-slate-400 mb-1">Aptitude Médicale (VMA) :</label>
-                                <select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold">
-                                    <option value="Apte Service FS">🟢 Apte Service FS (Forces Spéciales)</option>
-                                    <option value="Apte avec Restrictions">🟡 Apte avec Restrictions Médicales</option>
-                                    <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire (GITA)</option>
-                                    <option value="Visite Médicale à Renouveler">⚪ Visite Médicale à Renouveler</option>
-                                </select>
+                            <!-- Catégorie 2 : Conduite, Véhicules & Logistique -->
+                            <div class="bg-input p-3 rounded-lg border border-slate-700/50 space-y-2">
+                                <h5 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-truck-monster"></i> Permis & Véhicules
+                                </h5>
+                                <div class="space-y-1.5">
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_pilote_blindes" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🚘 Pilote VBCI / VAB / VBMR / GBC</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_tourelle" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🎯 Opérateur Tourelle</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_mecanicien" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🔧 Mécanicien</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_permis_b" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🪪 Permis B validé</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_permis_c" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🚛 Permis C validé</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_permis_d" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🚌 Permis D validé</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_spl" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🚚 Conducteur SPL</span>
+                                    </label>
+                                </div>
                             </div>
 
-                            <div>
-                                <label class="block text-slate-400 mb-1">Date Dernière VMA :</label>
-                                <input type="date" id="fDateVMA" class="w-full bg-input border rounded p-2">
+                            <!-- Catégorie 3 : Spécialités Opérationnelles & Combat -->
+                            <div class="bg-input p-3 rounded-lg border border-slate-700/50 space-y-2">
+                                <h5 class="font-bold text-red-400 border-b border-slate-700/40 pb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-crosshair"></i> Spécialités de Combat
+                                </h5>
+                                <div class="space-y-1.5">
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_te" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🎯 Tireur d'Élite</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_tp" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🔫 Tireur de Précision</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_spotteur" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🔭 Spotteur</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_medecin" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🩺 Médecin / Sanitaire</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_transmetteur" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>📻 Transmetteur</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                                        <input type="checkbox" id="qualif_drone" class="qualif-checkbox rounded bg-slate-800 border-slate-600">
+                                        <span>🛸 Opérateur Drone</span>
+                                    </label>
+                                </div>
                             </div>
+
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Allergies Connues / Traitements :</label>
-                                <input type="text" id="fAllergies" placeholder="ex: Pénicilline, Piqûres de guêpes..." class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Vaccins Opérationnels :</label>
-                                <input type="text" id="fVaccins" placeholder="ex: Tétanos à jour (2025), Fièvre Jaune ok" class="w-full bg-input border rounded p-2">
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end pt-2">
-                            <button onclick="saveMedicalData()" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded shadow">
-                                Enregistrer la Fiche Médicale
+                        <div class="flex justify-end pt-2 border-t border-slate-700/60">
+                            <button onclick="saveQualificationsData()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded shadow">
+                                Enregistrer les Qualifications & Spécialités
                             </button>
                         </div>
+                    </div>
+
+                    <!-- BLOC MÉDICAL -->
+                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                        <h4 class="text-xs font-bold text-red-400 flex items-center gap-2 border-b border-slate-700/60 pb-2"><i class="fa-solid fa-notes-medical"></i> Fiche Médicale de Combat & Visite d'Aptitude (VMA)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div><label class="block text-slate-400 mb-1">Groupe Sanguin</label><select id="fSang" class="w-full bg-input border rounded p-2 font-bold text-red-400"><option value="Non renseigné">Non renseigné</option><option value="O +">O +</option><option value="O -">O - (Universel)</option><option value="A +">A +</option><option value="A -">A -</option><option value="B +">B +</option><option value="B -">B -</option><option value="AB +">AB +</option><option value="AB -">AB -</option></select></div>
+                            <div><label class="block text-slate-400 mb-1">Aptitude VMA</label><select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold"><option value="Apte Service FS">🟢 Apte Service FS</option><option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option><option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option></select></div>
+                            <div><label class="block text-slate-400 mb-1">Date VMA</label><input type="date" id="fDateVMA" class="w-full bg-input border rounded p-2"></div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                            <div><label class="block text-slate-400 mb-1">Allergies / Traitements</label><input type="text" id="fAllergies" placeholder="ex: Pénicilline" class="w-full bg-input border rounded p-2"></div>
+                            <div><label class="block text-slate-400 mb-1">Vaccins Opérationnels</label><input type="text" id="fVaccins" placeholder="ex: Tétanos à jour" class="w-full bg-input border rounded p-2"></div>
+                        </div>
+                        <div class="flex justify-end pt-2"><button onclick="saveMedicalData()" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded shadow">Enregistrer Fiche Médicale</button></div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-card p-3 rounded-xl border space-y-1">
-                            <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-award"></i> Décorations :</h4>
-                            <div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs"></div>
-                        </div>
-
-                        <div class="bg-card p-3 rounded-xl border space-y-1">
-                            <h4 class="text-xs font-bold text-red-400 flex items-center gap-1.5"><i class="fa-solid fa-notes-medical"></i> Statut Médical / Inaptitude :</h4>
-                            <div id="fInaptitudesList" class="text-xs text-slate-300">Aptitude opérationnelle complète</div>
-                        </div>
+                        <div class="bg-card p-3 rounded-xl border space-y-1"><h4 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-award"></i> Décorations :</h4><div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs"></div></div>
+                        <div class="bg-card p-3 rounded-xl border space-y-1"><h4 class="text-xs font-bold text-red-400"><i class="fa-solid fa-notes-medical"></i> Inaptitude :</h4><div id="fInaptitudesList" class="text-xs text-slate-300">Aptitude opérationnelle complète</div></div>
                     </div>
 
-                    <div class="flex justify-end">
-                        <button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-pdf"></i> Imprimer Fiche Individuelle & Médicale (PDF)
-                        </button>
-                    </div>
+                    <div class="flex justify-end"><button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Imprimer Fiche PDF</button></div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-card p-4 rounded-xl border space-y-3">
-                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                                <i class="fa-solid fa-award text-amber-400"></i> Historique des Formations & Évaluations
-                            </h4>
+                            <h4 class="text-xs font-bold text-slate-200 border-b border-slate-700/60 pb-2"><i class="fa-solid fa-award text-amber-400"></i> Historique Formations</h4>
                             <div id="fHistoriqueFormations" class="space-y-2 max-h-60 overflow-y-auto custom-scroll text-xs"></div>
                         </div>
-
                         <div class="bg-card p-4 rounded-xl border space-y-3 flex flex-col">
-                            <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                                <i class="fa-solid fa-pen-to-square text-blue-400"></i> Appréciations & Notes du Commandement
-                            </h4>
-                            <textarea id="fNotesPerso" placeholder="Saisissez ici des notes individuelles..." class="w-full flex-1 min-h-[120px] bg-input border rounded p-2.5 text-xs focus:outline-none resize-none"></textarea>
-                            <button onclick="saveFicheNotes()" class="self-end px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs rounded shadow">
-                                Enregistrer la note
-                            </button>
+                            <h4 class="text-xs font-bold text-slate-200 border-b border-slate-700/60 pb-2"><i class="fa-solid fa-pen-to-square text-blue-400"></i> Notes du Commandement</h4>
+                            <textarea id="fNotesPerso" placeholder="Saisissez des notes..." class="w-full flex-1 min-h-[120px] bg-input border rounded p-2.5 text-xs focus:outline-none resize-none"></textarea>
+                            <button onclick="saveFicheNotes()" class="self-end px-4 py-1.5 bg-blue-600 text-white font-medium text-xs rounded shadow">Enregistrer note</button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ONGLET PLANNING & SESSIONS -->
+            <!-- PLANNING -->
             <section id="tab-planning" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-calendar-plus text-blue-500"></i> Programmer une Session</h3>
                         <form id="formAddSession" class="space-y-2 text-xs">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Formation</label>
-                                <select id="sessForm" required class="w-full bg-input border rounded p-2">
-                                    <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
-                                    <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
-                                    <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
-                                    <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
-                                    <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
-                                    <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Date & Heure</label>
-                                <input type="datetime-local" id="sessDate" required class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Lieu / Stand</label>
-                                <input type="text" id="sessLieu" placeholder="ex: Stand B, Zone de Saut Alpha" required class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Instructeur Référent</label>
-                                <select id="sessInstructeur" class="w-full bg-input border rounded p-2"></select>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded mt-2">+ Créer la Session</button>
+                            <div><label class="block text-slate-400 mb-1">Formation</label><select id="sessForm" required class="w-full bg-input border rounded p-2"><option value="[FGI] Formation Général Initiale">[FGI] FGI</option><option value="[CAT1] Brevet Caporal">[CAT1] Caporal</option><option value="[FG1 / BS1] Brevet de Sergent">[FG1] Sergent</option><option value="[DEM] Diplôme d'État-Major">[DEM] État-Major</option></select></div>
+                            <div><label class="block text-slate-400 mb-1">Date & Heure</label><input type="datetime-local" id="sessDate" required class="w-full bg-input border rounded p-2"></div>
+                            <div><label class="block text-slate-400 mb-1">Lieu</label><input type="text" id="sessLieu" placeholder="ex: Stand B" required class="w-full bg-input border rounded p-2"></div>
+                            <div><label class="block text-slate-400 mb-1">Instructeur</label><select id="sessInstructeur" class="w-full bg-input border rounded p-2"></select></div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded mt-2">+ Créer Session</button>
                         </form>
                     </div>
-
                     <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-list-ul text-blue-500"></i> Sessions de Formations Plannifiées</h3>
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-list-ul text-blue-500"></i> Sessions Planifiées</h3>
                         <div id="sessionsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- ONGLET DÉCORATIONS & CITATIONS -->
+            <!-- DÉCORATIONS -->
             <section id="tab-decorations" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-award text-amber-400"></i> Décerner une Décoration</h3>
                         <form id="formAddDecoration" class="space-y-3 text-xs">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Militaire Récipiendaire</label>
-                                <select id="decoMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Titre de la Décoration / Médaille</label>
-                                <select id="decoTitre" required class="w-full bg-input border rounded p-2">
-                                    <option value="Médaille de la Défense Nationale">Médaille de la Défense Nationale</option>
-                                    <option value="Citation à l'Ordre du Régiment">Citation à l'Ordre du Régiment</option>
-                                    <option value="Croix de la Valeur Militaire">Croix de la Valeur Militaire</option>
-                                    <option value="Lettre de Félicitations du Commandement">Lettre de Félicitations du Commandement</option>
-                                    <option value="Médaille des Blessés de Guerre">Médaille des Blessés de Guerre</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Motif / Citation</label>
-                                <textarea id="decoMotif" rows="2" placeholder="Saisir la raison de la distinction..." required class="w-full bg-input border rounded p-2 resize-none"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Décerner la Médaille</button>
+                            <div><label class="block text-slate-400 mb-1">Récipiendaire</label><select id="decoMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
+                            <div><label class="block text-slate-400 mb-1">Titre</label><select id="decoTitre" required class="w-full bg-input border rounded p-2"><option value="Médaille de la Défense Nationale">Médaille Défense Nationale</option><option value="Citation à l'Ordre du Régiment">Citation Régiment</option><option value="Croix de la Valeur Militaire">Croix Valeur Militaire</option></select></div>
+                            <div><label class="block text-slate-400 mb-1">Motif</label><textarea id="decoMotif" rows="2" placeholder="Motif..." required class="w-full bg-input border rounded p-2 resize-none"></textarea></div>
+                            <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2 rounded">+ Décerner Médaille</button>
                         </form>
                     </div>
-
                     <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-ribbon text-amber-400"></i> Registre des Décorations Décernées</h3>
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-ribbon text-amber-400"></i> Registre des Décorations</h3>
                         <div id="decorationsRegistry" class="space-y-2 text-xs"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- ONGLET PROGRAMMES / RÉFÉRENTIEL ENA -->
+            <!-- RÉFÉRENTIEL -->
             <section id="tab-programmes" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
-                    <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel des Brevets & Formations ENA
-                    </h2>
-                    <p class="text-xs text-slate-400">Programme officiel, prérequis et critères d'attribution des diplômes de l'ENA</p>
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel ENA</h2>
+                    <p class="text-xs text-slate-400">Programmes officiels et prérequis</p>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                    <div class="bg-card border p-4 rounded-xl space-y-2">
-                        <span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold border border-blue-700">[FGI] Formation Général Initiale</span>
-                        <h4 class="font-bold text-white pt-1">Brevets de Base</h4>
-                        <p class="text-slate-400">Formation obligatoire pour tous les nouveaux engagés. Apprentissage du tir de combat, topographie, discipline et protocoles radio.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Examen : Pratique & Théorique / Note éliminatoire < 10/20</div>
-                    </div>
-
-                    <div class="bg-card border p-4 rounded-xl space-y-2">
-                        <span class="px-2 py-0.5 bg-emerald-900/40 text-emerald-300 rounded font-bold border border-emerald-700">[CAT1 / CME] Gradés de Contact</span>
-                        <h4 class="font-bold text-white pt-1">Commandement d'Équipe</h4>
-                        <p class="text-slate-400">Formation pour Caporaux et Caporaux-Chefs. Apprentissage de la pédagogie de combat, tactique d'escouade et gestion d'éléments sous le feu.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Prérequis : FGI Validée</div>
-                    </div>
-
-                    <div class="bg-card border p-4 rounded-xl space-y-2">
-                        <span class="px-2 py-0.5 bg-purple-900/40 text-purple-300 rounded font-bold border border-purple-700">[FG1 / BS1 / BSTAT] Sous-Officiers</span>
-                        <h4 class="font-bold text-white pt-1">Brevet de Sergent & Adjoint</h4>
-                        <p class="text-slate-400">Cursus de préparation au commandement de groupe et de section. Tactique avancée, liaisons interarmes et secourisme de combat niveau 2.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Évaluation : Mise en situation tactique réelle</div>
-                    </div>
-
-                    <div class="bg-card border p-4 rounded-xl space-y-2">
-                        <span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded font-bold border border-amber-700">[DEM / CDU] Cursus Officiers</span>
-                        <h4 class="font-bold text-white pt-1">Diplôme d'État-Major</h4>
-                        <p class="text-slate-400">Haut cursus de commandement destiné aux chefs d'unité et officiers d'État-Major. Planification stratégique, logistique lourde et conduite des opérations.</p>
-                        <div class="text-[10px] text-slate-500 border-t border-slate-700/60 pt-2">Attribution par le Directeur de l'ENA</div>
-                    </div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-blue-900/45 text-blue-300 rounded font-bold">[FGI] Base</span><h4 class="font-bold text-white pt-1">Formation Général Initiale</h4><p class="text-slate-400">Tir de combat, topographie, discipline.</p></div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-emerald-900/45 text-emerald-300 rounded font-bold">[CAT1] Gradés</span><h4 class="font-bold text-white pt-1">Brevet Caporal / Chef</h4><p class="text-slate-400">Pédagogie, escouade, commandement.</p></div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-purple-900/45 text-purple-300 rounded font-bold">[DEM] Officiers</span><h4 class="font-bold text-white pt-1">État-Major</h4><p class="text-slate-400">Planification stratégique et opérations.</p></div>
                 </div>
             </section>
 
-            <!-- ONGLET NOTES -->
+            <!-- NOTES (VERSION SÉCURISÉE & FONCTIONNELLE) -->
             <section id="tab-notes" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <button id="btnNewNote" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+                        <button id="btnNewNote" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Nouvelle Note
                         </button>
-                        <button id="btnExportNotePDF" class="bg-red-600 hover:bg-red-500 text-white text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
-                            <i class="fa-solid fa-file-pdf"></i> Exporter Note (PDF)
+                        <button id="btnExportNotePDF" onclick="exportActiveNotePDF()" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-pdf"></i> Imprimer Note (PDF)
                         </button>
                     </div>
-                    <span class="text-xs text-slate-400">Sauvegarde automatique dans Firebase</span>
                 </div>
                 <div class="flex-1 flex gap-4 overflow-hidden">
                     <div id="notesList" class="w-1/3 bg-card rounded-xl border p-2 overflow-y-auto custom-scroll space-y-2"></div>
                     <div id="pdfNoteContainer" class="w-2/3 bg-card rounded-xl border p-4 flex flex-col">
                         <input type="text" id="noteTitle" placeholder="Titre de la note..." class="bg-transparent border-b border-slate-700 pb-2 text-sm font-bold text-white focus:outline-none mb-3">
-                        <textarea id="noteContent" placeholder="Écrivez vos notes ici..." class="flex-1 bg-transparent text-xs resize-none focus:outline-none custom-scroll"></textarea>
+                        <textarea id="noteContent" placeholder="Saisissez vos remarques et consignes..." class="flex-1 bg-transparent text-xs resize-none focus:outline-none custom-scroll text-slate-200"></textarea>
                     </div>
                 </div>
             </section>
 
-            <!-- ONGLET ADMIN EXCLUSIF GABIN (gabinpompier811@gmail.com) -->
+            <!-- ADMINISTRATION HIERARCHIQUE STRICTE (6 RÔLES) -->
             <section id="tab-admin" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="bg-card p-4 rounded-xl border border-amber-500/50 bg-amber-950/10">
-                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-user-shield text-xl"></i> Administration & Gestion de la Hiérarchie
-                    </h2>
-                    <p class="text-xs text-slate-400">Espace de contrôle haute sécurité réservé exclusivement à <span class="text-amber-300 font-mono font-bold">gabinpompier811@gmail.com</span>.</p>
+                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1"><i class="fa-solid fa-user-shield text-xl"></i> Administration & Hiérarchie Sécurisée</h2>
+                    <p class="text-xs text-slate-400">
+                        Gestion des 6 rôles : 
+                        <span class="text-amber-300 font-semibold">1. Fondateur</span> (Tous les droits), 
+                        <span class="text-purple-300 font-semibold">2. Co-Fondateur</span> (Tous les droits), 
+                        <span class="text-red-300 font-semibold">3. Administrateur</span> (Tous droits sauf exclure les fondateurs), 
+                        <span class="text-emerald-300 font-semibold">4. Modérateur</span> (Pas d'exclusion ni de ban), 
+                        <span class="text-cyan-300 font-semibold">5. Personnel ENA</span> (Gestion fiches/cours/inscriptions), 
+                        <span class="text-slate-300 font-semibold">6. Personnel Opérateur</span> (Lecture et notes).
+                    </p>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Affecter un Rôle & Accès</h3>
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Attribuer un Rôle</h3>
                         <form id="formAddAllowedUser" class="space-y-3 text-xs">
+                            <div><label class="block text-slate-400 mb-1">Email</label><input type="email" id="adminUserEmail" placeholder="nom@gmail.com" required class="w-full bg-input border rounded p-2"></div>
+                            <div><label class="block text-slate-400 mb-1">Nom / Grade</label><input type="text" id="adminUserNom" placeholder="CPT Thomas" required class="w-full bg-input border rounded p-2"></div>
                             <div>
-                                <label class="block text-slate-400 mb-1">Email du membre :</label>
-                                <input type="email" id="adminUserEmail" placeholder="nom@gmail.com" required class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Nom / Grade / Indicatif :</label>
-                                <input type="text" id="adminUserNom" placeholder="ex: CPT Thomas" required class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Hiérarchie du Rôle :</label>
+                                <label class="block text-slate-400 mb-1">Rôle Hiérarchique</label>
                                 <select id="adminUserRole" class="w-full bg-input border rounded p-2 font-bold text-amber-300">
-                                    <option value="Co-Fondateur">👑 Co-Fondateur (Tous les droits)</option>
-                                    <option value="Administrateur">⭐ Administrateur (Tous droits sauf exclure les Fondateurs)</option>
-                                    <option value="Modérateur">🛡️ Modérateur (Gestion sans exclusion/ban)</option>
-                                    <option value="Personnel ENA">🎓 Personnel ENA (Gestion fiches, cours, diplômes)</option>
-                                    <option value="Personnel Opérateur">🪖 Personnel Opérateur (Lecture & Notes uniquement)</option>
+                                    <option value="Fondateur">👑 1. Fondateur (Tous les droits)</option>
+                                    <option value="Co-Fondateur">👑 2. Co-Fondateur (Tous les droits)</option>
+                                    <option value="Administrateur">⭐ 3. Administrateur (Tous droits sauf exclure fonda)</option>
+                                    <option value="Modérateur">🛡️ 4. Modérateur (Pas d'exclusion ni de ban)</option>
+                                    <option value="Personnel ENA">🎓 5. Personnel ENA (Gestion fiches, cours, ENA)</option>
+                                    <option value="Personnel Opérateur">🪖 6. Personnel Opérateur (Lecture et notes)</option>
                                 </select>
                             </div>
-                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Valider la Nomination</button>
+                            <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2 rounded">+ Valider le Rôle</button>
                         </form>
                     </div>
-
                     <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres Enregistrés & Permissions</h3>
+                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres & Privilèges Actifs</h3>
                         <div id="adminUsersList" class="space-y-2 text-xs"></div>
                     </div>
                 </div>
             </section>
 
-           <!-- ONGLET CHANGELOG / MISES À JOUR COMPLET (Toutes les versions) -->
+            <!-- CHANGELOG (TOUTES LES VERSIONS DE 1.0 A 9.0) -->
             <section id="tab-changelog" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1">
@@ -932,8 +823,8 @@
                             <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Qualifications & Spécialités :</strong> Ajout du système de cases à cocher pour les brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat (TE, TP, Spotteur, Médecin, Transmetteur, Drone).</li>
-                            <li><strong>Synchronisation Fiches :</strong> Enregistrement et chargement dynamique des spécialités sur chaque dossier militaire via Firebase.</li>
+                            <li><strong>Qualifications & Spécialités :</strong> Cases à cocher pour attribuer les brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat (TE, TP, Spotteur, Médecin, Transmetteur, Drone).</li>
+                            <li><strong>Correctifs Notes :</strong> Réparation complète du gestionnaire de notes avec synchronisation automatique Firebase et export PDF.</li>
                         </ul>
                     </div>
 
@@ -957,7 +848,7 @@
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
                             <li><strong>Dossier Médical Militaire :</strong> Suivi du groupe sanguin, des vaccins, des allergies et des visites VMA.</li>
-                            <li><strong>Thèmes Dynamiques :</strong> Choix entre Night Slate, Desert Camo et OLED Black avec palettes de couleurs ajustables.</li>
+                            <li><strong>Thèmes Dynamiques :</strong> Choix entre Night Slate, Desert Camo et OLED Black.</li>
                         </ul>
                     </div>
 
@@ -1004,9 +895,8 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Générateur de Diplômes (PDF) :</strong> Génération de brevets officiels ENA imprimables avec signatures et mentions.</li>
+                            <li><strong>Générateur de Diplômes (PDF) :</strong> Génération de brevets officiels ENA imprimables avec signatures.</li>
                             <li><strong>Registre des Décorations :</strong> Remise de médailles et affichage automatique sur les fiches.</li>
-                            <li><strong>Export CSV / Excel :</strong> Téléchargement du registre complet en un clic.</li>
                         </ul>
                     </div>
 
@@ -1017,8 +907,8 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Sauvegarde Backup JSON :</strong> Exportation globale de toute la base de données en fichier `.json`.</li>
-                            <li><strong>Éditeur de Notes :</strong> Prise de note multi-pages synchro avec sauvegarde automatique.</li>
+                            <li><strong>Sauvegarde Backup JSON :</strong> Exportation globale de toute la base de données.</li>
+                            <li><strong>Éditeur de Notes :</strong> Prise de note multi-pages avec sauvegarde automatique.</li>
                         </ul>
                     </div>
 
@@ -1029,9 +919,8 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Tableau de Bord Statistiques :</strong> Indicateurs clés, taux de réussite, totaux de candidats et échecs.</li>
-                            <li><strong>Onglet Planning & Sessions :</strong> Programmation des examens et convocations avec lieux et instructeurs.</li>
-                            <li><strong>Visionneuse d'Images Modale :</strong> Agrandissement des photos en plein écran sans rechargement.</li>
+                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite, totaux de candidats et échecs.</li>
+                            <li><strong>Onglet Planning & Sessions :</strong> Convocations avec lieux et instructeurs.</li>
                         </ul>
                     </div>
 
@@ -1042,8 +931,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Moteur de Recherche :</strong> Filtrage temps réel des effectifs par nom, grade et matricule.</li>
-                            <li><strong>Refonte de l'En-tête :</strong> Barre supérieure épurée avec statut de connexion et rôle actif.</li>
+                            <li><strong>Moteur de Recherche :</strong> Filtrage temps réel des effectifs.</li>
                         </ul>
                     </div>
 
@@ -1054,8 +942,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Onglet Fiches Individuelles :</strong> Consultations des parcours militaires et notes du commandement.</li>
-                            <li><strong>Gestion des Instructeurs :</strong> Rôles officiels ENA (Directeur, Chef des Instructeurs, Formateur).</li>
+                            <li><strong>Fiches Individuelles :</strong> Parcours militaires et notes du commandement.</li>
                         </ul>
                     </div>
 
@@ -1067,7 +954,6 @@
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
                             <li><strong>Écran d'Authentification :</strong> Formulaire de connexion sécurisé au démarrage.</li>
-                            <li><strong>Persistance de Session :</strong> Maintien de l'utilisateur via LocalStorage.</li>
                         </ul>
                     </div>
 
@@ -1078,8 +964,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Synchronisation Temps Réel :</strong> Migration du stockage local vers Firebase Realtime Database.</li>
-                            <li><strong>Suppression Multi-tables :</strong> Gestion centralisée des suppressions de données avec confirmation.</li>
+                            <li><strong>Synchronisation Cloud :</strong> Stockage temps réel avec Firebase.</li>
                         </ul>
                     </div>
 
@@ -1090,8 +975,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">16/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Modale d'Évaluation :</strong> Saisie des notes /20, mentions et avis des instructeurs.</li>
-                            <li><strong>Explorateur de Documents :</strong> Importation et prévisualisation des fichiers PDF et images.</li>
+                            <li><strong>Modale d'Évaluation :</strong> Saisie des notes et avis instructeurs.</li>
                         </ul>
                     </div>
 
@@ -1102,8 +986,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">16/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Suivi des Formations :</strong> Tableau d'inscription pour FGI, CAT1, CME, FG1, FG2, DEM.</li>
-                            <li><strong>Codes Couleurs de Statut :</strong> Surlignage vert pour les admis et ambre pour les candidats en cours.</li>
+                            <li><strong>Suivi des Formations :</strong> Tableau d'inscription FGI, CAT1, CME, FG1, DEM.</li>
                         </ul>
                     </div>
 
@@ -1114,8 +997,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Onglet Référentiel :</strong> Publication des programmes d'instruction et prérequis.</li>
-                            <li><strong>Stylisation Tailwind CSS :</strong> Interface sombre adaptée aux environnements tactiques.</li>
+                            <li><strong>Référentiel :</strong> Publication des programmes d'instruction.</li>
                         </ul>
                     </div>
 
@@ -1126,35 +1008,39 @@
                             <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Initialisation du Projet :</strong> Structure de base HTML/JS et système de navigation par onglets.</li>
-                            <li><strong>Prise de Notes :</strong> Carnet de notes basique pour les opérateurs.</li>
+                            <li><strong>Initialisation :</strong> Structure HTML/JS et navigation par onglets.</li>
                         </ul>
                     </div>
 
                 </div>
             </section>
 
-    <!-- Script Firebase & Logique de l'application -->
+            <!-- LOGS -->
+            <section id="tab-logs" class="tab-content hidden h-full p-4 flex flex-col space-y-3">
+                <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
+                    <h2 class="text-sm font-bold text-white"><i class="fa-solid fa-receipt text-blue-500"></i> Logs d'Activité</h2>
+                    <button id="btnExportLogsPDF" onclick="generatePDF('pdfLogsContainer', 'Logs_Activites_ENA.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                </div>
+                <div id="pdfLogsContainer" class="flex-1 bg-card rounded-xl border p-2 overflow-y-auto custom-scroll">
+                    <table class="w-full text-left">
+                        <thead class="bg-input text-slate-400 text-[10px] uppercase"><tr><th class="p-2">Date</th><th class="p-2">Utilisateur</th><th class="p-2">Action</th><th class="p-2">Détails</th></tr></thead>
+                        <tbody id="logsTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Script Application & Firebase -->
     <script>
-        const firebaseConfig = {
-            databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app"
-        };
+        const firebaseConfig = { databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const statusEl = document.getElementById('connection-status');
-        db.ref('.info/connected').on('value', (snap) => {
-            if (snap.val() === true) {
-                statusEl.textContent = "Connecté & Synchro";
-                statusEl.className = "px-2.5 py-1 rounded-full bg-emerald-600 text-white font-medium text-[10px]";
-            } else {
-                statusEl.textContent = "Hors ligne...";
-                statusEl.className = "px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]";
-            }
-        });
-
         const state = {
             user: JSON.parse(localStorage.getItem('ena_user')) || null,
+            role: 'Personnel Opérateur',
             files: [],
             notes: [],
             activeNoteId: null,
@@ -1170,6 +1056,13 @@
             selectedMilitaireId: null
         };
 
+        const QUALIFICATION_KEYS = [
+            'qualif_para', 'qualif_cqb', 'qualif_fgi',
+            'qualif_pilote_blindes', 'qualif_tourelle', 'qualif_mecanicien',
+            'qualif_permis_b', 'qualif_permis_c', 'qualif_permis_d', 'qualif_spl',
+            'qualif_te', 'qualif_tp', 'qualif_spotteur', 'qualif_medecin', 'qualif_transmetteur', 'qualif_drone'
+        ];
+
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -1177,7 +1070,6 @@
             document.documentElement.setAttribute('data-theme', themeName);
             localStorage.setItem('ena_theme', themeName);
         }
-
         function changeAccent(colorName) {
             document.documentElement.setAttribute('data-accent', colorName);
             localStorage.setItem('ena_accent', colorName);
@@ -1189,131 +1081,93 @@
         changeAccent(savedAccent);
         document.getElementById('themeSelector').value = savedTheme;
 
-        db.ref('files').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.files = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderFiles();
-            updateDashboard();
+        function getUserRole(email) {
+            if (!email) return 'Personnel Opérateur';
+            if (email.toLowerCase() === 'gabinpompier811@gmail.com') return 'Fondateur';
+            const found = state.allowedUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+            return found ? found.role : 'Personnel Opérateur';
+        }
+
+        // Vérification des droits selon les actions
+        function checkPermission(actionType, targetRole = '') {
+            const r = state.role;
+            if (r === 'Fondateur' || r === 'Co-Fondateur') return true;
+            if (r === 'Administrateur') {
+                if ((actionType === 'EXCLURE' || actionType === 'BAN') && (targetRole === 'Fondateur' || targetRole === 'Co-Fondateur')) {
+                    alert("⛔ Un Administrateur ne peut pas exclure ou bannir un Fondateur ou un Co-Fondateur !");
+                    return false;
+                }
+                return true;
+            }
+            if (r === 'Modérateur' && (actionType === 'EXCLURE' || actionType === 'BAN')) {
+                alert("⛔ Les modérateurs n'ont pas le droit d'exclure ou de bannir de membres !");
+                return false;
+            }
+            if (r === 'Personnel ENA') {
+                if (actionType === 'BAN' || actionType === 'ADMIN_USER') {
+                    alert("⛔ Le personnel ENA ne peut pas gérer les rôles administratifs.");
+                    return false;
+                }
+                return true;
+            }
+            if (r === 'Personnel Opérateur' && actionType !== 'NOTE' && actionType !== 'LECTURE') {
+                alert("⛔ Le personnel opérateur n'a accès qu'à la lecture et aux notes !");
+                return false;
+            }
+            return true;
+        }
+
+        // Synchronisations Firebase
+        db.ref('.info/connected').on('value', (snap) => {
+            const statusEl = document.getElementById('connection-status');
+            if (snap.val() === true) {
+                statusEl.textContent = "Connecté";
+                statusEl.className = "px-2.5 py-1 rounded-full bg-emerald-600 text-white font-medium text-[10px]";
+            } else {
+                statusEl.textContent = "Hors ligne";
+                statusEl.className = "px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]";
+            }
         });
 
-        db.ref('notes').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.notes = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderNotes();
-        });
-
-        db.ref('effectifs').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.effectifs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderEffectifs();
-            renderFormateurs();
-            renderUnites();
-            updateFichesSelect();
-            updateDecorationsSelects();
-            updateTirsSelects();
-            updateDashboard();
-            if (state.selectedMilitaireId) loadFicheMilitaire();
-        });
-
-        db.ref('formateurs').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.formateurs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderFormateurs();
-            updateInstructeursSelects();
-            updateDashboard();
-        });
-
-        db.ref('sessions').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.sessions = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderSessions();
-        });
-
-        db.ref('decorations').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.decorations = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderDecorations();
-            if (state.selectedMilitaireId) loadFicheMilitaire();
-        });
-
-        db.ref('tirs').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.tirs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderTirs();
-        });
-
-        db.ref('inaptitudes').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.inaptitudes = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderInaptitudes();
-            updateDashboard();
-            if (state.selectedMilitaireId) loadFicheMilitaire();
-        });
-
-        db.ref('allowedUsers').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.allowedUsers = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderAdminUsers();
-        });
-
-        db.ref('notifications').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.notifications = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderNotifications();
-        });
-
-        db.ref('logs').on('value', (snapshot) => {
-            const val = snapshot.val();
-            state.logs = val ? Object.entries(val).map(([fbKey, item]) => ({ ...item, _fbKey: fbKey })) : [];
-            renderLogs();
-        });
+        db.ref('files').on('value', snap => { state.files = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFiles(); updateDashboard(); });
+        db.ref('notes').on('value', snap => { state.notes = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderNotes(); });
+        db.ref('effectifs').on('value', snap => { state.effectifs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderEffectifs(); renderFormateurs(); renderUnites(); updateFichesSelect(); updateDecorationsSelects(); updateTirsSelects(); updateDashboard(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
+        db.ref('formateurs').on('value', snap => { state.formateurs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFormateurs(); updateInstructeursSelects(); updateDashboard(); });
+        db.ref('sessions').on('value', snap => { state.sessions = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderSessions(); });
+        db.ref('decorations').on('value', snap => { state.decorations = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderDecorations(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
+        db.ref('tirs').on('value', snap => { state.tirs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderTirs(); });
+        db.ref('inaptitudes').on('value', snap => { state.inaptitudes = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderInaptitudes(); updateDashboard(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
+        db.ref('allowedUsers').on('value', snap => { state.allowedUsers = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; if(state.user) { state.role = getUserRole(state.user.email); document.getElementById('userRoleBadge').textContent = state.role; } renderAdminUsers(); });
+        db.ref('notifications').on('value', snap => { state.notifications = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderNotifications(); });
+        db.ref('logs').on('value', snap => { state.logs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderLogs(); });
 
         function addLog(action, details) {
-            const logEntry = {
-                id: Date.now().toString(),
-                date: new Date().toLocaleString('fr-FR'),
-                user: state.user ? state.user.email : 'Anonyme',
-                action, details
-            };
-            db.ref('logs').push(logEntry);
+            db.ref('logs').push({ id: Date.now().toString(), date: new Date().toLocaleString('fr-FR'), user: state.user ? state.user.email : 'Anonyme', action, details });
             db.ref('notifications').push({ text: `${action} : ${details}`, date: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) });
         }
 
         function generatePDF(elementId, filename) {
-            const element = document.getElementById(elementId);
-            const opt = {
-                margin: 0.3,
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#020617' },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-            };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().set({ margin: 0.3, filename, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, backgroundColor: '#020617' }, jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } }).from(document.getElementById(elementId)).save();
             addLog('EXPORT_PDF', `Export PDF : ${filename}`);
         }
 
         function exportToCSV() {
-            if (state.effectifs.length === 0) {
-                alert("Aucune donnée à exporter.");
-                return;
-            }
-            let csv = "Militaire;Grade;Matricule;Unite;Formation;DateDemande;Statut;Note;Formateur\n";
+            if (state.effectifs.length === 0) return alert("Aucune donnée.");
+            let csv = "Militaire;Grade;Matricule;Unite;Formation;Statut;Note\n";
             state.effectifs.forEach(e => {
                 const isVal = e.eval && e.eval.evaluee;
-                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.aff || ''}";"${e.form}";"${e.dateDemande}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}";"${isVal ? e.eval.formateur : ''}"\n`;
+                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.aff || ''}";"${e.form}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}"\n`;
             });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
+            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
             a.download = `Effectifs_ENA_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
-            addLog('EXPORT_CSV', 'Export des effectifs au format CSV/Excel');
+            addLog('EXPORT_CSV', 'Export CSV effectué');
         }
 
         window.printDiplome = (candidateId) => {
             const cand = state.effectifs.find(e => e.id === candidateId);
             if (!cand || !cand.eval) return;
-
             document.getElementById('dipNomMilitaire').textContent = `${cand.grade} ${cand.nom}`;
             document.getElementById('dipMatricule').textContent = cand.mat;
             document.getElementById('dipFormation').textContent = cand.form;
@@ -1322,19 +1176,9 @@
             document.getElementById('dipDate').textContent = cand.eval.dateEval || new Date().toLocaleDateString('fr-FR');
             document.getElementById('dipInstructeur').textContent = cand.eval.formateur || 'Instructeur ENA';
 
-            const element = document.getElementById('diplomeContent');
             const container = document.getElementById('diplomePrintContainer');
             container.classList.remove('hidden');
-
-            const opt = {
-                margin: 0.2,
-                filename: `Diplome_ENA_${cand.nom.replace(/\s+/g, '_')}_${cand.form.slice(0,10)}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#020617' },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
+            html2pdf().set({ margin: 0.2, filename: `Diplome_${cand.nom}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } }).from(document.getElementById('diplomeContent')).save().then(() => {
                 container.classList.add('hidden');
                 addLog('IMPRESSION_DIPLOME', `Diplôme imprimé pour ${cand.nom}`);
             });
@@ -1346,46 +1190,40 @@
             } else {
                 document.getElementById('authModal').classList.remove('hidden');
             }
-            
             const dtInput = document.getElementById('pDateTime');
-            if(dtInput) {
-                const now = new Date();
-                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            if (dtInput) {
+                const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
                 dtInput.value = now.toISOString().slice(0,16);
             }
-
             setupListeners();
         }
 
         function showApp() {
+            state.role = getUserRole(state.user.email);
+            document.getElementById('userRoleBadge').textContent = state.role;
             document.getElementById('authModal').classList.add('hidden');
             const app = document.getElementById('app');
-            app.classList.remove('hidden');
-            app.classList.add('flex');
+            app.classList.remove('hidden'); app.classList.add('flex');
             document.getElementById('userInfo').textContent = state.user.email;
 
-            const adminBtn = document.getElementById('navAdminBtn');
-            if (state.user.email.toLowerCase() === 'gabinpompier811@gmail.com') {
-                adminBtn.classList.remove('hidden');
+            if (['Fondateur', 'Co-Fondateur', 'Administrateur'].includes(state.role) || state.user.email.toLowerCase() === 'gabinpompier811@gmail.com') {
+                document.getElementById('navAdminBtn').classList.remove('hidden');
             } else {
-                adminBtn.classList.add('hidden');
+                document.getElementById('navAdminBtn').classList.add('hidden');
             }
         }
 
         function setupListeners() {
             document.getElementById('authForm').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const email = document.getElementById('authEmail').value.trim();
-                state.user = { email };
+                state.user = { email: document.getElementById('authEmail').value.trim() };
                 localStorage.setItem('ena_user', JSON.stringify(state.user));
-                addLog('CONNEXION', `Utilisateur ${email} connecté`);
+                addLog('CONNEXION', `Connexion de ${state.user.email}`);
                 showApp();
             });
 
             document.getElementById('btnLogout').addEventListener('click', () => {
-                addLog('DECONNEXION', `Déconnexion de ${state.user.email}`);
-                localStorage.removeItem('ena_user');
-                location.reload();
+                localStorage.removeItem('ena_user'); location.reload();
             });
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1399,96 +1237,63 @@
 
             document.getElementById('formAddAllowedUser')?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const email = document.getElementById('adminUserEmail').value.trim();
-                const nom = document.getElementById('adminUserNom').value;
-                const role = document.getElementById('adminUserRole').value;
-
-                db.ref('allowedUsers').push({ id: Date.now().toString(), email, nom, role });
-                addLog('ADMIN_MEMBRE_AJOUTE', `Membre ${email} autorisé avec le rôle ${role}`);
+                if (!checkPermission('ADMIN')) return;
+                db.ref('allowedUsers').push({ email: document.getElementById('adminUserEmail').value.trim(), nom: document.getElementById('adminUserNom').value, role: document.getElementById('adminUserRole').value });
                 e.target.reset();
             });
 
             document.getElementById('formAddPersonnel').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('pNom').value;
-                const grade = document.getElementById('pGrade').value;
-                const mat = document.getElementById('pMat').value;
-                const aff = document.getElementById('pUnite').value;
-                const form = document.getElementById('pForm').value;
-                const dtVal = document.getElementById('pDateTime').value;
-
-                const dateObj = dtVal ? new Date(dtVal) : new Date();
-                const dateDemande = `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`;
-
-                const newPersonnel = {
+                if (!checkPermission('MOD')) return;
+                const dt = document.getElementById('pDateTime').value;
+                const dateObj = dt ? new Date(dt) : new Date();
+                db.ref('effectifs').push({
                     id: Date.now().toString(),
-                    nom, grade, mat, aff, form, dateDemande,
+                    nom: document.getElementById('pNom').value,
+                    grade: document.getElementById('pGrade').value,
+                    mat: document.getElementById('pMat').value,
+                    aff: document.getElementById('pUnite').value,
+                    form: document.getElementById('pForm').value,
+                    dateDemande: `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`,
                     eval: { evaluee: false }
-                };
-
-                db.ref('effectifs').push(newPersonnel);
-                addLog('INSCRIPTION_FORMATION', `Candidat ${nom} inscrit pour ${form}`);
+                });
                 e.target.reset();
             });
 
             document.getElementById('formAddSession').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const formation = document.getElementById('sessForm').value;
-                const dateVal = document.getElementById('sessDate').value;
-                const lieu = document.getElementById('sessLieu').value;
-                const instructeur = document.getElementById('sessInstructeur').value;
-
-                const dateObj = new Date(dateVal);
-                const dateFormatted = `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`;
-
-                const sessionObj = {
+                const d = new Date(document.getElementById('sessDate').value);
+                db.ref('sessions').push({
                     id: Date.now().toString(),
-                    formation, date: dateFormatted, lieu, instructeur
-                };
-
-                db.ref('sessions').push(sessionObj);
-                addLog('CREATION_SESSION', `Session de ${formation} programmée le ${dateFormatted}`);
+                    formation: document.getElementById('sessForm').value,
+                    date: `${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`,
+                    lieu: document.getElementById('sessLieu').value,
+                    instructeur: document.getElementById('sessInstructeur').value
+                });
                 e.target.reset();
             });
 
             document.getElementById('formAddDecoration').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nomMilitaire = document.getElementById('decoMilitaire').value;
-                const titre = document.getElementById('decoTitre').value;
-                const motif = document.getElementById('decoMotif').value;
-
-                const decoObj = {
+                db.ref('decorations').push({
                     id: Date.now().toString(),
-                    nom: nomMilitaire,
-                    titre, motif,
+                    nom: document.getElementById('decoMilitaire').value,
+                    titre: document.getElementById('decoTitre').value,
+                    motif: document.getElementById('decoMotif').value,
                     date: new Date().toLocaleDateString('fr-FR')
-                };
-
-                db.ref('decorations').push(decoObj);
-                addLog('DECORATION_ATTRIBUEE', `${titre} décernée à ${nomMilitaire}`);
+                });
                 e.target.reset();
             });
 
             document.getElementById('formAddScoreTir').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('tirMilitaire').value;
-                const arme = document.getElementById('tirArme').value;
-                const score = document.getElementById('tirScore').value;
-
-                db.ref('tirs').push({ id: Date.now().toString(), nom, arme, score, date: new Date().toLocaleDateString('fr-FR') });
-                addLog('SCORE_TIR', `Score ${score}/100 enregistré pour ${nom} (${arme})`);
+                db.ref('tirs').push({ id: Date.now().toString(), nom: document.getElementById('tirMilitaire').value, arme: document.getElementById('tirArme').value, score: document.getElementById('tirScore').value, date: new Date().toLocaleDateString('fr-FR') });
                 e.target.reset();
             });
 
             document.getElementById('formAddInaptitude').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('inapteMilitaire').value;
-                const type = document.getElementById('inapteType').value;
-                const dateFin = document.getElementById('inapteDateFin').value;
-                const motif = document.getElementById('inapteMotif').value;
-
-                db.ref('inaptitudes').push({ id: Date.now().toString(), nom, type, dateFin, motif });
-                addLog('INAPTITUDE_MEDICALE', `${nom} déclaré inapte (${type}) jusqu'au ${dateFin}`);
+                db.ref('inaptitudes').push({ id: Date.now().toString(), nom: document.getElementById('inapteMilitaire').value, type: document.getElementById('inapteType').value, dateFin: document.getElementById('inapteDateFin').value, motif: document.getElementById('inapteMotif').value });
                 e.target.reset();
             });
 
@@ -1496,9 +1301,8 @@
                 e.preventDefault();
                 const candidateId = document.getElementById('evalCandidateId').value;
                 const candidate = state.effectifs.find(item => item.id === candidateId);
-
                 if (candidate && candidate._fbKey) {
-                    const evalData = {
+                    db.ref(`effectifs/${candidate._fbKey}/eval`).set({
                         evaluee: true,
                         resultat: document.getElementById('evalResultat').value,
                         note: document.getElementById('evalNote').value,
@@ -1506,39 +1310,16 @@
                         formateur: document.getElementById('evalFormateur').value,
                         comments: document.getElementById('evalComments').value,
                         dateEval: new Date().toLocaleDateString('fr-FR')
-                    };
-
-                    db.ref(`effectifs/${candidate._fbKey}/eval`).set(evalData);
+                    });
                     closeEvalModal();
-                    addLog('EVALUATION_VALIDEE', `Formation ${candidate.form} évaluée pour ${candidate.nom}`);
                 }
-            });
-
-            document.getElementById('btnExportEffectifsPDF').addEventListener('click', () => {
-                generatePDF('pdfContentEffectifs', `Demandes_Formations_ENA_${new Date().toISOString().slice(0,10)}.pdf`);
-            });
-
-            document.getElementById('btnExportNotePDF').addEventListener('click', () => {
-                generatePDF('pdfNoteContainer', `Note_ENA_${new Date().toISOString().slice(0,10)}.pdf`);
-            });
-
-            document.getElementById('btnExportLogsPDF').addEventListener('click', () => {
-                generatePDF('pdfLogsContainer', `Logs_ENA_${new Date().toISOString().slice(0,10)}.pdf`);
             });
 
             document.getElementById('fileInput').addEventListener('change', (e) => {
                 Array.from(e.target.files).forEach(file => {
                     const reader = new FileReader();
                     reader.onload = (event) => {
-                        const fileObj = {
-                            id: Date.now().toString(),
-                            name: file.name,
-                            size: (file.size / 1024).toFixed(1) + ' Ko',
-                            type: file.type,
-                            content: event.target.result
-                        };
-                        db.ref('files').push(fileObj);
-                        addLog('IMPORT_FICHIER', `Import de ${file.name}`);
+                        db.ref('files').push({ id: Date.now().toString(), name: file.name, size: (file.size / 1024).toFixed(1) + ' Ko', type: file.type, content: event.target.result });
                     };
                     reader.readAsDataURL(file);
                 });
@@ -1546,120 +1327,90 @@
 
             document.getElementById('formAddFormateur').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('fmtNom').value;
-                const role = document.getElementById('fmtRole').value;
-                const fmtObj = { id: Date.now().toString(), nom, role };
-                db.ref('formateurs').push(fmtObj);
-                addLog('AJOUT_FORMATEUR', `Instructeur ajouté : ${nom} (${role})`);
+                db.ref('formateurs').push({ id: Date.now().toString(), nom: document.getElementById('fmtNom').value, role: document.getElementById('fmtRole').value });
                 e.target.reset();
             });
 
+            // GESTIONNAIRE DE NOTES (SÉCURISÉ)
             document.getElementById('btnNewNote').addEventListener('click', () => {
-                const newNote = { id: Date.now().toString(), title: 'Nouvelle Note', content: '' };
-                db.ref('notes').push(newNote);
-                addLog('CREATION_NOTE', 'Note créée');
+                const newRef = db.ref('notes').push();
+                const newId = Date.now().toString();
+                newRef.set({ id: newId, title: 'Nouvelle Note', content: '' }).then(() => {
+                    selectNote(newId);
+                });
             });
 
             document.getElementById('noteTitle').addEventListener('input', saveCurrentNote);
             document.getElementById('noteContent').addEventListener('input', saveCurrentNote);
 
             document.getElementById('btnSaveGlobal').addEventListener('click', () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
                 const a = document.createElement('a');
-                a.href = dataStr;
+                a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
                 a.download = `ENA_Backup_${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
-                addLog('EXPORT_GLOBAL', 'Sauvegarde JSON exportée');
             });
         }
 
+        // CORRECTION COMPLÈTE DE LA SAUVEGARDE DES NOTES
         function saveCurrentNote() {
             if (!state.activeNoteId) return;
             const note = state.notes.find(n => n.id === state.activeNoteId);
-            if (!note || !note._fbKey) return;
-
-            const title = document.getElementById('noteTitle').value;
-            const content = document.getElementById('noteContent').value;
-            db.ref(`notes/${note._fbKey}`).update({ title, content });
+            if (note && note._fbKey) {
+                const updatedTitle = document.getElementById('noteTitle').value;
+                const updatedContent = document.getElementById('noteContent').value;
+                db.ref(`notes/${note._fbKey}`).update({
+                    title: updatedTitle,
+                    content: updatedContent
+                });
+            }
         }
+
+        window.exportActiveNotePDF = () => {
+            if (!state.activeNoteId) return alert("Aucune note sélectionnée.");
+            const title = document.getElementById('noteTitle').value || 'Note';
+            generatePDF('pdfNoteContainer', `Note_${title.replace(/\s+/g, '_')}.pdf`);
+        };
 
         function updateDashboard() {
             const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
-            
-            let filteredEff = state.effectifs;
-            if (filterUnite !== 'TOUTES') {
-                filteredEff = state.effectifs.filter(e => e.aff === filterUnite);
-            }
+            let filteredEff = filterUnite === 'TOUTES' ? state.effectifs : state.effectifs.filter(e => e.aff === filterUnite);
 
-            const totalCandidats = new Set(filteredEff.map(e => e.nom)).size;
-            document.getElementById('dashTotalCandidats').textContent = totalCandidats;
+            document.getElementById('dashTotalCandidats').textContent = new Set(filteredEff.map(e => e.nom)).size;
             document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
             document.getElementById('dashTotalInaptes').textContent = state.inaptitudes.length;
 
             const evals = filteredEff.filter(e => e.eval && e.eval.evaluee);
             const admis = evals.filter(e => e.eval.resultat === 'Admis').length;
-            const ajournes = evals.filter(e => e.eval.resultat === 'Ajourné').length;
-            const enAttente = filteredEff.length - evals.length;
-
             document.getElementById('dashCountAdmis').textContent = admis;
-            document.getElementById('dashCountAjournes').textContent = ajournes;
-            document.getElementById('dashCountAttente').textContent = enAttente;
-
-            const taux = evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0;
-            document.getElementById('dashTauxReussite').textContent = taux + '%';
+            document.getElementById('dashCountAjournes').textContent = evals.filter(e => e.eval.resultat === 'Ajourné').length;
+            document.getElementById('dashCountAttente').textContent = filteredEff.length - evals.length;
+            document.getElementById('dashTauxReussite').textContent = (evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0) + '%';
 
             const recentContainer = document.getElementById('dashRecentEvals');
-            recentContainer.innerHTML = '';
-            if (evals.length === 0) {
-                recentContainer.innerHTML = `<p class="text-slate-500 text-center py-2">Aucune évaluation validée.</p>`;
-            } else {
-                evals.slice(-4).reverse().forEach(e => {
-                    recentContainer.innerHTML += `
-                        <div class="bg-input p-2 rounded flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-white">${e.nom}</p>
-                                <p class="text-[10px] text-blue-400">${e.form}</p>
-                            </div>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${e.eval.resultat} (${e.eval.note}/20)</span>
-                        </div>
-                    `;
-                });
-            }
+            recentContainer.innerHTML = evals.length === 0 ? '<p class="text-slate-500 text-center py-2">Aucune évaluation.</p>' : evals.slice(-4).reverse().map(e => `
+                <div class="bg-input p-2 rounded flex justify-between items-center">
+                    <div><p class="font-bold text-white">${e.nom}</p><p class="text-[10px] text-blue-400">${e.form}</p></div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${e.eval.resultat} (${e.eval.note}/20)</span>
+                </div>
+            `).join('');
         }
 
         function renderUnites() {
             const container = document.getElementById('unitesListGrid');
-            if(!container) return;
-            container.innerHTML = '';
-
+            if(!container) return; container.innerHTML = '';
             const selectedFilter = document.getElementById('uniteFilterSelect')?.value || 'TOUTES';
-            const unites = ["CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"];
-
-            unites.forEach(u => {
+            ["CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"].forEach(u => {
                 if (selectedFilter !== 'TOUTES' && selectedFilter !== u) return;
-
-                const membres = state.effectifs.filter(e => e.aff === u);
-                const uniqueMembres = [];
-                membres.forEach(m => {
-                    if(!uniqueMembres.some(x => x.nom === m.nom)) uniqueMembres.push(m);
-                });
-
+                const membres = [];
+                state.effectifs.filter(e => e.aff === u).forEach(m => { if(!membres.some(x => x.nom === m.nom)) membres.push(m); });
                 container.innerHTML += `
                     <div class="bg-card border p-4 rounded-xl space-y-3">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-shield text-blue-400"></i> ${u}
-                            </h3>
-                            <span class="text-xs px-2 py-0.5 bg-blue-900/40 border border-blue-700 text-blue-300 rounded font-bold">${uniqueMembres.length} membre(s)</span>
-                        </div>
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2"><h3 class="font-bold text-white text-sm"><i class="fa-solid fa-shield text-blue-400"></i> ${u}</h3><span class="text-xs px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${membres.length}</span></div>
                         <div class="space-y-1.5 max-h-56 overflow-y-auto custom-scroll text-xs">
-                            ${uniqueMembres.length === 0 ? '<p class="text-slate-500 italic py-2">Aucun militaire assigné.</p>' : uniqueMembres.map(m => `
+                            ${membres.length === 0 ? '<p class="text-slate-500 italic py-2">Aucun membre.</p>' : membres.map(m => `
                                 <div class="bg-input p-2 rounded flex justify-between items-center">
-                                    <div>
-                                        <p class="font-bold text-white">${m.grade}${m.nom}</p>
-                                        <p class="text-[10px] text-slate-400 font-mono">${m.mat}</p>
-                                    </div>
-                                    <button onclick="selectMilitaireAndOpenFiche('${m.nom}')" class="text-blue-400 hover:text-white text-[10px] px-2 py-1 bg-slate-800 rounded">Fiche</button>
+                                    <div><p class="font-bold text-white">${m.grade}${m.nom}</p><p class="text-[10px] text-slate-400">${m.mat}</p></div>
+                                    <button onclick="selectMilitaireAndOpenFiche('${m.nom}')" class="text-blue-400 text-[10px] px-2 py-1 bg-slate-800 rounded">Fiche</button>
                                 </div>
                             `).join('')}
                         </div>
@@ -1668,32 +1419,17 @@
             });
         }
 
-        window.selectMilitaireAndOpenFiche = (nom) => {
-            document.querySelector('[data-tab="fiches"]').click();
-            document.getElementById('selectFicheMilitaire').value = nom;
-            loadFicheMilitaire();
-        };
+        window.selectMilitaireAndOpenFiche = (nom) => { document.querySelector('[data-tab="fiches"]').click(); document.getElementById('selectFicheMilitaire').value = nom; loadFicheMilitaire(); };
 
         function renderAdminUsers() {
             const container = document.getElementById('adminUsersList');
             if(!container) return;
-            container.innerHTML = '';
-            
-            container.innerHTML += `
+            container.innerHTML = `
                 <div class="bg-amber-950/40 border border-amber-500/60 p-3 rounded-lg flex justify-between items-center">
-                    <div>
-                        <p class="font-bold text-amber-300">gabinpompier811@gmail.com (Gabin)</p>
-                        <p class="text-[10px] text-slate-400">Fondateur Principal - Pleins Pouvoirs Absolus</p>
-                    </div>
+                    <div><p class="font-bold text-amber-300">gabinpompier811@gmail.com (Gabin)</p><p class="text-[10px] text-slate-400">Fondateur Principal</p></div>
                     <span class="px-2.5 py-1 bg-amber-500 text-black rounded text-[10px] font-extrabold uppercase">👑 Fondateur</span>
                 </div>
             `;
-
-            if(state.allowedUsers.length === 0) {
-                container.innerHTML += `<p class="text-slate-500 italic py-2">Aucun autre membre affecté dans la hiérarchie.</p>`;
-                return;
-            }
-
             state.allowedUsers.forEach(u => {
                 let badgeColor = "bg-blue-600 text-white";
                 if(u.role === "Co-Fondateur") badgeColor = "bg-purple-600 text-white";
@@ -1704,258 +1440,108 @@
 
                 container.innerHTML += `
                     <div class="bg-input border p-2.5 rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-white">${u.nom} <span class="text-slate-400 font-normal">(${u.email})</span></p>
-                            <p class="text-[10px] text-slate-400">Niveau : ${u.role}</p>
-                        </div>
+                        <div><p class="font-bold text-white">${u.nom} <span class="text-slate-400">(${u.email})</span></p><p class="text-[10px] text-slate-400">Rôle : ${u.role}</p></div>
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${u.role}</span>
-                            <button onclick="deleteAllowedUser('${u._fbKey}', '${u.role}')" class="text-red-400 hover:text-red-300 text-xs p-1" title="Révoquer / Exclure"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
+                            <button onclick="deleteAllowedUser('${u._fbKey}', '${u.role}', '${u.email}')" class="text-red-400 text-xs p-1"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        window.deleteAllowedUser = (fbKey, role) => {
-            if (role === "Fondateur" || role === "Co-Fondateur") {
-                if (state.user.email.toLowerCase() !== 'gabinpompier811@gmail.com') {
-                    alert("⚠️ Seul le Fondateur suprême peut exclure ou révoquer un Fondateur / Co-Fondateur !");
-                    return;
-                }
-            }
-            if(confirm("Révoquer les accès de cet utilisateur ?")) {
-                db.ref('allowedUsers/' + fbKey).remove().then(() => addLog('ADMIN_MEMBRE_REVOQUE', 'Membre révoqué'));
+        window.deleteAllowedUser = (fbKey, targetRole, targetEmail) => {
+            if (!checkPermission('EXCLURE', targetRole)) return;
+            if (confirm(`Révoquer les accès de ${targetEmail} ?`)) {
+                db.ref('allowedUsers/' + fbKey).remove();
+                addLog('ADMIN_REVOCATION', `Accès révoqués pour ${targetEmail}`);
             }
         };
 
         function renderTirs() {
             const container = document.getElementById('tirsHistoryList');
-            if(!container) return;
-            container.innerHTML = '';
-            if(state.tirs.length === 0) {
-                container.innerHTML = `<p class="text-slate-500 italic">Aucun tir enregistré.</p>`;
-                return;
-            }
-            state.tirs.slice(-6).reverse().forEach(t => {
-                container.innerHTML += `
-                    <div class="bg-input p-2 rounded flex justify-between items-center">
-                        <div>
-                            <span class="font-bold text-white">${t.nom}</span>
-                            <span class="text-slate-400 block text-[10px]">${t.arme} - le ${t.date}</span>
-                        </div>
-                        <span class="font-bold text-red-400 text-sm">${t.score}/100</span>
-                    </div>
-                `;
-            });
+            if(!container) return; container.innerHTML = state.tirs.length === 0 ? '<p class="text-slate-500 italic">Aucun tir.</p>' : state.tirs.slice(-6).reverse().map(t => `
+                <div class="bg-input p-2 rounded flex justify-between items-center"><div><span class="font-bold text-white">${t.nom}</span><span class="text-slate-400 block text-[10px]">${t.arme} (${t.date})</span></div><span class="font-bold text-red-400 text-sm">${t.score}/100</span></div>
+            `).join('');
         }
 
         function renderInaptitudes() {
             const container = document.getElementById('inaptesActiveList');
-            if(!container) return;
-            container.innerHTML = '';
-            if(state.inaptitudes.length === 0) {
-                container.innerHTML = `<p class="text-slate-500 italic">Aucune inaptitude active.</p>`;
-                return;
-            }
-            state.inaptitudes.forEach(i => {
-                container.innerHTML += `
-                    <div class="bg-input p-2 rounded flex justify-between items-center">
-                        <div>
-                            <span class="font-bold text-amber-400">${i.nom}</span>
-                            <span class="text-slate-300 block text-[10px]">${i.type} (${i.motif})</span>
-                            <span class="text-slate-500 text-[9px]">Jusqu'au ${i.dateFin}</span>
-                        </div>
-                        <button onclick="deleteInaptitude('${i._fbKey}')" class="text-red-400 hover:text-red-300 p-1" title="Lever inaptitude"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                `;
-            });
+            if(!container) return; container.innerHTML = state.inaptitudes.length === 0 ? '<p class="text-slate-500 italic">Aucune inaptitude.</p>' : state.inaptitudes.map(i => `
+                <div class="bg-input p-2 rounded flex justify-between items-center"><div><span class="font-bold text-amber-400">${i.nom}</span><span class="text-slate-300 block text-[10px]">${i.type} (${i.motif}) - Jusqu'au ${i.dateFin}</span></div><button onclick="db.ref('inaptitudes/${i._fbKey}').remove()" class="text-red-400 text-xs"><i class="fa-solid fa-xmark"></i></button></div>
+            `).join('');
         }
 
-        window.deleteInaptitude = (fbKey) => {
-            if(confirm("Lever cette inaptitude médicale ?")) {
-                db.ref('inaptitudes/' + fbKey).remove().then(() => addLog('FIN_INAPTITUDE', 'Inaptitude médicale levée'));
-            }
-        };
-
-        function toggleNotifications() {
-            document.getElementById('notifDropdown').classList.toggle('hidden');
-        }
-
-        function clearNotifications() {
-            db.ref('notifications').remove();
-        }
-
+        function toggleNotifications() { document.getElementById('notifDropdown').classList.toggle('hidden'); }
+        function clearNotifications() { db.ref('notifications').remove(); }
         function renderNotifications() {
             const container = document.getElementById('notifList');
             const badge = document.getElementById('notifBadge');
             if(!container) return;
-
-            container.innerHTML = '';
-            if(state.notifications.length === 0) {
-                container.innerHTML = `<p class="text-slate-500 text-center py-2">Aucune alerte récente.</p>`;
-                badge.classList.add('hidden');
-            } else {
-                badge.textContent = state.notifications.length;
-                badge.classList.remove('hidden');
-                state.notifications.slice(-10).reverse().forEach(n => {
-                    container.innerHTML += `
-                        <div class="p-2 bg-input rounded border border-slate-700/50 text-[11px]">
-                            <span class="text-slate-400 text-[9px] block">${n.date || ''}</span>
-                            <span class="text-white">${n.text}</span>
-                        </div>
-                    `;
-                });
-            }
+            if(state.notifications.length === 0) { container.innerHTML = '<p class="text-slate-500 text-center py-2">Aucune alerte.</p>'; badge.classList.add('hidden'); }
+            else { badge.textContent = state.notifications.length; badge.classList.remove('hidden'); container.innerHTML = state.notifications.slice(-10).reverse().map(n => `<div class="p-2 bg-input rounded text-[11px]"><span class="text-slate-400 text-[9px] block">${n.date}</span>${n.text}</div>`).join(''); }
         }
 
         function updateInstructeursSelects() {
-            const selectSess = document.getElementById('sessInstructeur');
-            if (!selectSess) return;
-            selectSess.innerHTML = '';
-            state.formateurs.forEach(f => {
-                const opt = document.createElement('option');
-                opt.value = f.nom;
-                opt.textContent = `${f.nom} (${f.role})`;
-                selectSess.appendChild(opt);
-            });
+            const selectSess = document.getElementById('sessInstructeur'); if(!selectSess) return;
+            selectSess.innerHTML = state.formateurs.map(f => `<option value="${f.nom}">${f.nom} (${f.role})</option>`).join('');
         }
-
         function updateDecorationsSelects() {
-            const select = document.getElementById('decoMilitaire');
-            if (!select) return;
-            select.innerHTML = '';
-            const unique = [];
-            state.effectifs.forEach(e => {
-                if (!unique.some(m => m.nom === e.nom)) unique.push(e);
-            });
-            unique.forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = m.nom;
-                opt.textContent = `${m.grade} ${m.nom}`;
-                select.appendChild(opt);
-            });
+            const select = document.getElementById('decoMilitaire'); if(!select) return;
+            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
+            select.innerHTML = unique.map(m => `<option value="${m.nom}">${m.grade} ${m.nom}</option>`).join('');
         }
-
         function updateTirsSelects() {
-            const selectTir = document.getElementById('tirMilitaire');
-            const selectInapte = document.getElementById('inapteMilitaire');
-            if(!selectTir || !selectInapte) return;
-
-            selectTir.innerHTML = '';
-            selectInapte.innerHTML = '';
-
-            const unique = [];
-            state.effectifs.forEach(e => {
-                if (!unique.some(m => m.nom === e.nom)) unique.push(e);
-            });
-
-            unique.forEach(m => {
-                const opt1 = document.createElement('option');
-                opt1.value = m.nom;
-                opt1.textContent = `${m.grade} ${m.nom}`;
-                selectTir.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = m.nom;
-                opt2.textContent = `${m.grade} ${m.nom}`;
-                selectInapte.appendChild(opt2);
-            });
+            const s1 = document.getElementById('tirMilitaire'), s2 = document.getElementById('inapteMilitaire'); if(!s1 || !s2) return;
+            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
+            const html = unique.map(m => `<option value="${m.nom}">${m.grade} ${m.nom}</option>`).join('');
+            s1.innerHTML = html; s2.innerHTML = html;
         }
 
-        window.openImageViewer = (src, title) => {
-            document.getElementById('viewerImage').src = src;
-            document.getElementById('viewerTitle').textContent = title;
-            document.getElementById('imageViewerModal').classList.remove('hidden');
-        };
+        window.openImageViewer = (src, title) => { document.getElementById('viewerImage').src = src; document.getElementById('viewerTitle').textContent = title; document.getElementById('imageViewerModal').classList.remove('hidden'); };
+        window.closeImageViewer = () => document.getElementById('imageViewerModal').classList.add('hidden');
+        window.deleteFile = (k) => { if(confirm("Supprimer ce fichier ?")) db.ref('files/' + k).remove(); };
+        window.deleteSession = (k) => { if(confirm("Supprimer cette session ?")) db.ref('sessions/' + k).remove(); };
+        window.deleteDecoration = (k) => { if(confirm("Supprimer cette décoration ?")) db.ref('decorations/' + k).remove(); };
+        window.deleteFormateur = (k, name) => { if(confirm(`Supprimer ${name} ?`)) db.ref('formateurs/' + k).remove(); };
+        window.deleteEffectif = (k, name) => { if(!checkPermission('EXCLURE')) return; if(confirm(`Supprimer ${name} ?`)) db.ref('effectifs/' + k).remove(); };
 
-        window.closeImageViewer = () => {
-            document.getElementById('imageViewerModal').classList.add('hidden');
-        };
-
-        window.deleteFile = (fbKey) => {
-            if (!fbKey) return;
-            if (confirm("Voulez-vous vraiment supprimer définitivement ce fichier / cette photo ?")) {
-                db.ref('files/' + fbKey).remove().then(() => addLog('SUPPRESSION_FICHIER', `Fichier supprimé`));
-            }
-        };
-
-        window.deleteSession = (fbKey) => {
-            if (confirm("Supprimer cette session plannifiée ?")) {
-                db.ref('sessions/' + fbKey).remove().then(() => addLog('SUPPRESSION_SESSION', `Session supprimée`));
-            }
-        };
-
-        window.deleteDecoration = (fbKey) => {
-            if (confirm("Retirer cette décoration ?")) {
-                db.ref('decorations/' + fbKey).remove().then(() => addLog('SUPPRESSION_DECORATION', `Décoration retirée`));
-            }
-        };
-
-        window.deleteFormateur = (fbKey, name) => {
-            if (confirm(`Supprimer le formateur ${name} ?`)) {
-                db.ref(`formateurs/${fbKey}`).remove();
-                addLog('SUPPRESSION_FORMATEUR', `Formateur supprimé : ${name}`);
-            }
-        };
-
-        window.deleteEffectif = (fbKey, name) => {
-            if (confirm(`Supprimer la demande de formation pour ${name} ?`)) {
-                db.ref(`effectifs/${fbKey}`).remove();
-                addLog('SUPPRESSION_EFFECTIF', `Effectif supprimé : ${name}`);
-            }
-        };
-
-        window.deleteNote = (fbKey, title) => {
+        // CORRECTION DE LA SUPPRESSION DES NOTES
+        window.deleteNote = (k, title) => {
             if (confirm(`Supprimer la note "${title}" ?`)) {
-                db.ref(`notes/${fbKey}`).remove();
-                addLog('SUPPRESSION_NOTE', `Note supprimée : ${title}`);
+                db.ref('notes/' + k).remove().then(() => {
+                    if (state.activeNoteId) {
+                        state.activeNoteId = null;
+                        document.getElementById('noteTitle').value = '';
+                        document.getElementById('noteContent').value = '';
+                    }
+                });
             }
         };
 
         function updateFichesSelect() {
-            const select = document.getElementById('selectFicheMilitaire');
-            const currentValue = select.value;
-            select.innerHTML = `<option value="">-- Sélectionner un Militaire --</option>`;
-            
-            const uniqueMilaires = [];
-            state.effectifs.forEach(e => {
-                if (!uniqueMilaires.some(m => m.nom === e.nom)) uniqueMilaires.push(e);
-            });
-
-            uniqueMilaires.forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = m.nom;
-                opt.textContent = `${m.grade} ${m.nom} (${m.mat})`;
-                select.appendChild(opt);
-            });
-            select.value = currentValue;
+            const select = document.getElementById('selectFicheMilitaire'); if(!select) return;
+            const val = select.value; select.innerHTML = '<option value="">-- Sélectionner --</option>';
+            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
+            unique.forEach(m => select.innerHTML += `<option value="${m.nom}">${m.grade} ${m.nom} (${m.mat})</option>`);
+            select.value = val;
         }
 
         window.loadFicheMilitaire = () => {
-            const select = document.getElementById('selectFicheMilitaire');
-            const nom = select.value;
+            const nom = document.getElementById('selectFicheMilitaire').value;
             const container = document.getElementById('ficheContainer');
-
-            if (!nom) {
-                container.classList.add('hidden');
-                state.selectedMilitaireId = null;
-                return;
-            }
-
+            if (!nom) { container.classList.add('hidden'); state.selectedMilitaireId = null; return; }
             const dossiers = state.effectifs.filter(e => e.nom === nom);
-            if (dossiers.length === 0) return;
-
-            const mil = dossiers[0];
-            state.selectedMilitaireId = nom;
+            if(dossiers.length === 0) return;
+            const mil = dossiers[0]; state.selectedMilitaireId = nom;
 
             document.getElementById('fNom').textContent = mil.nom;
             document.getElementById('fGrade').textContent = mil.grade;
             document.getElementById('fMat').textContent = mil.mat;
             document.getElementById('fAff').textContent = mil.aff || 'N/A';
+            document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis').length;
 
-            const formValide = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis');
-            document.getElementById('fCountValide').textContent = formValide.length;
+            loadQualificationsMilitaire(mil);
 
             document.getElementById('fSang').value = mil.sang || 'Non renseigné';
             document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
@@ -1964,200 +1550,129 @@
             document.getElementById('fVaccins').value = mil.vaccins || '';
 
             const decos = state.decorations.filter(d => d.nom === nom);
-            const decoContainer = document.getElementById('fDecorationsList');
-            decoContainer.innerHTML = '';
-            if (decos.length === 0) {
-                decoContainer.innerHTML = `<span class="text-slate-500 italic">Aucune décoration attribuée.</span>`;
-            } else {
-                decos.forEach(d => {
-                    decoContainer.innerHTML += `
-                        <span class="px-2.5 py-1 bg-amber-900/40 text-amber-300 border border-amber-700/60 rounded-full font-bold flex items-center gap-1">
-                            <i class="fa-solid fa-medal text-amber-400"></i> ${d.titre}
-                        </span>
-                    `;
-                });
-            }
+            document.getElementById('fDecorationsList').innerHTML = decos.length === 0 ? '<span class="text-slate-500 italic">Aucune.</span>' : decos.map(d => `<span class="px-2.5 py-1 bg-amber-900/40 text-amber-300 rounded-full font-bold"><i class="fa-solid fa-medal"></i> ${d.titre}</span>`).join('');
 
             const inaptes = state.inaptitudes.filter(i => i.nom === nom);
-            const inapteContainer = document.getElementById('fInaptitudesList');
-            if(inaptes.length === 0) {
-                inapteContainer.innerHTML = `<span class="text-emerald-400 font-bold">Aptitude opérationnelle complète</span>`;
-            } else {
-                inapteContainer.innerHTML = inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif}) jusqu'au ${i.dateFin}</div>`).join('');
-            }
+            document.getElementById('fInaptitudesList').innerHTML = inaptes.length === 0 ? '<span class="text-emerald-400 font-bold">Aptitude complète</span>' : inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif})</div>`).join('');
 
-            const histoContainer = document.getElementById('fHistoriqueFormations');
-            histoContainer.innerHTML = '';
-            dossiers.forEach(d => {
+            document.getElementById('fHistoriqueFormations').innerHTML = dossiers.map(d => {
                 const isVal = d.eval && d.eval.evaluee;
-                histoContainer.innerHTML += `
-                    <div class="bg-input p-2.5 rounded border border-slate-700/60 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-white">${d.form}</p>
-                            <p class="text-[10px] text-slate-400">Demande du ${d.dateDemande}</p>
-                        </div>
+                return `
+                    <div class="bg-input p-2 rounded flex justify-between items-center text-xs">
+                        <div><p class="font-bold text-white">${d.form}</p><p class="text-[10px] text-slate-400">${d.dateDemande}</p></div>
                         <div class="flex items-center gap-2">
-                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300 border border-green-700' : 'bg-red-900/50 text-red-300 border border-red-700'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : `<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px] border border-amber-700">En cours</span>`}
-                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2 py-0.5 bg-amber-600 hover:bg-amber-500 text-white rounded text-[10px]" title="Imprimer Diplôme"><i class="fa-solid fa-certificate"></i> Diplôme</button>` : ''}
+                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400">En cours</span>'}
+                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2 py-0.5 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
                         </div>
                     </div>
                 `;
-            });
+            }).join('');
 
             document.getElementById('fNotesPerso').value = mil.notesPerso || '';
             container.classList.remove('hidden');
         };
 
-        window.saveMedicalData = () => {
-            const nom = state.selectedMilitaireId;
-            if (!nom) return;
+        window.saveQualificationsData = () => {
+            if (!state.selectedMilitaireId) return alert("Veuillez d'abord sélectionner un militaire.");
 
-            const sang = document.getElementById('fSang').value;
-            const aptitudeVMA = document.getElementById('fAptitudeVMA').value;
-            const dateVMA = document.getElementById('fDateVMA').value;
-            const allergies = document.getElementById('fAllergies').value;
-            const vaccins = document.getElementById('fVaccins').value;
-
-            const dossiers = state.effectifs.filter(e => e.nom === nom);
-
-            dossiers.forEach(d => {
-                if (d._fbKey) {
-                    db.ref(`effectifs/${d._fbKey}`).update({ sang, aptitudeVMA, dateVMA, allergies, vaccins });
+            const qualificationsSaved = {};
+            QUALIFICATION_KEYS.forEach(key => {
+                const checkbox = document.getElementById(key);
+                if (checkbox) {
+                    qualificationsSaved[key] = checkbox.checked;
                 }
             });
 
-            addLog('MISE_A_JOUR_MEDICALE', `Fiche médicale VMA enregistrée pour : ${nom}`);
-            alert('Fiche médicale enregistrée avec succès !');
+            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
+                if (d._fbKey) {
+                    db.ref(`effectifs/${d._fbKey}/qualifications`).set(qualificationsSaved);
+                }
+            });
+
+            addLog('MISE_A_JOUR_QUALIFS', `Qualifications mises à jour pour ${state.selectedMilitaireId}`);
+            alert('Qualifications et spécialités enregistrées avec succès !');
+        };
+
+        function loadQualificationsMilitaire(militaireObj) {
+            const qualifs = militaireObj.qualifications || {};
+            QUALIFICATION_KEYS.forEach(key => {
+                const checkbox = document.getElementById(key);
+                if (checkbox) {
+                    checkbox.checked = !!qualifs[key];
+                }
+            });
+        }
+
+        window.saveMedicalData = () => {
+            if(!state.selectedMilitaireId) return;
+            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
+                if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({
+                    sang: document.getElementById('fSang').value,
+                    aptitudeVMA: document.getElementById('fAptitudeVMA').value,
+                    dateVMA: document.getElementById('fDateVMA').value,
+                    allergies: document.getElementById('fAllergies').value,
+                    vaccins: document.getElementById('fVaccins').value
+                });
+            });
+            alert('Fiche médicale enregistrée !');
         };
 
         window.saveFicheNotes = () => {
-            const nom = state.selectedMilitaireId;
-            if (!nom) return;
-
-            const notesText = document.getElementById('fNotesPerso').value;
-            const dossiers = state.effectifs.filter(e => e.nom === nom);
-
-            dossiers.forEach(d => {
-                if (d._fbKey) {
-                    db.ref(`effectifs/${d._fbKey}`).update({ notesPerso: notesText });
-                }
+            if(!state.selectedMilitaireId) return;
+            const notes = document.getElementById('fNotesPerso').value;
+            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
+                if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({ notesPerso: notes });
             });
-
-            addLog('MISE_A_JOUR_FICHE', `Notes enregistrées sur la fiche de : ${nom}`);
-            alert('Notes enregistrées avec succès !');
+            alert('Notes enregistrées !');
         };
 
         function renderDecorations() {
-            const container = document.getElementById('decorationsRegistry');
-            container.innerHTML = '';
-            if (state.decorations.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 py-4 text-center">Aucune décoration attribuée dans le registre.</p>`;
-                return;
-            }
-
-            state.decorations.forEach(d => {
-                container.innerHTML += `
-                    <div class="bg-input border p-3 rounded-lg flex justify-between items-start">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-medal text-amber-400 text-base"></i>
-                                <span class="font-bold text-white text-sm">${d.titre}</span>
-                            </div>
-                            <p class="text-blue-400 font-bold">Récipiendaire : ${d.nom}</p>
-                            <p class="text-slate-300 italic">« ${d.motif} »</p>
-                            <p class="text-[10px] text-slate-500">Décernée le ${d.date}</p>
-                        </div>
-                        <button onclick="deleteDecoration('${d._fbKey}')" class="text-red-400 hover:text-red-300 p-1" title="Retirer la médaille"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
+            const container = document.getElementById('decorationsRegistry'); if(!container) return;
+            container.innerHTML = state.decorations.length === 0 ? '<p class="text-slate-500 text-center py-4">Aucune décoration.</p>' : state.decorations.map(d => `
+                <div class="bg-input border p-3 rounded-lg flex justify-between items-start">
+                    <div><div class="flex items-center gap-2"><i class="fa-solid fa-medal text-amber-400"></i><span class="font-bold text-white text-sm">${d.titre}</span></div><p class="text-blue-400 font-bold">Récipiendaire : ${d.nom}</p><p class="text-slate-300 italic">« ${d.motif} »</p></div>
+                    <button onclick="deleteDecoration('${d._fbKey}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         }
 
         function renderSessions() {
-            const container = document.getElementById('sessionsList');
-            container.innerHTML = '';
-            if (state.sessions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full py-4 text-center">Aucune session de formation plannifiée.</p>`;
-                return;
-            }
-
-            state.sessions.forEach(s => {
-                container.innerHTML += `
-                    <div class="bg-input border p-3 rounded-lg flex justify-between items-start space-y-1">
-                        <div>
-                            <span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold border border-blue-700/50">${s.formation}</span>
-                            <p class="text-white font-bold mt-1.5"><i class="fa-solid fa-clock text-slate-400 mr-1"></i> ${s.date}</p>
-                            <p class="text-slate-300"><i class="fa-solid fa-location-dot text-red-400 mr-1"></i> ${s.lieu}</p>
-                            <p class="text-blue-400 font-semibold"><i class="fa-solid fa-user-tie mr-1"></i> Instructeur : ${s.instructeur || 'Non assigné'}</p>
-                        </div>
-                        <button onclick="deleteSession('${s._fbKey}')" class="text-red-400 hover:text-red-300 p-1" title="Annuler session"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
+            const container = document.getElementById('sessionsList'); if(!container) return;
+            container.innerHTML = state.sessions.length === 0 ? '<p class="text-slate-500 col-span-full py-4 text-center">Aucune session.</p>' : state.sessions.map(s => `
+                <div class="bg-input border p-3 rounded-lg flex justify-between items-start">
+                    <div><span class="px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${s.formation}</span><p class="text-white font-bold mt-1.5"><i class="fa-solid fa-clock"></i> ${s.date}</p><p class="text-slate-300"><i class="fa-solid fa-location-dot"></i> ${s.lieu}</p></div>
+                    <button onclick="deleteSession('${s._fbKey}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         }
 
         function renderFiles() {
-            const container = document.getElementById('fileList');
-            container.innerHTML = '';
-            
-            if (!state.files || state.files.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full text-center py-4">Aucun fichier importé</p>`;
-                return;
-            }
-            
-            state.files.forEach(file => {
+            const container = document.getElementById('fileList'); if(!container) return;
+            container.innerHTML = state.files.length === 0 ? '<p class="text-xs text-slate-500 col-span-full text-center py-4">Aucun fichier</p>' : state.files.map(file => {
                 const isImage = file.type && file.type.startsWith('image/');
-                const fileNameSafe = file.name ? file.name : 'Fichier';
-                
-                const card = document.createElement('div');
-                card.className = "bg-card border rounded-lg p-3 flex flex-col justify-between space-y-2";
-                
-                card.innerHTML = `
-                    ${isImage ? `
-                        <div onclick="openImageViewer('${file.content}', '${fileNameSafe.replace(/'/g, "\\'")}')" class="w-full h-24 bg-input rounded overflow-hidden flex items-center justify-center border border-slate-700/50 cursor-pointer hover:opacity-80 transition" title="Cliquer pour agrandir">
-                            <img src="${file.content}" alt="Aperçu" class="max-h-full max-w-full object-contain">
+                return `
+                    <div class="bg-card border rounded-lg p-3 flex flex-col justify-between space-y-2">
+                        ${isImage ? `<div onclick="openImageViewer('${file.content}', '${file.name}')" class="w-full h-24 bg-input rounded overflow-hidden flex items-center justify-center cursor-pointer"><img src="${file.content}" class="max-h-full max-w-full object-contain"></div>` : ''}
+                        <div class="truncate text-xs font-bold text-slate-200"><i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'}"></i> ${file.name}</div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
+                            <a href="${file.content}" download="${file.name}" class="text-blue-400 text-xs px-2 py-1 bg-input rounded"><i class="fa-solid fa-download"></i></a>
+                            <button onclick="deleteFile('${file._fbKey}')" class="text-red-400 text-xs px-2 py-1 bg-red-900/40 rounded"><i class="fa-solid fa-trash"></i></button>
                         </div>
-                    ` : ''}
-                    <div class="truncate text-xs font-bold text-slate-200" title="${fileNameSafe}">
-                        <i class="fa-solid ${isImage ? 'fa-image text-emerald-400' : 'fa-file text-blue-400'} mr-1"></i> ${fileNameSafe}
-                    </div>
-                    <div class="text-[10px] text-slate-400">${file.size || ''}</div>
-                    <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
-                        <a href="${file.content}" download="${fileNameSafe}" class="text-blue-400 hover:text-white text-xs px-2 py-1 bg-input rounded" title="Télécharger">
-                            <i class="fa-solid fa-download"></i>
-                        </a>
-                        <button type="button" class="btn-delete-file text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-900/40 border border-red-700/50 rounded flex items-center gap-1" title="Supprimer">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
                     </div>
                 `;
-                
-                const deleteBtn = card.querySelector('.btn-delete-file');
-                deleteBtn.addEventListener('click', () => {
-                    window.deleteFile(file._fbKey);
-                });
-                
-                container.appendChild(card);
-            });
+            }).join('');
         }
 
+        // RENDU CORRIGÉ ET FLUIDE DE LA LISTE DES NOTES
         function renderNotes() {
-            const container = document.getElementById('notesList');
-            container.innerHTML = '';
-            if (state.notes.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-4">Aucune note. Cliquez sur "+ Nouvelle Note"</p>`;
-                return;
-            }
-            state.notes.forEach(note => {
-                const isActive = note.id === state.activeNoteId;
-                const escapedTitle = (note.title || 'Sans titre').replace(/'/g, "\\'");
-                container.innerHTML += `
-                    <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer transition text-xs flex justify-between items-center ${isActive ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-input hover:opacity-90 text-slate-300'}">
-                        <span class="truncate">${note.title || 'Sans titre'}</span>
-                        <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${escapedTitle}')" class="text-red-400 hover:text-red-300 ml-2" title="Supprimer"><i class="fa-solid fa-trash text-[11px]"></i></button>
-                    </div>
-                `;
-            });
+            const container = document.getElementById('notesList'); if(!container) return;
+            container.innerHTML = state.notes.length === 0 ? '<p class="text-xs text-slate-500 text-center py-4">Aucune note enregistrée</p>' : state.notes.map(note => `
+                <div onclick="selectNote('${note.id}')" class="p-2.5 rounded-lg cursor-pointer text-xs flex justify-between items-center transition ${note.id === state.activeNoteId ? 'bg-blue-600/30 border border-blue-500 text-white font-bold' : 'bg-input text-slate-300 hover:bg-slate-800'}">
+                    <span class="truncate">${note.title || 'Sans titre'}</span>
+                    <button onclick="event.stopPropagation(); deleteNote('${note._fbKey}', '${note.title || 'Note'}')" class="text-red-400 hover:text-red-300 ml-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+
             if (!state.activeNoteId && state.notes.length > 0) {
                 selectNote(state.notes[0].id);
             }
@@ -2166,166 +1681,75 @@
         window.selectNote = (id) => {
             state.activeNoteId = id;
             const note = state.notes.find(n => n.id === id);
-            if (note) {
-                document.getElementById('noteTitle').value = note.title || '';
-                document.getElementById('noteContent').value = note.content || '';
+            if (note) { 
+                document.getElementById('noteTitle').value = note.title || ''; 
+                document.getElementById('noteContent').value = note.content || ''; 
+            } else {
+                document.getElementById('noteTitle').value = '';
+                document.getElementById('noteContent').value = '';
             }
             renderNotes();
         };
 
         function renderEffectifs() {
-            const tbody = document.getElementById('effectifsTable');
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('effectifsTable'); if(!tbody) return;
+            const search = (document.getElementById('searchTable')?.value || '').toLowerCase();
+            const filtered = state.effectifs.filter(e => (e.nom || '').toLowerCase().includes(search) || (e.grade || '').toLowerCase().includes(search) || (e.mat || '').toLowerCase().includes(search));
             
-            const searchVal = (document.getElementById('searchTable')?.value || '').toLowerCase();
-            const filtered = state.effectifs.filter(e => 
-                (e.nom || '').toLowerCase().includes(searchVal) ||
-                (e.grade || '').toLowerCase().includes(searchVal) ||
-                (e.mat || '').toLowerCase().includes(searchVal)
-            );
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">Aucune demande de formation ne correspond à la recherche.</td></tr>`;
-                return;
-            }
-            filtered.forEach(item => {
+            tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-500">Aucun résultat.</td></tr>' : filtered.map(item => {
                 const isValide = item.eval && item.eval.evaluee;
-                const escapedNom = (item.nom || '').replace(/'/g, "\\'");
-                tbody.innerHTML += `
+                return `
                     <tr class="${isValide ? 'row-valide' : 'hover:bg-slate-800/40'} transition">
                         <td class="p-2.5 font-bold text-white">${item.nom}</td>
                         <td class="p-2.5">${item.grade}</td>
                         <td class="p-2.5 font-mono text-xs text-blue-400">${item.mat}</td>
-                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] text-slate-300 font-semibold">${item.aff || 'CPA 10'}</span></td>
+                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px]">${item.aff || ''}</span></td>
                         <td class="p-2.5">${item.form}</td>
-                        <td class="p-2.5">
-                            ${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold border border-green-700">${item.eval.resultat} (${item.eval.note}/20)</span>` : `<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px] border border-amber-700">En attente</span>`}
-                        </td>
+                        <td class="p-2.5">${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold">${item.eval.resultat} (${item.eval.note}/20)</span>` : '<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px]">En attente</span>'}</td>
                         <td class="p-2.5 text-right space-x-1">
-                            <button onclick="openEvalModal('${item.id}')" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[10px]">Évaluer</button>
-                            ${isValide && item.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${item.id}')" class="px-2 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded text-[10px]" title="Imprimer Diplôme"><i class="fa-solid fa-certificate"></i></button>` : ''}
-                            <button onclick="deleteEffectif('${item._fbKey}', '${escapedNom}')" class="px-2 py-1 bg-red-900/40 hover:bg-red-800 border border-red-700/50 text-red-300 rounded text-[10px]" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="openEvalModal('${item.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px]">Évaluer</button>
+                            ${isValide && item.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${item.id}')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
+                            <button onclick="deleteEffectif('${item._fbKey}', '${item.nom}')" class="px-2 py-1 bg-red-900/40 text-red-300 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
-            });
+            }).join('');
         }
 
         function renderFormateurs() {
-            const container = document.getElementById('formateursList');
-            container.innerHTML = '';
-            if (state.formateurs.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full py-2">Aucun formateur enregistré.</p>`;
-                return;
-            }
-            state.formateurs.forEach(f => {
-                const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === f.nom);
-                const escapedNom = (f.nom || '').replace(/'/g, "\\'");
-                container.innerHTML += `
-                    <div class="bg-input border p-3 rounded-lg transition flex items-center justify-between">
-                        <div onclick="openFmtStatsModal('${f.id}')" class="cursor-pointer flex-1">
-                            <p class="text-xs font-bold text-white">${f.nom}</p>
-                            <p class="text-[10px] text-blue-400 font-semibold">${f.role}</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] px-2 py-1 bg-blue-900/40 border border-blue-700/50 text-blue-300 rounded font-semibold">${formationsFaites.length} formation(s)</span>
-                            <button onclick="deleteFormateur('${f._fbKey}', '${escapedNom}')" class="text-red-400 hover:text-red-300 p-1 text-xs" title="Supprimer le formateur"><i class="fa-solid fa-user-minus"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
+            const container = document.getElementById('formateursList'); if(!container) return;
+            container.innerHTML = state.formateurs.length === 0 ? '<p class="text-xs text-slate-500 col-span-full py-2">Aucun formateur.</p>' : state.formateurs.map(f => `
+                <div class="bg-input border p-3 rounded-lg flex items-center justify-between">
+                    <div><p class="text-xs font-bold text-white">${f.nom}</p><p class="text-[10px] text-blue-400">${f.role}</p></div>
+                    <button onclick="deleteFormateur('${f._fbKey}', '${f.nom}')" class="text-red-400 text-xs"><i class="fa-solid fa-user-minus"></i></button>
+                </div>
+            `).join('');
         }
 
         function renderLogs() {
-            const tbody = document.getElementById('logsTable');
-            tbody.innerHTML = '';
-            if (state.logs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">Aucun log enregistré.</td></tr>`;
-                return;
-            }
-            state.logs.forEach(log => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-800/40 text-[11px]">
-                        <td class="p-2 text-slate-400 font-mono">${log.date}</td>
-                        <td class="p-2 text-blue-300">${log.user}</td>
-                        <td class="p-2 font-bold text-white">${log.action}</td>
-                        <td class="p-2 text-slate-300">${log.details}</td>
-                    </tr>
-                `;
-            });
+            const tbody = document.getElementById('logsTable'); if(!tbody) return;
+            tbody.innerHTML = state.logs.length === 0 ? '<tr><td colspan="4" class="p-4 text-center text-slate-500">Aucun log.</td></tr>' : state.logs.map(log => `
+                <tr class="hover:bg-slate-800/40 text-[11px]"><td class="p-2 text-slate-400 font-mono">${log.date}</td><td class="p-2 text-blue-300">${log.user}</td><td class="p-2 font-bold text-white">${log.action}</td><td class="p-2 text-slate-300">${log.details}</td></tr>
+            `).join('');
         }
 
         window.openEvalModal = (candidateId) => {
-            const candidate = state.effectifs.find(item => item.id === candidateId);
-            if (!candidate) return;
-
+            const candidate = state.effectifs.find(item => item.id === candidateId); if(!candidate) return;
             document.getElementById('evalCandidateId').value = candidate.id;
             document.getElementById('evalCandidateName').value = `${candidate.grade} ${candidate.nom}`;
             document.getElementById('evalFormName').value = candidate.form;
-
             const selectFmt = document.getElementById('evalFormateur');
-            selectFmt.innerHTML = '';
-            state.formateurs.forEach(f => {
-                const opt = document.createElement('option');
-                opt.value = f.nom;
-                opt.textContent = `${f.nom} (${f.role})`;
-                selectFmt.appendChild(opt);
-            });
-
+            selectFmt.innerHTML = state.formateurs.map(f => `<option value="${f.nom}">${f.nom} (${f.role})</option>`).join('');
             if (candidate.eval && candidate.eval.evaluee) {
                 document.getElementById('evalResultat').value = candidate.eval.resultat || 'Admis';
                 document.getElementById('evalNote').value = candidate.eval.note || '';
                 document.getElementById('evalMention').value = candidate.eval.mention || 'Pas de mention';
                 if (candidate.eval.formateur) selectFmt.value = candidate.eval.formateur;
                 document.getElementById('evalComments').value = candidate.eval.comments || '';
-            } else {
-                document.getElementById('evalResultat').value = 'Admis';
-                document.getElementById('evalNote').value = '';
-                document.getElementById('evalMention').value = 'Pas de mention';
-                document.getElementById('evalComments').value = '';
             }
-
             document.getElementById('evalModal').classList.remove('hidden');
         };
-
-        window.closeEvalModal = () => {
-            document.getElementById('evalModal').classList.add('hidden');
-        };
-
-        window.openFmtStatsModal = (formateurId) => {
-            const fmt = state.formateurs.find(f => f.id === formateurId);
-            if (!fmt) return;
-
-            document.getElementById('fmtStatsName').textContent = fmt.nom;
-            document.getElementById('fmtStatsRole').textContent = fmt.role;
-
-            const formationsFaites = state.effectifs.filter(e => e.eval && e.eval.evaluee && e.eval.formateur === fmt.nom);
-            document.getElementById('fmtStatsCount').textContent = formationsFaites.length;
-
-            const historyContainer = document.getElementById('fmtStatsHistory');
-            historyContainer.innerHTML = '';
-            if (formationsFaites.length === 0) {
-                historyContainer.innerHTML = `<p class="text-slate-500 text-center py-2">Aucune formation validée pour le moment.</p>`;
-            } else {
-                formationsFaites.forEach(item => {
-                    historyContainer.innerHTML += `
-                        <div class="bg-input p-2 rounded flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-white">${item.nom}</span>
-                                <span class="text-blue-400 block text-[10px]">${item.form}</span>
-                            </div>
-                            <span class="text-green-400 font-bold">${item.eval.note}/20</span>
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById('fmtStatsModal').classList.remove('hidden');
-        };
-
-        window.closeFmtStatsModal = () => {
-            document.getElementById('fmtStatsModal').classList.add('hidden');
-        };
+        window.closeEvalModal = () => document.getElementById('evalModal').classList.add('hidden');
 
         window.onload = init;
     </script>
