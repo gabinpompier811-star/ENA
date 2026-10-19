@@ -325,6 +325,7 @@
                     </span>
                     <select id="dashUniteFilter" onchange="updateDashboard()" class="bg-input border rounded px-3 py-1.5 text-xs focus:outline-none">
                         <option value="TOUTES">Toutes les Unités</option>
+                        <option value="N/A">N/A (Sans affectation)</option>
                         <option value="CPA 10">CPA 10</option>
                         <option value="4e RHFS">4e RHFS</option>
                         <option value="13e RDP">13e RDP</option>
@@ -430,7 +431,8 @@
                         <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs">
+                        <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs font-bold text-blue-300">
+                            <option value="N/A">N/A (Sans affectation)</option>
                             <option value="CPA 10">CPA 10</option>
                             <option value="4e RHFS">4e RHFS</option>
                             <option value="13e RDP">13e RDP</option>
@@ -438,13 +440,36 @@
                             <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
                         </select>
                         <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                            <option value="" disabled selected>-- Formation --</option>
-                            <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
-                            <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
-                            <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
-                            <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
-                            <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
-                            <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
+                            <option value="" disabled selected>-- Formation / Brevet / Permis --</option>
+                            <optgroup label="🎓 Diplômes & Formations Militaires">
+                                <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
+                                <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
+                                <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
+                                <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
+                                <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
+                                <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
+                            </optgroup>
+                            <optgroup label="🪂 Brevets & Qualifications">
+                                <option value="🪂 Brevet Parachutiste">🪂 Brevet Parachutiste</option>
+                                <option value="🥊 Qualification CQB">🥊 Qualification CQB</option>
+                            </optgroup>
+                            <optgroup label="🚘 Permis & Conduite Véhicules">
+                                <option value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)">🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)</option>
+                                <option value="🎯 Opérateur Tourelle">🎯 Opérateur Tourelle</option>
+                                <option value="🔧 Qualification Mécanicien">🔧 Qualification Mécanicien</option>
+                                <option value="🪪 Permis B">🪪 Permis B</option>
+                                <option value="🚛 Permis C">🚛 Permis C</option>
+                                <option value="🚌 Permis D">🚌 Permis D</option>
+                                <option value="🚚 Permis SPL (Conducteur SPL)">🚚 Permis SPL (Conducteur SPL)</option>
+                            </optgroup>
+                            <optgroup label="🎯 Spécialités de Combat">
+                                <option value="🎯 Qualification Tireur d'Élite (TE)">🎯 Qualification Tireur d'Élite (TE)</option>
+                                <option value="🔫 Qualification Tireur de Précision (TP)">🔫 Qualification Tireur de Précision (TP)</option>
+                                <option value="🔭 Qualification Spotteur">🔭 Qualification Spotteur</option>
+                                <option value="🩺 Qualification Médecin / Sanitaire">🩺 Qualification Médecin / Sanitaire</option>
+                                <option value="📻 Qualification Transmetteur Radio">📻 Qualification Transmetteur Radio</option>
+                                <option value="🛸 Qualification Opérateur Drone">🛸 Qualification Opérateur Drone</option>
+                            </optgroup>
                         </select>
                         <input type="datetime-local" id="pDateTime" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Inscrire</button>
@@ -470,6 +495,7 @@
                     <div class="w-full sm:w-72">
                         <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-input border rounded p-2 text-xs font-bold">
                             <option value="TOUTES">Toutes les Unités</option>
+                            <option value="N/A">N/A (Sans affectation)</option>
                             <option value="CPA 10">CPA 10</option>
                             <option value="4e RHFS">4e RHFS</option>
                             <option value="13e RDP">13e RDP</option>
@@ -824,7 +850,7 @@
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
                             <li><strong>Qualifications & Spécialités :</strong> Cases à cocher pour attribuer les brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat (TE, TP, Spotteur, Médecin, Transmetteur, Drone).</li>
-                            <li><strong>Correctifs Notes :</strong> Réparation complète du gestionnaire de notes avec synchronisation automatique Firebase et export PDF.</li>
+                            <li><strong>Correctifs & Inscriptions :</strong> Intégration de l'option N/A pour les militaires sans affectation et liste complète des brevets/permis dans le formulaire ENA.</li>
                         </ul>
                     </div>
 
@@ -1156,7 +1182,7 @@
             let csv = "Militaire;Grade;Matricule;Unite;Formation;Statut;Note\n";
             state.effectifs.forEach(e => {
                 const isVal = e.eval && e.eval.evaluee;
-                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.aff || ''}";"${e.form}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}"\n`;
+                csv += `"${e.nom}";"${e.grade}";"${e.mat}";"${e.aff || 'N/A'}";"${e.form}";"${isVal ? e.eval.resultat : 'En attente'}";"${isVal ? e.eval.note : ''}"\n`;
             });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
@@ -1252,7 +1278,7 @@
                     nom: document.getElementById('pNom').value,
                     grade: document.getElementById('pGrade').value,
                     mat: document.getElementById('pMat').value,
-                    aff: document.getElementById('pUnite').value,
+                    aff: document.getElementById('pUnite').value || 'N/A',
                     form: document.getElementById('pForm').value,
                     dateDemande: `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`,
                     eval: { evaluee: false }
@@ -1351,7 +1377,6 @@
             });
         }
 
-        // CORRECTION COMPLÈTE DE LA SAUVEGARDE DES NOTES
         function saveCurrentNote() {
             if (!state.activeNoteId) return;
             const note = state.notes.find(n => n.id === state.activeNoteId);
@@ -1373,7 +1398,7 @@
 
         function updateDashboard() {
             const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
-            let filteredEff = filterUnite === 'TOUTES' ? state.effectifs : state.effectifs.filter(e => e.aff === filterUnite);
+            let filteredEff = filterUnite === 'TOUTES' ? state.effectifs : state.effectifs.filter(e => (e.aff || 'N/A') === filterUnite);
 
             document.getElementById('dashTotalCandidats').textContent = new Set(filteredEff.map(e => e.nom)).size;
             document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
@@ -1399,13 +1424,13 @@
             const container = document.getElementById('unitesListGrid');
             if(!container) return; container.innerHTML = '';
             const selectedFilter = document.getElementById('uniteFilterSelect')?.value || 'TOUTES';
-            ["CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"].forEach(u => {
+            ["N/A", "CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"].forEach(u => {
                 if (selectedFilter !== 'TOUTES' && selectedFilter !== u) return;
                 const membres = [];
-                state.effectifs.filter(e => e.aff === u).forEach(m => { if(!membres.some(x => x.nom === m.nom)) membres.push(m); });
+                state.effectifs.filter(e => (e.aff || 'N/A') === u).forEach(m => { if(!membres.some(x => x.nom === m.nom)) membres.push(m); });
                 container.innerHTML += `
                     <div class="bg-card border p-4 rounded-xl space-y-3">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2"><h3 class="font-bold text-white text-sm"><i class="fa-solid fa-shield text-blue-400"></i> ${u}</h3><span class="text-xs px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${membres.length}</span></div>
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2"><h3 class="font-bold text-white text-sm"><i class="fa-solid fa-shield text-blue-400"></i> ${u === 'N/A' ? 'N/A (Sans affectation)' : u}</h3><span class="text-xs px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${membres.length}</span></div>
                         <div class="space-y-1.5 max-h-56 overflow-y-auto custom-scroll text-xs">
                             ${membres.length === 0 ? '<p class="text-slate-500 italic py-2">Aucun membre.</p>' : membres.map(m => `
                                 <div class="bg-input p-2 rounded flex justify-between items-center">
@@ -1461,9 +1486,25 @@
         function renderTirs() {
             const container = document.getElementById('tirsHistoryList');
             if(!container) return; container.innerHTML = state.tirs.length === 0 ? '<p class="text-slate-500 italic">Aucun tir.</p>' : state.tirs.slice(-6).reverse().map(t => `
-                <div class="bg-input p-2 rounded flex justify-between items-center"><div><span class="font-bold text-white">${t.nom}</span><span class="text-slate-400 block text-[10px]">${t.arme} (${t.date})</span></div><span class="font-bold text-red-400 text-sm">${t.score}/100</span></div>
+                <div class="bg-input p-2 rounded flex justify-between items-center">
+                    <div>
+                        <span class="font-bold text-white">${t.nom}</span>
+                        <span class="text-slate-400 block text-[10px]">${t.arme} (${t.date})</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-red-400 text-sm">${t.score}/100</span>
+                        <button onclick="deleteTir('${t._fbKey}')" class="text-red-400 hover:text-red-300 text-xs p-1" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
             `).join('');
         }
+
+        window.deleteTir = (fbKey) => {
+            if(confirm("Voulez-vous vraiment supprimer ce score de tir ?")) {
+                db.ref('tirs/' + fbKey).remove();
+                addLog('SUPPRESSION_TIR', 'Score de tir supprimé');
+            }
+        };
 
         function renderInaptitudes() {
             const container = document.getElementById('inaptesActiveList');
@@ -1506,7 +1547,6 @@
         window.deleteFormateur = (k, name) => { if(confirm(`Supprimer ${name} ?`)) db.ref('formateurs/' + k).remove(); };
         window.deleteEffectif = (k, name) => { if(!checkPermission('EXCLURE')) return; if(confirm(`Supprimer ${name} ?`)) db.ref('effectifs/' + k).remove(); };
 
-        // CORRECTION DE LA SUPPRESSION DES NOTES
         window.deleteNote = (k, title) => {
             if (confirm(`Supprimer la note "${title}" ?`)) {
                 db.ref('notes/' + k).remove().then(() => {
@@ -1663,7 +1703,6 @@
             }).join('');
         }
 
-        // RENDU CORRIGÉ ET FLUIDE DE LA LISTE DES NOTES
         function renderNotes() {
             const container = document.getElementById('notesList'); if(!container) return;
             container.innerHTML = state.notes.length === 0 ? '<p class="text-xs text-slate-500 text-center py-4">Aucune note enregistrée</p>' : state.notes.map(note => `
@@ -1703,7 +1742,7 @@
                         <td class="p-2.5 font-bold text-white">${item.nom}</td>
                         <td class="p-2.5">${item.grade}</td>
                         <td class="p-2.5 font-mono text-xs text-blue-400">${item.mat}</td>
-                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px]">${item.aff || ''}</span></td>
+                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] font-bold ${item.aff === 'N/A' || !item.aff ? 'text-slate-400' : 'text-blue-300'}">${item.aff || 'N/A'}</span></td>
                         <td class="p-2.5">${item.form}</td>
                         <td class="p-2.5">${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold">${item.eval.resultat} (${item.eval.note}/20)</span>` : '<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px]">En attente</span>'}</td>
                         <td class="p-2.5 text-right space-x-1">
