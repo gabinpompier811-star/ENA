@@ -350,17 +350,17 @@
                         </div>
                     </div>
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
-                        <div class="p-3 bg-amber-600/20 text-amber-400 rounded-lg"><i class="fa-solid fa-user-graduate text-xl"></i></div>
+                        <div class="p-3 bg-amber-600/20 text-amber-400 rounded-lg"><i class="fa-solid fa-stethoscope text-xl"></i></div>
                         <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold">Total Instructeurs</span>
-                            <p id="dashTotalInstructeurs" class="text-2xl font-black text-amber-400">0</p>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">VMA à Renouveler (&lt;15j)</span>
+                            <p id="dashTotalVMARenouveler" class="text-2xl font-black text-amber-400">0</p>
                         </div>
                     </div>
                     <div class="bg-card border p-4 rounded-xl flex items-center space-x-3">
-                        <div class="p-3 bg-red-600/20 text-red-400 rounded-lg"><i class="fa-solid fa-user-slash text-xl"></i></div>
+                        <div class="p-3 bg-red-600/20 text-red-400 rounded-lg"><i class="fa-solid fa-heart-crack text-xl"></i></div>
                         <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold">Inaptitudes Médicales</span>
-                            <p id="dashTotalInaptes" class="text-2xl font-black text-red-400">0</p>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">VMA Périmées (&gt;2 mois)</span>
+                            <p id="dashTotalVMAPerimee" class="text-2xl font-black text-red-400">0</p>
                         </div>
                     </div>
                 </div>
@@ -376,6 +376,7 @@
                             <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Formations Validées (Admis)</span><span id="dashCountAdmis" class="font-bold text-green-400">0</span></div>
                             <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Formations Ajournées (Échecs)</span><span id="dashCountAjournes" class="font-bold text-red-400">0</span></div>
                             <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Demandes en Attente d'Examen</span><span id="dashCountAttente" class="font-bold text-amber-400">0</span></div>
+                            <div class="flex justify-between p-2 bg-input rounded border border-slate-700/50"><span>Inaptitudes temporaires déclarées (GITA)</span><span id="dashTotalInaptes" class="font-bold text-red-400">0</span></div>
                         </div>
                     </div>
                 </div>
@@ -469,7 +470,7 @@
                         <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
                             <i class="fa-solid fa-notes-medical text-red-400"></i> 3. Informations Médicales & Notes
                         </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                             <div>
                                 <label class="block text-slate-400 mb-1">Groupe Sanguin</label>
                                 <select id="fullSang" class="w-full bg-input border rounded p-2 text-red-400 font-bold">
@@ -481,7 +482,11 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-slate-400 mb-1">Aptitude Opérationnelle</label>
+                                <label class="block text-slate-400 mb-1">Date Visite Médicale (VMA)</label>
+                                <input type="date" id="fullDateVMA" class="w-full bg-input border rounded p-2 font-bold text-white">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Aptitude Déclarée</label>
                                 <select id="fullAptitude" class="w-full bg-input border rounded p-2 font-bold">
                                     <option value="Apte Service FS">🟢 Apte Service FS</option>
                                     <option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option>
@@ -636,13 +641,17 @@
                 <!-- FORMULAIRE VISITE MEDICALE -->
                 <div class="bg-card p-4 rounded-xl border space-y-3">
                     <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                        <i class="fa-solid fa-heart-pulse text-red-500"></i> Formulaire de Visite Médicale (Aptitude VMA & Bilan Sanitaire)
+                        <i class="fa-solid fa-heart-pulse text-red-500"></i> Formulaire de Visite Médicale (Aptitude VMA Obligatoire tous les 2 Mois)
                     </h3>
                     <form id="formFullVisiteMedicale" class="space-y-3 text-xs">
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                             <div>
                                 <label class="block text-slate-400 mb-1 font-semibold">Militaire Concerné *</label>
                                 <select id="medMilitaire" required class="w-full bg-input border rounded p-2 font-bold text-white"></select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-semibold">Date de la Visite *</label>
+                                <input type="date" id="medDateVMA" required class="w-full bg-input border rounded p-2 font-bold text-blue-300">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1 font-semibold">Tension Artérielle (ex: 12/8)</label>
@@ -691,7 +700,7 @@
 
                         <div class="flex justify-end pt-1">
                             <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded shadow flex items-center gap-2">
-                                <i class="fa-solid fa-notes-medical"></i> Valider Visite Médicale
+                                <i class="fa-solid fa-notes-medical"></i> Enregistrer Visite Médicale
                             </button>
                         </div>
                     </form>
@@ -795,11 +804,14 @@
 
                     <!-- FICHE MEDICALE -->
                     <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h4 class="text-xs font-bold text-red-400 flex items-center gap-2 border-b border-slate-700/60 pb-2"><i class="fa-solid fa-notes-medical"></i> Fiche Médicale de Combat & Visite d'Aptitude (VMA)</h4>
+                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                            <h4 class="text-xs font-bold text-red-400 flex items-center gap-2"><i class="fa-solid fa-notes-medical"></i> Fiche Médicale de Combat & Visite d'Aptitude (VMA)</h4>
+                            <div id="fVMABadgeStatus" class="px-3 py-1 rounded text-xs font-bold border"></div>
+                        </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                             <div><label class="block text-slate-400 mb-1">Groupe Sanguin</label><select id="fSang" class="w-full bg-input border rounded p-2 font-bold text-red-400"><option value="Non renseigné">Non renseigné</option><option value="O +">O +</option><option value="O -">O - (Universel)</option><option value="A +">A +</option><option value="A -">A -</option><option value="B +">B +</option><option value="B -">B -</option><option value="AB +">AB +</option><option value="AB -">AB -</option></select></div>
-                            <div><label class="block text-slate-400 mb-1">Aptitude VMA</label><select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold"><option value="Apte Service FS">🟢 Apte Service FS</option><option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option><option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option></select></div>
-                            <div><label class="block text-slate-400 mb-1">Dernière Visite</label><input type="text" id="fDateVMA" readonly class="w-full bg-input border rounded p-2 text-slate-400"></div>
+                            <div><label class="block text-slate-400 mb-1">Aptitude Médicale</label><select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold"><option value="Apte Service FS">🟢 Apte Service FS</option><option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option><option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option></select></div>
+                            <div><label class="block text-slate-400 mb-1">Date Visite Médicale (VMA)</label><input type="date" id="fDateVMA" class="w-full bg-input border rounded p-2 text-white font-bold"></div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
                             <div><label class="block text-slate-400 mb-1">Détails Visite Médicale</label><input type="text" id="fDetailsMed" readonly class="w-full bg-input border rounded p-2 text-slate-300"></div>
@@ -957,12 +969,12 @@
                     <!-- VERSION 10.0 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2 border-emerald-500/50">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i> Version 10.0 - Fiche Visite Médicale VMA & Dossiers Rétroactifs</span>
+                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i> Version 10.0 - Fiche Visite Médicale VMA (Délai 2 mois) & Dossiers Rétroactifs</span>
                             <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>🩺 Suivi Visite Médicale (2 mois) :</strong> Vérification automatique de l'aptitude. Après 60 jours sans VMA, l'opérateur bascule automatiquement en VMA Périmée / Inapte.</li>
                             <li><strong>📁 Onglet "Créer Dossier" :</strong> Enregistrement accéléré des militaires ayant déjà validé de nombreuses formations.</li>
-                            <li><strong>🩺 Fiche Visite Médicale :</strong> Bilan médical complet (Tension, Vision, Audition, Avis) enregistré directement.</li>
                             <li><strong>🎯 Choix du Barème de Tir :</strong> Notation personnalisable (`/100`, `/50`, `/20`, `/10`).</li>
                             <li><strong>🗑️ Suppression globale d'un Opérateur :</strong> Suppression définitive d'un militaire et de l'ensemble de ses acquis.</li>
                         </ul>
@@ -1224,6 +1236,36 @@
             { category: 'specialites', label: '🛸 Opérateur Drone', keyMatch: ['Opérateur Drone'] }
         ];
 
+        // LOGIQUE DE SUIVI VMA (OBLIGATOIRE TOUS LES 2 MOIS = 60 JOURS)
+        function getStatutMedicalVMA(dateVMAStr) {
+            if (!dateVMAStr || dateVMAStr === "Non effectuée" || dateVMAStr === "Non renseigné") {
+                return { status: "PERIME", daysRemaining: 0, label: "🔴 VMA Périmée (Non faite)", class: "bg-red-900/60 text-red-300 border-red-500" };
+            }
+
+            let dateVMA = new Date(dateVMAStr);
+            if (isNaN(dateVMA.getTime())) {
+                const parts = dateVMAStr.split('/');
+                if (parts.length === 3) { dateVMA = new Date(parts[2], parts[1] - 1, parts[0]); }
+            }
+
+            if (isNaN(dateVMA.getTime())) {
+                return { status: "PERIME", daysRemaining: 0, label: "🔴 VMA Périmée (Date invalide)", class: "bg-red-900/60 text-red-300 border-red-500" };
+            }
+
+            const aujourdhui = new Date();
+            const diffMs = aujourdhui - dateVMA;
+            const diffJours = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const joursRestants = 60 - diffJours;
+
+            if (diffJours > 60) {
+                return { status: "PERIME", daysRemaining: joursRestants, label: `🔴 VMA Périmée (${Math.abs(joursRestants)}j de retard)`, class: "bg-red-900/80 text-red-200 border-red-500 font-bold" };
+            } else if (diffJours >= 45) {
+                return { status: "ALERTE", daysRemaining: joursRestants, label: `🟡 À Renouveler (${joursRestants}j restants)`, class: "bg-amber-900/80 text-amber-200 border-amber-500 font-bold" };
+            } else {
+                return { status: "VALIDE", daysRemaining: joursRestants, label: `🟢 VMA Valide (${joursRestants}j restants)`, class: "bg-emerald-900/80 text-emerald-200 border-emerald-500 font-bold" };
+            }
+        }
+
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
         function changeTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('ena_theme', t); }
@@ -1293,25 +1335,10 @@
 
             if (confirm(`⚠️ ATTENTION ACTION IRRÉVERSIBLE !\n\nVoulez-vous SUPPRIMER COMPLÈTEMENT l'opérateur "${nom}" ?\n\nCela effacera définitivement :\n- Toutes ses fiches d'effectifs & formations\n- Ses scores de tirs enregistrés\n- Ses inaptitudes médicales\n- Ses décorations et médailles`)) {
                 
-                // 1. Supprimer dans effectifs
-                state.effectifs.filter(e => e.nom === nom).forEach(e => {
-                    if (e._fbKey) db.ref('effectifs/' + e._fbKey).remove();
-                });
-
-                // 2. Supprimer dans tirs
-                state.tirs.filter(t => t.nom === nom).forEach(t => {
-                    if (t._fbKey) db.ref('tirs/' + t._fbKey).remove();
-                });
-
-                // 3. Supprimer dans inaptitudes
-                state.inaptitudes.filter(i => i.nom === nom).forEach(i => {
-                    if (i._fbKey) db.ref('inaptitudes/' + i._fbKey).remove();
-                });
-
-                // 4. Supprimer dans decorations
-                state.decorations.filter(d => d.nom === nom).forEach(d => {
-                    if (d._fbKey) db.ref('decorations/' + d._fbKey).remove();
-                });
+                state.effectifs.filter(e => e.nom === nom).forEach(e => { if (e._fbKey) db.ref('effectifs/' + e._fbKey).remove(); });
+                state.tirs.filter(t => t.nom === nom).forEach(t => { if (t._fbKey) db.ref('tirs/' + t._fbKey).remove(); });
+                state.inaptitudes.filter(i => i.nom === nom).forEach(i => { if (i._fbKey) db.ref('inaptitudes/' + i._fbKey).remove(); });
+                state.decorations.filter(d => d.nom === nom).forEach(d => { if (d._fbKey) db.ref('decorations/' + d._fbKey).remove(); });
 
                 addLog('PURGE_OPERATEUR', `Purge complète et définitive de l'opérateur ${nom}`);
                 alert(`L'opérateur ${nom} et l'intégralité de son historique ont été supprimés avec succès.`);
@@ -1367,6 +1394,8 @@
                 const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
                 dtInput.value = now.toISOString().slice(0,16);
             }
+            const todayStr = new Date().toISOString().slice(0, 10);
+            if(document.getElementById('medDateVMA')) document.getElementById('medDateVMA').value = todayStr;
             setupListeners();
         }
 
@@ -1413,6 +1442,7 @@
                 const mat = document.getElementById('fullMat').value.trim();
                 const aff = document.getElementById('fullUnite').value;
                 const sang = document.getElementById('fullSang').value;
+                const dateVMA = document.getElementById('fullDateVMA').value || new Date().toISOString().slice(0,10);
                 const aptitude = document.getElementById('fullAptitude').value;
                 const notes = document.getElementById('fullNotes').value;
 
@@ -1430,7 +1460,7 @@
                             id: Date.now().toString() + Math.floor(Math.random()*1000),
                             nom, grade, mat, aff, form: formName,
                             dateDemande: today,
-                            sang, aptitudeVMA: aptitude, notesPerso: notes,
+                            sang, dateVMA, aptitudeVMA: aptitude, notesPerso: notes,
                             eval: { evaluee: true, resultat: 'Admis', note: '20', mention: 'Validation Rétroactive', dateEval: today, formateur: 'Commandement' }
                         });
                     });
@@ -1438,7 +1468,7 @@
                     db.ref('effectifs').push({
                         id: Date.now().toString(),
                         nom, grade, mat, aff, form: '[FGI] Formation Général Initiale',
-                        dateDemande: today, sang, aptitudeVMA: aptitude, notesPerso: notes,
+                        dateDemande: today, sang, dateVMA, aptitudeVMA: aptitude, notesPerso: notes,
                         eval: { evaluee: false }
                     });
                 }
@@ -1456,6 +1486,7 @@
                 const nom = document.getElementById('medMilitaire').value;
                 if (!nom) return alert("Sélectionnez un militaire.");
 
+                const dateVMA = document.getElementById('medDateVMA').value;
                 const tension = document.getElementById('medTension').value;
                 const taille = document.getElementById('medTaille').value;
                 const poids = document.getElementById('medPoids').value;
@@ -1464,7 +1495,6 @@
                 const aptitude = document.getElementById('medAptitudeFinal').value;
                 const medecin = document.getElementById('medMedecin').value;
                 const remarques = document.getElementById('medRemarques').value;
-                const dateToday = new Date().toLocaleDateString('fr-FR');
 
                 const detailsText = `TA: ${tension || 'N/A'}, T/P: ${taille || '?'}cm/${poids || '?'}kg, Vision: ${vision || 'N/A'}, Audition: ${audition}. Obs: ${remarques || 'RAS'}`;
 
@@ -1472,7 +1502,7 @@
                     if(m._fbKey) {
                         db.ref(`effectifs/${m._fbKey}`).update({
                             aptitudeVMA: aptitude,
-                            dateVMA: dateToday,
+                            dateVMA: dateVMA,
                             detailsMedicalExam: detailsText,
                             medecinExaminateur: medecin
                         });
@@ -1627,9 +1657,25 @@
             const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
             let filteredEff = filterUnite === 'TOUTES' ? state.effectifs : state.effectifs.filter(e => (e.aff || 'N/A') === filterUnite);
 
-            document.getElementById('dashTotalCandidats').textContent = new Set(filteredEff.map(e => e.nom)).size;
+            const uniqueMilitairesMap = new Map();
+            filteredEff.forEach(e => { if(!uniqueMilitairesMap.has(e.nom)) uniqueMilitairesMap.set(e.nom, e); });
+            const uniqueMilitaires = Array.from(uniqueMilitairesMap.values());
+
+            document.getElementById('dashTotalCandidats').textContent = uniqueMilitaires.length;
             document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
             document.getElementById('dashTotalInaptes').textContent = state.inaptitudes.length;
+
+            let countVMAPerimee = 0;
+            let countVMARenouveler = 0;
+
+            uniqueMilitaires.forEach(m => {
+                const st = getStatutMedicalVMA(m.dateVMA);
+                if(st.status === 'PERIME') countVMAPerimee++;
+                if(st.status === 'ALERTE') countVMARenouveler++;
+            });
+
+            document.getElementById('dashTotalVMAPerimee').textContent = countVMAPerimee;
+            document.getElementById('dashTotalVMARenouveler').textContent = countVMARenouveler;
 
             const evals = filteredEff.filter(e => e.eval && e.eval.evaluee);
             const admis = evals.filter(e => e.eval.resultat === 'Admis').length;
@@ -1659,12 +1705,20 @@
                     <div class="bg-card border p-4 rounded-xl space-y-3">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2"><h3 class="font-bold text-white text-sm"><i class="fa-solid fa-shield text-blue-400"></i> ${u === 'N/A' ? 'N/A (Sans affectation)' : u}</h3><span class="text-xs px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${membres.length}</span></div>
                         <div class="space-y-1.5 max-h-56 overflow-y-auto custom-scroll text-xs">
-                            ${membres.length === 0 ? '<p class="text-slate-500 italic py-2">Aucun membre.</p>' : membres.map(m => `
+                            ${membres.length === 0 ? '<p class="text-slate-500 italic py-2">Aucun membre.</p>' : membres.map(m => {
+                                const st = getStatutMedicalVMA(m.dateVMA);
+                                return `
                                 <div class="bg-input p-2 rounded flex justify-between items-center">
-                                    <div><p class="font-bold text-white">${m.grade} ${m.nom}</p><p class="text-[10px] text-slate-400">${m.mat}</p></div>
+                                    <div>
+                                        <p class="font-bold text-white flex items-center gap-1.5">
+                                            <span>${m.grade} ${m.nom}</span>
+                                            <span class="text-[9px] px-1.5 py-0.2 rounded border ${st.class}">${st.status === 'VALIDE' ? '🟢' : st.status === 'ALERTE' ? '🟡' : '🔴'}</span>
+                                        </p>
+                                        <p class="text-[10px] text-slate-400">${m.mat}</p>
+                                    </div>
                                     <button onclick="selectMilitaireAndOpenFiche('${m.nom}')" class="text-blue-400 text-[10px] px-2 py-1 bg-slate-800 rounded">Fiche</button>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 `;
@@ -1804,9 +1858,20 @@
 
             renderAutomaticQualifications(dossiers);
 
+            const vmaStatus = getStatutMedicalVMA(mil.dateVMA);
+            const badgeEl = document.getElementById('fVMABadgeStatus');
+            badgeEl.className = `px-3 py-1 rounded text-xs font-bold border ${vmaStatus.class}`;
+            badgeEl.textContent = vmaStatus.label;
+
             document.getElementById('fSang').value = mil.sang || 'Non renseigné';
-            document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
-            document.getElementById('fDateVMA').value = mil.dateVMA || 'Non effectuée';
+            
+            if (vmaStatus.status === 'PERIME') {
+                document.getElementById('fAptitudeVMA').value = 'Inapte Temporaire (GITA)';
+            } else {
+                document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
+            }
+
+            document.getElementById('fDateVMA').value = mil.dateVMA || '';
             document.getElementById('fDetailsMed').value = mil.detailsMedicalExam || 'Aucun bilan récent';
             document.getElementById('fMedecinExam').value = mil.medecinExaminateur || 'Non renseigné';
 
@@ -1814,7 +1879,11 @@
             document.getElementById('fDecorationsList').innerHTML = decos.length === 0 ? '<span class="text-slate-500 italic">Aucune.</span>' : decos.map(d => `<span class="px-2.5 py-1 bg-amber-900/40 text-amber-300 rounded-full font-bold"><i class="fa-solid fa-medal"></i> ${d.titre}</span>`).join('');
 
             const inaptes = state.inaptitudes.filter(i => i.nom === nom);
-            document.getElementById('fInaptitudesList').innerHTML = inaptes.length === 0 ? '<span class="text-emerald-400 font-bold">Aptitude complète</span>' : inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif})</div>`).join('');
+            let inaptText = inaptes.length === 0 ? '<span class="text-emerald-400 font-bold">Aptitude opérationnelle complète</span>' : inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif})</div>`).join('');
+            if(vmaStatus.status === 'PERIME') {
+                inaptText += `<div class="text-red-400 font-bold mt-1">🔴 Visite Médicale (VMA) Périmée (&gt;2 mois)</div>`;
+            }
+            document.getElementById('fInaptitudesList').innerHTML = inaptText;
 
             document.getElementById('fHistoriqueFormations').innerHTML = dossiers.map(d => {
                 const isVal = d.eval && d.eval.evaluee;
@@ -1868,10 +1937,15 @@
 
         window.saveMedicalData = () => {
             if(!state.selectedMilitaireId) return;
+            const sang = document.getElementById('fSang').value;
+            const dateVMA = document.getElementById('fDateVMA').value;
+            const aptitude = document.getElementById('fAptitudeVMA').value;
+
             state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
                 if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({
-                    sang: document.getElementById('fSang').value,
-                    aptitudeVMA: document.getElementById('fAptitudeVMA').value
+                    sang: sang,
+                    dateVMA: dateVMA,
+                    aptitudeVMA: aptitude
                 });
             });
             alert('Fiche médicale enregistrée !');
@@ -1955,9 +2029,13 @@
             
             tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-500">Aucun résultat.</td></tr>' : filtered.map(item => {
                 const isValide = item.eval && item.eval.evaluee;
+                const vmaStatus = getStatutMedicalVMA(item.dateVMA);
                 return `
                     <tr class="${isValide ? 'row-valide' : 'hover:bg-slate-800/40'} transition">
-                        <td class="p-2.5 font-bold text-white">${item.nom}</td>
+                        <td class="p-2.5 font-bold text-white flex items-center gap-1.5">
+                            <span>${item.nom}</span>
+                            <span title="${vmaStatus.label}" class="text-[9px] px-1.5 py-0.2 rounded border ${vmaStatus.class}">${vmaStatus.status === 'VALIDE' ? '🟢' : vmaStatus.status === 'ALERTE' ? '🟡' : '🔴'}</span>
+                        </td>
                         <td class="p-2.5">${item.grade}</td>
                         <td class="p-2.5 font-mono text-xs text-blue-400">${item.mat}</td>
                         <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] font-bold ${item.aff === 'N/A' || !item.aff ? 'text-slate-400' : 'text-blue-300'}">${item.aff || 'N/A'}</span></td>
