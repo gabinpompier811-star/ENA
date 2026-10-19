@@ -427,22 +427,26 @@
 
                     <div>
                         <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-400"></i> 2. Formations, Brevets & Qualifications Déjà Validés
+                            <i class="fa-solid fa-graduation-cap text-amber-400"></i> 2. Formations, Brevets & Qualifications Déjà Validés (Référentiel Complet ENA)
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
-                                <h4 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1">🎓 Diplômes & Brevets ENA</h4>
+                                <h4 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1">🎓 Diplômes ENA Officiels</h4>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FGI] Formation Général Initiale"> <span>[FGI] Formation Général Initiale</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CAT1] Brevet Caporal"> <span>[CAT1] Brevet Caporal</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CME] Brevet Caporal-Chef"> <span>[CME] Brevet Caporal-Chef</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CC1] Caporal-Chef de 1ère classe"> <span>[CC1] Caporal-Chef de 1ère classe</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG1 / BS1] Brevet de Sergent"> <span>[FG1 / BS1] Brevet de Sergent</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[BM2] Brevet Militaire de Niveau 2"> <span>[BM2] Brevet Militaire N2</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste"> <span>[FG2 / BSTAT] Brevet d'Adjoint</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[BM2] Brevet Militaire de niveau 2"> <span>[BM2] Brevet Militaire N2</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG3] Brevet de Major"> <span>[FG3] Brevet de Major</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FAE] Formation d'Application"> <span>[FAE] Formation d'Application</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CDU] Cursus de Chef d'Unité"> <span>[CDU] Cursus de Chef d'Unité</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[DEM] Diplôme d'État-Major"> <span>[DEM] Diplôme d'État-Major</span></label>
                             </div>
 
                             <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
-                                <h4 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1">🚘 Permis & Brevets</h4>
+                                <h4 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1">🚘 Permis & Brevets Annexes</h4>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🪂 Brevet Parachutiste"> <span>🪂 Brevet Parachutiste</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🥊 Qualification CQB"> <span>🥊 Qualification CQB</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)"> <span>🚘 Pilote Blindés (VBCI/VAB)</span></label>
@@ -569,14 +573,18 @@
                         </select>
                         <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
                             <option value="" disabled selected>-- Formation / Brevet / Permis --</option>
-                            <optgroup label="🎓 Diplômes & Formations Militaires">
-                                <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
+                            <optgroup label="🎓 Diplômes ENA (Officiels)">
+                                <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale (Soldat 1cl)</option>
                                 <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
                                 <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
+                                <option value="[CC1] Caporal-Chef de 1ère classe">[CC1] Caporal-Chef de 1ère classe</option>
                                 <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
-                                <option value="[BM2] Brevet Militaire de Niveau 2">[BM2] Brevet Militaire de Niveau 2</option>
                                 <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
-                                <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
+                                <option value="[BM2] Brevet Militaire de niveau 2">[BM2] Brevet Militaire de niveau 2</option>
+                                <option value="[FG3] Brevet de Major">[FG3] Brevet de Major</option>
+                                <option value="[FAE] Formation d'Application">[FAE] Formation d'Application (Lieutenant)</option>
+                                <option value="[CDU] Cursus de Chef d'Unité">[CDU] Cursus de Chef d'Unité (Capitaine)</option>
+                                <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major (Commandant)</option>
                             </optgroup>
                             <optgroup label="🪂 Brevets & Qualifications">
                                 <option value="🪂 Brevet Parachutiste">🪂 Brevet Parachutiste</option>
@@ -883,13 +891,14 @@
             <!-- RÉFÉRENTIEL -->
             <section id="tab-programmes" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
-                    <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel ENA</h2>
-                    <p class="text-xs text-slate-400">Programmes officiels et prérequis</p>
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel ENA (Cursus & Grades)</h2>
+                    <p class="text-xs text-slate-400">Programmes officiels et correspondances des grades</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-blue-900/45 text-blue-300 rounded font-bold">[FGI] Base</span><h4 class="font-bold text-white pt-1">Formation Général Initiale</h4><p class="text-slate-400">Tir de combat, topographie, discipline.</p></div>
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-emerald-900/45 text-emerald-300 rounded font-bold">[CAT1] Gradés</span><h4 class="font-bold text-white pt-1">Brevet Caporal / Chef</h4><p class="text-slate-400">Pédagogie, escouade, commandement.</p></div>
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-purple-900/45 text-purple-300 rounded font-bold">[DEM] Officiers</span><h4 class="font-bold text-white pt-1">État-Major</h4><p class="text-slate-400">Planification stratégique et opérations.</p></div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-blue-900/45 text-blue-300 rounded font-bold">[FGI] Base</span><h4 class="font-bold text-white pt-1">Formation Général Initiale</h4><p class="text-slate-400">Grade : Soldat de 1er Classe</p></div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-emerald-900/45 text-emerald-300 rounded font-bold">[CAT1] Gradés</span><h4 class="font-bold text-white pt-1">Brevet Caporal / Chef</h4><p class="text-slate-400">Grades : Caporal & Caporal-Chef</p></div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-amber-900/45 text-amber-300 rounded font-bold">[FG1/BS1] Sous-Off</span><h4 class="font-bold text-white pt-1">Brevet de Sergent</h4><p class="text-slate-400">Grade : Sergent & Sergent-Chef</p></div>
+                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-purple-900/45 text-purple-300 rounded font-bold">[CDU/DEM] Officiers</span><h4 class="font-bold text-white pt-1">État-Major & Capitaine</h4><p class="text-slate-400">Grades : Lieutenant, Capitaine, Commandant</p></div>
                 </div>
             </section>
 
@@ -969,14 +978,13 @@
                     <!-- VERSION 10.0 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2 border-emerald-500/50">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i> Version 10.0 - Fiche Visite Médicale VMA (Délai 2 mois) & Dossiers Rétroactifs</span>
+                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i> Version 10.0 - Référentiel Complet ENA & Visite Médicale (2 mois)</span>
                             <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                            <li><strong>🎓 Intégration du Référentiel ENA Complet :</strong> Ajout de tous les diplômes officiels ([FGI], [CAT1], [CME], [CC1], [FG1/BS1], [FG2/BSTAT], [BM2], [FG3], [FAE], [CDU], [DEM]) avec correspondance exacte des grades.</li>
                             <li><strong>🩺 Suivi Visite Médicale (2 mois) :</strong> Vérification automatique de l'aptitude. Après 60 jours sans VMA, l'opérateur bascule automatiquement en VMA Périmée / Inapte.</li>
-                            <li><strong>📁 Onglet "Créer Dossier" :</strong> Enregistrement accéléré des militaires ayant déjà validé de nombreuses formations.</li>
-                            <li><strong>🎯 Choix du Barème de Tir :</strong> Notation personnalisable (`/100`, `/50`, `/20`, `/10`).</li>
-                            <li><strong>🗑️ Suppression globale d'un Opérateur :</strong> Suppression définitive d'un militaire et de l'ensemble de ses acquis.</li>
+                            <li><strong>📁 Onglet "Créer Dossier" & 🗑️ Suppression d'Opérateur :</strong> Outils administratifs renforcés.</li>
                         </ul>
                     </div>
 
@@ -987,8 +995,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">19/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Qualifications & Spécialités :</strong> Attribuer les brevets (Para, CQB, FGI), permis/véhicules (Pilote VBCI/VAB, Tourelle, Mécanicien, Permis B/C/D, SPL) et spécialités de combat.</li>
-                            <li><strong>Correctifs & Inscriptions :</strong> Option N/A pour les militaires sans affectation.</li>
+                            <li><strong>Qualifications & Spécialités :</strong> Attribuer les brevets, permis et spécialités de combat.</li>
                         </ul>
                     </div>
 
@@ -1000,7 +1007,6 @@
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
                             <li><strong>Hiérarchie à 6 Rôles :</strong> Intégration des rôles Fondateur, Co-Fondateur, Administrateur, Modérateur, Personnel ENA et Personnel Opérateur.</li>
-                            <li><strong>Contrôle des Droits :</strong> Protection anti-bannissement des fondateurs et interdiction des exclusions non autorisées.</li>
                         </ul>
                     </div>
 
@@ -1012,7 +1018,6 @@
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
                             <li><strong>Dossier Médical Militaire :</strong> Suivi du groupe sanguin et des visites VMA.</li>
-                            <li><strong>Thèmes Dynamiques :</strong> Choix entre Night Slate, Desert Camo et OLED Black.</li>
                         </ul>
                     </div>
 
@@ -1023,8 +1028,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Menu Notifications Dropdown :</strong> Alertes en direct lors des modifications et actions importantes.</li>
-                            <li><strong>Rapports Logs PDF :</strong> Exportation complète de l'historique d'activité au format PDF.</li>
+                            <li><strong>Menu Notifications Dropdown :</strong> Alertes en direct.</li>
                         </ul>
                     </div>
 
@@ -1035,8 +1039,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Carnet de Tir :</strong> Enregistrement des tirs par arme (HK416, Glock, SCAR-H, PGM).</li>
-                            <li><strong>Module Inaptitudes (GITA) :</strong> Déclaration temporaire d'inaptitudes sportives, de tir ou de saut parachutiste.</li>
+                            <li><strong>Carnet de Tir :</strong> Enregistrement des tirs par arme.</li>
                         </ul>
                     </div>
 
@@ -1047,8 +1050,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Onglet Unités & Sections :</strong> Organisation des militaires par régiment (CPA 10, 4e RHFS, 13e RDP, Commandos Marine, GCP).</li>
-                            <li><strong>Filtrage Global :</strong> Tri instantané des statistiques du tableau de bord selon l'unité sélectionnée.</li>
+                            <li><strong>Unités & Sections :</strong> Organisation par régiment.</li>
                         </ul>
                     </div>
 
@@ -1059,120 +1061,18 @@
                             <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Générateur de Diplômes (PDF) :</strong> Génération de brevets officiels ENA imprimables avec signatures.</li>
-                            <li><strong>Registre des Décorations :</strong> Remise de médailles et affichage automatique sur les fiches.</li>
+                            <li><strong>Générateur de Diplômes :</strong> Brevets officiels ENA imprimables.</li>
                         </ul>
                     </div>
 
-                    <!-- VERSION 3.5 -->
+                    <!-- VERSION 3.0 à 1.0 -->
                     <div class="bg-card border rounded-xl p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-indigo-400"><i class="fa-solid fa-save mr-1"></i> Version 3.5 - Backup JSON & Gestionnaire de Notes</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Sauvegarde Backup JSON :</strong> Exportation globale de toute la base de données.</li>
-                            <li><strong>Éditeur de Notes :</strong> Prise de note multi-pages avec sauvegarde automatique.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 3.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-blue-400"><i class="fa-solid fa-chart-pie mr-1"></i> Version 3.0 - Grand Tableau de Bord & Planning ENA</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Tableau de Bord Statistiques :</strong> Taux de réussite, totaux de candidats et échecs.</li>
-                            <li><strong>Onglet Planning & Sessions :</strong> Convocations avec lieux et instructeurs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.8 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-300"><i class="fa-solid fa-magnifying-glass mr-1"></i> Version 2.8 - Moteur de Recherche Dynamique & Correctifs UI</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Moteur de Recherche :</strong> Filtrage temps réel des effectifs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.4 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-purple-400"><i class="fa-solid fa-user-gear mr-1"></i> Version 2.4 - Module Suivi Individuel & Corps Instructeurs</span>
-                            <span class="text-[10px] text-slate-500 font-mono">18/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Fiches Individuelles :</strong> Parcours militaires et notes du commandement.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.1 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-teal-400"><i class="fa-solid fa-shield-halved mr-1"></i> Version 2.1 - Authentification & Modal Sécurisé</span>
-                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Écran d'Authentification :</strong> Formulaire de connexion sécurisé au démarrage.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 2.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-emerald-400"><i class="fa-solid fa-database mr-1"></i> Version 2.0 - Migration Cloud Firebase Realtime Database</span>
-                            <span class="text-[10px] text-slate-500 font-mono">17/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Synchronisation Cloud :</strong> Stockage temps réel avec Firebase.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.5 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-blue-300"><i class="fa-solid fa-folder-open mr-1"></i> Version 1.5 - Modale d'Évaluation & Gestion de Fichiers</span>
-                            <span class="text-[10px] text-slate-500 font-mono">16/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Modale d'Évaluation :</strong> Saisie des notes et avis instructeurs.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.2 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-300"><i class="fa-solid fa-list-check mr-1"></i> Version 1.2 - Tableau des Effectifs & Formations ENA</span>
-                            <span class="text-[10px] text-slate-500 font-mono">16/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Suivi des Formations :</strong> Tableau d'inscription FGI, CAT1, CME, FG1, DEM.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.1 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-sliders mr-1"></i> Version 1.1 - Référentiel de Cours & Amélioration UI</span>
+                            <span class="font-bold text-xs text-slate-400"><i class="fa-solid fa-flag mr-1"></i> Versions 3.0 à 1.0 - Fondations, Dashboard & Interface</span>
                             <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
                         </div>
                         <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Référentiel :</strong> Publication des programmes d'instruction.</li>
-                        </ul>
-                    </div>
-
-                    <!-- VERSION 1.0 -->
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <span class="font-bold text-xs text-slate-500"><i class="fa-solid fa-flag mr-1"></i> Version 1.0 - Lancement Initial du Portail ENA</span>
-                            <span class="text-[10px] text-slate-500 font-mono">15/10/2026</span>
-                        </div>
-                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
-                            <li><strong>Initialisation :</strong> Structure HTML/JS et navigation par onglets.</li>
+                            <li>Mise en place des bases de données et de l'interface tactile.</li>
                         </ul>
                     </div>
 
@@ -1214,11 +1114,16 @@
             { category: 'brevets', label: '🪂 Brevet Parachutiste', keyMatch: ['Brevet Parachutiste'] },
             { category: 'brevets', label: '🥊 Qualification CQB', keyMatch: ['Qualification CQB'] },
             { category: 'brevets', label: '🪖 FGI Validé', keyMatch: ['Formation Général Initiale'] },
-            { category: 'brevets', label: '📜 BM2 (Brevet Militaire N2)', keyMatch: ['Brevet Militaire de Niveau 2', 'BM2'] },
             { category: 'brevets', label: '🎗️ CAT1 (Brevet Caporal)', keyMatch: ['Brevet Caporal'] },
             { category: 'brevets', label: '🎗️ CME (Brevet Caporal-Chef)', keyMatch: ['Brevet Caporal-Chef'] },
+            { category: 'brevets', label: '🎗️ CC1 (Caporal-Chef 1cl)', keyMatch: ['Caporal-Chef de 1ère classe'] },
             { category: 'brevets', label: '🎖️ FG1 / BS1 (Sergent)', keyMatch: ['Brevet de Sergent'] },
-            { category: 'brevets', label: '⭐ DEM (Diplôme d\'État-Major)', keyMatch: ['Diplôme d\'État-Major'] },
+            { category: 'brevets', label: '🎖️ FG2 / BSTAT (Adjoint)', keyMatch: ['Brevet d\'Adjoint'] },
+            { category: 'brevets', label: '📜 BM2 (Militaire N2)', keyMatch: ['Brevet Militaire de niveau 2', 'BM2'] },
+            { category: 'brevets', label: '🎖️ FG3 (Major)', keyMatch: ['Brevet de Major'] },
+            { category: 'brevets', label: '⭐ FAE (Application)', keyMatch: ['Formation d\'Application'] },
+            { category: 'brevets', label: '⭐ CDU (Chef d\'Unité)', keyMatch: ['Cursus de Chef d\'Unité'] },
+            { category: 'brevets', label: '⭐ DEM (État-Major)', keyMatch: ['Diplôme d\'État-Major'] },
 
             { category: 'permis', label: '🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)', keyMatch: ['Pilote Blindés'] },
             { category: 'permis', label: '🎯 Opérateur Tourelle', keyMatch: ['Opérateur Tourelle'] },
