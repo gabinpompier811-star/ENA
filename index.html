@@ -520,8 +520,56 @@
                         </button>
                     </div>
                 </form>
+            
+                <!-- SECTION LISTE DES DOSSIERS ENREGISTRÉS (AVEC RECHERCHE ET FILTRES) -->
+                <div class="bg-card border border-slate-800 rounded-xl p-5 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-users-gear text-blue-400"></i> Registre des Dossiers Enregistrés
+                            </h3>
+                            <p class="text-[11px] text-slate-400">Recherchez, modifiez ou supprimez les fiches du personnel militaire.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                            <div class="relative flex-1 md:w-64">
+                                <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                                <input type="text" id="searchDossier" oninput="filtrerDossiers()" placeholder="Rechercher par nom, matricule..." class="w-full bg-input border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
+                            </div>
+                            <select id="filterUnite" onchange="filtrerDossiers()" class="bg-input border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-300 font-medium focus:border-emerald-500 outline-none">
+                                <option value="">Toutes les unités</option>
+                                <option value="CPA 10">CPA 10</option>
+                                <option value="4e RHFS">4e RHFS</option>
+                                <option value="13e RDP">13e RDP</option>
+                                <option value="Commandos Jaubert (marine)">Commandos Jaubert</option>
+                                <option value="Groupe de Commandos Parachutistes (GCP)">GCP</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </div>
+                    </div>
+            
+                    <div class="overflow-x-auto custom-scroll rounded-lg border border-slate-800 bg-slate-900/50">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900 text-slate-400 uppercase font-bold border-b border-slate-800">
+                                <tr>
+                                    <th class="p-3">Militaire / Matricule</th>
+                                    <th class="p-3">Grade</th>
+                                    <th class="p-3">Unité</th>
+                                    <th class="p-3 text-center">Qualifications</th>
+                                    <th class="p-3">Aptitude & Sanguin</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableDossiersBody" class="divide-y divide-slate-800/60">
+                                <!-- Généré dynamiquement en JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="noDossierMessage" class="hidden text-center py-8 text-slate-500 text-xs">
+                        <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-600"></i>
+                        <p>Aucun dossier militaire enregistré pour le moment.</p>
+                    </div>
+                </div>
             </section>
-
             <!-- DOCUMENTS -->
             <section id="tab-docs" class="tab-content hidden h-full p-4 flex flex-col space-y-4">
                 <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
