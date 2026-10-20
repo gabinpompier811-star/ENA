@@ -384,16 +384,25 @@
 
             <!-- ONGLET CRÉER UN DOSSIER DIRECTEMENT -->
             <section id="tab-creerdossier" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <div class="bg-card border border-emerald-500/40 p-4 rounded-xl bg-emerald-950/10">
-                    <h2 class="text-base font-bold text-emerald-400 flex items-center gap-2">
-                        <i class="fa-solid fa-user-plus text-xl"></i> Créer / Mettre à Jour un Dossier Militaire Rétroactif
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-1">
-                        Formulaire pour enregistrer directement un militaire qui possède déjà des diplômes/brevets/permis. Cochez toutes ses qualifications pour synchroniser son dossier dans tout le site.
-                    </p>
+                <div class="bg-card border border-emerald-500/40 p-4 rounded-xl bg-emerald-950/10 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 id="formTitle" class="text-base font-bold text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus text-xl"></i> Créer / Mettre à Jour un Dossier Militaire Rétroactif
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Formulaire pour enregistrer directement un militaire qui possède déjà des diplômes/brevets/permis. Cochez toutes ses qualifications pour synchroniser son dossier dans tout le site.
+                        </p>
+                    </div>
+                    <div id="cancelEditContainer" class="hidden">
+                        <button type="button" onclick="resetFormulaire()" class="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/40 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-xmark"></i> Annuler la modification
+                        </button>
+                    </div>
                 </div>
-
-                <form id="formFullDossier" class="bg-card p-5 rounded-xl border space-y-5 text-xs">
+            
+                <form id="formFullDossier" class="bg-card p-5 rounded-xl border border-slate-700/60 space-y-5 text-xs">
+                    <input type="hidden" id="editIndex" value="-1">
+            
                     <div>
                         <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
                             <i class="fa-solid fa-id-card text-blue-400"></i> 1. État Civil & Affectation
@@ -401,19 +410,19 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div>
                                 <label class="block text-slate-400 mb-1 font-semibold">Nom & Prénom *</label>
-                                <input type="text" id="fullNom" placeholder="ex: CPT Jean Dupont" required class="w-full bg-input border rounded p-2 text-white">
+                                <input type="text" id="fullNom" placeholder="ex: CPT Jean Dupont" required class="w-full bg-input border border-slate-700 rounded p-2 text-white focus:border-emerald-500 outline-none">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1 font-semibold">Grade *</label>
-                                <input type="text" id="fullGrade" placeholder="ex: Capitaine" required class="w-full bg-input border rounded p-2 text-white">
+                                <input type="text" id="fullGrade" placeholder="ex: Capitaine" required class="w-full bg-input border border-slate-700 rounded p-2 text-white focus:border-emerald-500 outline-none">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1 font-semibold">Matricule *</label>
-                                <input type="text" id="fullMat" placeholder="ex: MAT-8890" required class="w-full bg-input border rounded p-2 text-white">
+                                <input type="text" id="fullMat" placeholder="ex: MAT-8890" required class="w-full bg-input border border-slate-700 rounded p-2 text-white focus:border-emerald-500 outline-none">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1 font-semibold">Unité / Affectation</label>
-                                <select id="fullUnite" class="w-full bg-input border rounded p-2 font-bold text-blue-300">
+                                <select id="fullUnite" class="w-full bg-input border border-slate-700 rounded p-2 font-bold text-blue-300 focus:border-emerald-500 outline-none">
                                     <option value="N/A">N/A (Sans affectation)</option>
                                     <option value="CPA 10">CPA 10</option>
                                     <option value="4e RHFS">4e RHFS</option>
@@ -424,7 +433,7 @@
                             </div>
                         </div>
                     </div>
-
+            
                     <div>
                         <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
                             <i class="fa-solid fa-graduation-cap text-amber-400"></i> 2. Formations, Brevets & Qualifications Déjà Validés (Référentiel Complet ENA)
@@ -432,44 +441,44 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
                                 <h4 class="font-bold text-amber-300 border-b border-slate-700/40 pb-1">🎓 Diplômes ENA Officiels</h4>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FGI] Formation Général Initiale"> <span>[FGI] Formation Général Initiale</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CAT1] Brevet Caporal"> <span>[CAT1] Brevet Caporal</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CME] Brevet Caporal-Chef"> <span>[CME] Brevet Caporal-Chef</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CC1] Caporal-Chef de 1ère classe"> <span>[CC1] Caporal-Chef de 1ère classe</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG1 / BS1] Brevet de Sergent"> <span>[FG1 / BS1] Brevet de Sergent</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste"> <span>[FG2 / BSTAT] Brevet d'Adjoint</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[BM2] Brevet Militaire de niveau 2"> <span>[BM2] Brevet Militaire N2</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FG3] Brevet de Major"> <span>[FG3] Brevet de Major</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[FAE] Formation d'Application"> <span>[FAE] Formation d'Application</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[CDU] Cursus de Chef d'Unité"> <span>[CDU] Cursus de Chef d'Unité</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="[DEM] Diplôme d'État-Major"> <span>[DEM] Diplôme d'État-Major</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[FGI] Formation Général Initiale"> <span>[FGI] Formation Général Initiale</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[CAT1] Brevet Caporal"> <span>[CAT1] Brevet Caporal</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[CME] Brevet Caporal-Chef"> <span>[CME] Brevet Caporal-Chef</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[CC1] Caporal-Chef de 1ère classe"> <span>[CC1] Caporal-Chef de 1ère classe</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[FG1 / BS1] Brevet de Sergent"> <span>[FG1 / BS1] Brevet de Sergent</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste"> <span>[FG2 / BSTAT] Brevet d'Adjoint</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[BM2] Brevet Militaire de niveau 2"> <span>[BM2] Brevet Militaire N2</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[FG3] Brevet de Major"> <span>[FG3] Brevet de Major</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[FAE] Formation d'Application"> <span>[FAE] Formation d'Application</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[CDU] Cursus de Chef d'Unité"> <span>[CDU] Cursus de Chef d'Unité</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="[DEM] Diplôme d'État-Major"> <span>[DEM] Diplôme d'État-Major</span></label>
                             </div>
-
+            
                             <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
                                 <h4 class="font-bold text-blue-300 border-b border-slate-700/40 pb-1">🚘 Permis & Brevets Annexes</h4>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🪂 Brevet Parachutiste"> <span>🪂 Brevet Parachutiste</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🥊 Qualification CQB"> <span>🥊 Qualification CQB</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)"> <span>🚘 Pilote Blindés (VBCI/VAB)</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🎯 Opérateur Tourelle"> <span>🎯 Opérateur Tourelle</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🔧 Qualification Mécanicien"> <span>🔧 Qualification Mécanicien</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🪪 Permis B"> <span>🪪 Permis B</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚛 Permis C"> <span>🚛 Permis C</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚌 Permis D"> <span>🚌 Permis D</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🚚 Permis SPL (Conducteur SPL)"> <span>🚚 Permis SPL</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🪂 Brevet Parachutiste"> <span>🪂 Brevet Parachutiste</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🥊 Qualification CQB"> <span>🥊 Qualification CQB</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)"> <span>🚘 Pilote Blindés (VBCI/VAB)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🎯 Opérateur Tourelle"> <span>🎯 Opérateur Tourelle</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🔧 Qualification Mécanicien"> <span>🔧 Qualification Mécanicien</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🪪 Permis B"> <span>🪪 Permis B</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🚛 Permis C"> <span>🚛 Permis C</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🚌 Permis D"> <span>🚌 Permis D</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🚚 Permis SPL (Conducteur SPL)"> <span>🚚 Permis SPL</span></label>
                             </div>
-
+            
                             <div class="bg-input p-3 rounded-lg border border-slate-700/60 space-y-2">
                                 <h4 class="font-bold text-red-400 border-b border-slate-700/40 pb-1">🎯 Spécialités de Combat</h4>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🎯 Qualification Tireur d'Élite (TE)"> <span>🎯 Tireur d'Élite (TE)</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🔫 Qualification Tireur de Précision (TP)"> <span>🔫 Tireur de Précision (TP)</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🔭 Qualification Spotteur"> <span>🔭 Spotteur</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🩺 Qualification Médecin / Sanitaire"> <span>🩺 Médecin / Sanitaire</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="📻 Qualification Transmetteur Radio"> <span>📻 Transmetteur Radio</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check" value="🛸 Qualification Opérateur Drone"> <span>🛸 Opérateur Drone</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🎯 Qualification Tireur d'Élite (TE)"> <span>🎯 Tireur d'Élite (TE)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🔫 Qualification Tireur de Précision (TP)"> <span>🔫 Tireur de Précision (TP)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🔭 Qualification Spotteur"> <span>🔭 Spotteur</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🩺 Qualification Médecin / Sanitaire"> <span>🩺 Médecin / Sanitaire</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="📻 Qualification Transmetteur Radio"> <span>📻 Transmetteur Radio</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" class="full-form-check rounded border-slate-700 bg-slate-900 text-emerald-500" value="🛸 Qualification Opérateur Drone"> <span>🛸 Opérateur Drone</span></label>
                             </div>
                         </div>
                     </div>
-
+            
                     <div>
                         <h3 class="text-sm font-bold text-white border-b border-slate-700/60 pb-2 mb-3 flex items-center gap-2">
                             <i class="fa-solid fa-notes-medical text-red-400"></i> 3. Informations Médicales & Notes
@@ -477,7 +486,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                             <div>
                                 <label class="block text-slate-400 mb-1">Groupe Sanguin</label>
-                                <select id="fullSang" class="w-full bg-input border rounded p-2 text-red-400 font-bold">
+                                <select id="fullSang" class="w-full bg-input border border-slate-700 rounded p-2 text-red-400 font-bold focus:border-emerald-500 outline-none">
                                     <option value="Non renseigné">Non renseigné</option>
                                     <option value="O +">O +</option><option value="O -">O - (Universel)</option>
                                     <option value="A +">A +</option><option value="A -">A -</option>
@@ -487,11 +496,11 @@
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Date Visite Médicale (VMA)</label>
-                                <input type="date" id="fullDateVMA" class="w-full bg-input border rounded p-2 font-bold text-white">
+                                <input type="date" id="fullDateVMA" class="w-full bg-input border border-slate-700 rounded p-2 font-bold text-white focus:border-emerald-500 outline-none">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Aptitude Déclarée</label>
-                                <select id="fullAptitude" class="w-full bg-input border rounded p-2 font-bold">
+                                <select id="fullAptitude" class="w-full bg-input border border-slate-700 rounded p-2 font-bold focus:border-emerald-500 outline-none">
                                     <option value="Apte Service FS">🟢 Apte Service FS</option>
                                     <option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option>
                                     <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option>
@@ -499,14 +508,14 @@
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Notes du Commandement</label>
-                                <input type="text" id="fullNotes" placeholder="Remarques et appréciations..." class="w-full bg-input border rounded p-2">
+                                <input type="text" id="fullNotes" placeholder="Remarques et appréciations..." class="w-full bg-input border border-slate-700 rounded p-2 text-white focus:border-emerald-500 outline-none">
                             </div>
                         </div>
                     </div>
-
+            
                     <div class="pt-3 border-t border-slate-700 flex justify-end gap-3">
-                        <button type="reset" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded">Effacer</button>
-                        <button type="submit" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded shadow-lg text-sm flex items-center gap-2">
+                        <button type="reset" onclick="resetFormulaire()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded transition">Effacer</button>
+                        <button type="submit" id="btnSubmitDossier" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded shadow-lg text-sm flex items-center gap-2 transition">
                             <i class="fa-solid fa-floppy-disk"></i> Enregistrer Dossier Rétroactif
                         </button>
                     </div>
