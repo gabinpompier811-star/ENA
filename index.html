@@ -867,43 +867,184 @@
                         </div>
                     </div>
 
-                    <!-- FICHE MEDICALE -->
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                            <h4 class="text-xs font-bold text-red-400 flex items-center gap-2"><i class="fa-solid fa-notes-medical"></i> Fiche Médicale de Combat & Visite d'Aptitude (VMA)</h4>
-                            <div id="fVMABadgeStatus" class="px-3 py-1 rounded text-xs font-bold border"></div>
+                    <!-- FICHE MÉDICALE & DOSSIER DU MILITAIRE (VERSION AMÉLIORÉE) -->
+                    <div class="space-y-6 text-slate-200 font-sans">
+                    
+                        <!-- HEADER DE SECTION / FICHE MÉDICALE -->
+                        <div class="bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl border border-slate-800/80 shadow-2xl space-y-4 transition-all">
+                            <div class="flex flex-wrap justify-between items-center border-b border-slate-800 pb-3 gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
+                                        <i class="fa-solid fa-heart-pulse text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-bold text-slate-100 tracking-wide uppercase">Fiche Médicale de Combat</h3>
+                                        <p class="text-[11px] text-slate-400">Visite Médicale d'Aptitude (VMA) & Constantes</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- BADGE DE STATUT DYNAMIQUE -->
+                                <div id="fVMABadgeStatus" class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 flex items-center gap-2 shadow-sm">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span>VMA À JOUR</span>
+                                </div>
+                            </div>
+                    
+                            <!-- GRILLE DES CONSTANTES & APTITUDE -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                                <!-- GROUPE SANGUIN -->
+                                <div class="bg-slate-950/40 border border-slate-800/60 p-3 rounded-xl focus-within:border-red-500/50 transition">
+                                    <label class="block text-[11px] uppercase tracking-wider font-semibold text-slate-400 mb-1.5 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-droplet text-red-500"></i> Groupe Sanguin
+                                    </label>
+                                    <select id="fSang" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 font-bold text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/40 cursor-pointer">
+                                        <option value="Non renseigné">Non renseigné</option>
+                                        <option value="O +">O +</option>
+                                        <option value="O -">O - (Donneur Universel)</option>
+                                        <option value="A +">A +</option>
+                                        <option value="A -">A -</option>
+                                        <option value="B +">B +</option>
+                                        <option value="B -">B -</option>
+                                        <option value="AB +">AB + (Receveur Universel)</option>
+                                        <option value="AB -">AB -</option>
+                                    </select>
+                                </div>
+                    
+                                <!-- APTITUDE MÉDICALE -->
+                                <div class="bg-slate-950/40 border border-slate-800/60 p-3 rounded-xl focus-within:border-emerald-500/50 transition">
+                                    <label class="block text-[11px] uppercase tracking-wider font-semibold text-slate-400 mb-1.5 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-shield-halved text-emerald-400"></i> Aptitude Opérationnelle
+                                    </label>
+                                    <select id="fAptitudeVMA" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 cursor-pointer">
+                                        <option value="Apte Service FS" class="text-emerald-400">🟢 Apte Service FS (Forces Spéciales)</option>
+                                        <option value="Apte avec Restrictions" class="text-amber-400">🟡 Apte avec Restrictions / Réserves</option>
+                                        <option value="Inapte Temporaire (GITA)" class="text-red-400">🔴 Inapte Temporaire (GITA)</option>
+                                        <option value="Inapte Définitif" class="text-rose-600">🚫 Inapte Définitif</option>
+                                    </select>
+                                </div>
+                    
+                                <!-- DATE VMA -->
+                                <div class="bg-slate-950/40 border border-slate-800/60 p-3 rounded-xl focus-within:border-blue-500/50 transition">
+                                    <label class="block text-[11px] uppercase tracking-wider font-semibold text-slate-400 mb-1.5 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-calendar-check text-blue-400"></i> Date Dernière VMA
+                                    </label>
+                                    <input type="date" id="fDateVMA" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2 text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+                                </div>
+                            </div>
+                    
+                            <!-- DÉTAILS MÉDICAUX ET EXAMINATEUR -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-1">
+                                <div class="sm:col-span-2 bg-slate-950/20 border border-slate-800/50 p-3 rounded-xl">
+                                    <label class="block text-[11px] uppercase tracking-wider font-semibold text-slate-400 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-file-medical text-slate-400"></i> Observations / Allergies
+                                    </label>
+                                    <input type="text" id="fDetailsMed" readonly placeholder="Aucune restriction ou allergie connue..." class="w-full bg-slate-900/60 border border-slate-800 rounded-lg p-2 text-slate-300 focus:outline-none text-xs">
+                                </div>
+                    
+                                <div class="bg-slate-950/20 border border-slate-800/50 p-3 rounded-xl">
+                                    <label class="block text-[11px] uppercase tracking-wider font-semibold text-slate-400 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-user-md text-slate-400"></i> Médecin Examinateur
+                                    </label>
+                                    <input type="text" id="fMedecinExam" readonly placeholder="Dr. --" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg p-2 text-slate-300 focus:outline-none text-xs font-mono">
+                                </div>
+                            </div>
+                    
+                            <!-- BOUTON D'ENREGISTREMENT -->
+                            <div class="flex justify-end pt-2 border-t border-slate-800/60">
+                                <button onclick="saveMedicalData()" class="px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-950/50 flex items-center gap-2 transition-all transform active:scale-95">
+                                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer Fiche Médicale
+                                </button>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                            <div><label class="block text-slate-400 mb-1">Groupe Sanguin</label><select id="fSang" class="w-full bg-input border rounded p-2 font-bold text-red-400"><option value="Non renseigné">Non renseigné</option><option value="O +">O +</option><option value="O -">O - (Universel)</option><option value="A +">A +</option><option value="A -">A -</option><option value="B +">B +</option><option value="B -">B -</option><option value="AB +">AB +</option><option value="AB -">AB -</option></select></div>
-                            <div><label class="block text-slate-400 mb-1">Aptitude Médicale</label><select id="fAptitudeVMA" class="w-full bg-input border rounded p-2 font-bold"><option value="Apte Service FS">🟢 Apte Service FS</option><option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option><option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire</option></select></div>
-                            <div><label class="block text-slate-400 mb-1">Date Visite Médicale (VMA)</label><input type="date" id="fDateVMA" class="w-full bg-input border rounded p-2 text-white font-bold"></div>
+                    
+                        <!-- DÉCORATIONS ET INAPTITUDES -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- DÉCORATIONS -->
+                            <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3">
+                                <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                                    <i class="fa-solid fa-award text-sm"></i> Décorations & Distinctions
+                                </h4>
+                                <div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs min-h-[48px] items-center">
+                                    <!-- Badges d'exemple -->
+                                    <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-lg flex items-center gap-1.5 shadow-sm">
+                                        <i class="fa-solid fa-medal text-amber-400"></i> Croix de la Valeur Militaire
+                                    </span>
+                                    <span class="px-3 py-1 bg-slate-800 border border-slate-700 text-slate-300 rounded-lg flex items-center gap-1.5 shadow-sm">
+                                        <i class="fa-solid fa-ribbon text-blue-400"></i> Médaille de la Défense Nationale
+                                    </span>
+                                </div>
+                            </div>
+                    
+                            <!-- INAPTITUDES & RESTRICTIONS -->
+                            <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3">
+                                <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                                    <i class="fa-solid fa-triangle-exclamation text-sm"></i> Inaptitudes & Restrictions
+                                </h4>
+                                <div id="fInaptitudesList" class="text-xs text-slate-300 min-h-[48px] flex items-center">
+                                    <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-2.5 w-full">
+                                        <i class="fa-solid fa-circle-check text-base"></i>
+                                        <span class="font-medium">Aptitude opérationnelle complète. Aucune restriction enregistrée.</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
-                            <div><label class="block text-slate-400 mb-1">Détails Visite Médicale</label><input type="text" id="fDetailsMed" readonly class="w-full bg-input border rounded p-2 text-slate-300"></div>
-                            <div><label class="block text-slate-400 mb-1">Médecin Examinateur</label><input type="text" id="fMedecinExam" readonly class="w-full bg-input border rounded p-2 text-slate-300"></div>
+                    
+                        <!-- ACTIONS ET EXPORTATION PDF -->
+                        <div class="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                            <span class="text-[11px] text-slate-400 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-info text-blue-400"></i> Document officiel généré sous contrôle du service de santé des armées.
+                            </span>
+                            <button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all active:scale-95">
+                                <i class="fa-solid fa-file-pdf text-red-400 text-sm"></i> Imprimer Fiche PDF
+                            </button>
                         </div>
-                        <div class="flex justify-end pt-2"><button onclick="saveMedicalData()" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded shadow">Enregistrer Fiche Médicale</button></div>
+                    
+                        <!-- HISTORIQUE ET NOTES DU COMMANDEMENT -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- FORMATIONS -->
+                            <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3">
+                                <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-graduation-cap text-amber-400 text-sm"></i> Historique Formations
+                                </h4>
+                                <div id="fHistoriqueFormations" class="space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs custom-scroll">
+                                    <!-- Élément de formation modèle -->
+                                    <div class="p-2.5 bg-slate-950/40 border border-slate-800/70 rounded-xl flex justify-between items-center hover:border-slate-700 transition">
+                                        <div class="space-y-0.5">
+                                            <div class="font-bold text-slate-200">Stage Commando Nivel 2</div>
+                                            <div class="text-[10px] text-slate-400 flex items-center gap-2">
+                                                <span><i class="fa-solid fa-calendar text-slate-500"></i> 12/03/2024</span>
+                                                <span>•</span>
+                                                <span class="text-emerald-400">Mention Très Bien</span>
+                                            </div>
+                                        </div>
+                                        <span class="px-2 py-0.5 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md font-semibold">Validé</span>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- NOTES DU COMMANDEMENT -->
+                            <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3 flex flex-col">
+                                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                                        <i class="fa-solid fa-pen-to-square text-blue-400 text-sm"></i> Notes du Commandement
+                                    </h4>
+                                    <span class="text-[10px] text-slate-500 font-mono" id="noteCharCounter">0 car.</span>
+                                </div>
+                                
+                                <div class="flex-1 flex flex-col space-y-2">
+                                    <textarea id="fNotesPerso" oninput="document.getElementById('noteCharCounter').innerText = this.value.length + ' car.'" placeholder="Saisissez des remarques tactiques, évaluations confidentielles ou suivis administratifs..." class="w-full flex-1 min-h-[130px] bg-slate-950/50 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-transparent resize-none leading-relaxed transition"></textarea>
+                                    
+                                    <div class="flex justify-between items-center pt-1">
+                                        <span class="text-[10px] text-slate-500 italic">Visibilité restreinte - Officier/Commandement</span>
+                                        <button onclick="saveFicheNotes()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-950/50 flex items-center gap-2 transition-all active:scale-95">
+                                            <i class="fa-solid fa-check"></i> Enregistrer Note
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
                     </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-card p-3 rounded-xl border space-y-1"><h4 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-award"></i> Décorations :</h4><div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs"></div></div>
-                        <div class="bg-card p-3 rounded-xl border space-y-1"><h4 class="text-xs font-bold text-red-400"><i class="fa-solid fa-notes-medical"></i> Inaptitude :</h4><div id="fInaptitudesList" class="text-xs text-slate-300">Aptitude opérationnelle complète</div></div>
-                    </div>
-
-                    <div class="flex justify-end"><button onclick="generatePDF('ficheContainer', 'Fiche_Militaire_' + state.selectedMilitaireId + '.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Imprimer Fiche PDF</button></div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-card p-4 rounded-xl border space-y-3">
-                            <h4 class="text-xs font-bold text-slate-200 border-b border-slate-700/60 pb-2"><i class="fa-solid fa-award text-amber-400"></i> Historique Formations</h4>
-                            <div id="fHistoriqueFormations" class="space-y-2 max-h-60 overflow-y-auto custom-scroll text-xs"></div>
-                        </div>
-                        <div class="bg-card p-4 rounded-xl border space-y-3 flex flex-col">
-                            <h4 class="text-xs font-bold text-slate-200 border-b border-slate-700/60 pb-2"><i class="fa-solid fa-pen-to-square text-blue-400"></i> Notes du Commandement</h4>
-                            <textarea id="fNotesPerso" placeholder="Saisissez des notes..." class="w-full flex-1 min-h-[120px] bg-input border rounded p-2.5 text-xs focus:outline-none resize-none"></textarea>
-                            <button onclick="saveFicheNotes()" class="self-end px-4 py-1.5 bg-blue-600 text-white font-medium text-xs rounded shadow">Enregistrer note</button>
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <!-- PLANNING -->
