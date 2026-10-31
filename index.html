@@ -1837,15 +1837,18 @@
             });
             if (elTotalInaptes) elTotalInaptes.textContent = inaptesFiltres.length;
         
-            // 2. Calculs du statut médical VMA
+            // 2. Calculs du statut médical VMA (sécurisé texte ou objet)
             let countVMAPerimee = 0;
             let countVMARenouveler = 0;
         
             uniqueMilitaires.forEach(m => {
                 if (typeof getStatutMedicalVMA === 'function' && m.dateVMA) {
                     const st = getStatutMedicalVMA(m.dateVMA);
-                    if (st && st.status === 'PERIME') countVMAPerimee++;
-                    if (st && st.status === 'ALERTE') countVMARenouveler++;
+                    // Gère si st est un objet {status: '...'} ou directement une chaîne de caractères
+                    const statusValue = (typeof st === 'object' && st !== null) ? (st.status || st.etat) : st;
+                    
+                    if (statusValue && String(statusValue).toUpperCase() === 'PERIME') countVMAPerimee++;
+                    if (statusValue && String(statusValue).toUpperCase() === 'ALERTE') countVMARenouveler++;
                 }
             });
         
@@ -1854,10 +1857,10 @@
             if (elVMAPerimee) elVMAPerimee.textContent = countVMAPerimee;
             if (elVMARenouveler) elVMARenouveler.textContent = countVMARenouveler;
         
-            // 3. Calculs des évaluations et taux de réussite
-            const evals = filteredEff.filter(e => e.eval && e.eval.evaluee);
-            const admis = evals.filter(e => e.eval.resultat === 'Admis').length;
-            const ajournes = evals.filter(e => e.eval.resultat === 'Ajourné').length;
+            // 3. Calculs des évaluations et taux de réussite (insensible à la casse)
+            const evals = filteredEff.filter(e => e.eval && (e.eval.evaluee === true || e.eval.evaluee === 'true' || e.eval.evaluee === 1));
+            const admis = evals.filter(e => e.eval.resultat && String(e.eval.resultat).trim().toLowerCase() === 'admis').length;
+            const ajournes = evals.filter(e => e.eval.resultat && (String(e.eval.resultat).trim().toLowerCase() === 'ajourné' || String(e.eval.resultat).trim().toLowerCase() === 'ajourne')).length;
             const attente = filteredEff.length - evals.length;
             const tauxReussite = evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0;
         
