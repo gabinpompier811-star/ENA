@@ -1839,18 +1839,22 @@
             });
             if (elTotalInaptes) elTotalInaptes.textContent = inaptesFiltres.length;
         
-            // 2. Calculs du statut médical VMA (sécurisé texte ou objet)
+            // 2. Calculs du statut médical VMA (prend en compte les anciens sans date)
             let countVMAPerimee = 0;
             let countVMARenouveler = 0;
         
             uniqueMilitaires.forEach(m => {
-                if (typeof getStatutMedicalVMA === 'function' && m.dateVMA) {
-                    const st = getStatutMedicalVMA(m.dateVMA);
-                    // Gère si st est un objet {status: '...'} ou directement une chaîne de caractères
-                    const statusValue = (typeof st === 'object' && st !== null) ? (st.status || st.etat) : st;
-                    
-                    if (statusValue && String(statusValue).toUpperCase() === 'PERIME') countVMAPerimee++;
-                    if (statusValue && String(statusValue).toUpperCase() === 'ALERTE') countVMARenouveler++;
+                if (typeof getStatutMedicalVMA === 'function') {
+                    // Si la date est absente (anciens dossiers), on les compte direct comme périmés/à valider
+                    if (!m.dateVMA) {
+                        countVMAPerimee++;
+                    } else {
+                        const st = getStatutMedicalVMA(m.dateVMA);
+                        const statusValue = (typeof st === 'object' && st !== null) ? (st.status || st.etat) : st;
+                        
+                        if (statusValue && String(statusValue).toUpperCase() === 'PERIME') countVMAPerimee++;
+                        if (statusValue && String(statusValue).toUpperCase() === 'ALERTE') countVMARenouveler++;
+                    }
                 }
             });
         
