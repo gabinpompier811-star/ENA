@@ -1823,7 +1823,7 @@
             });
             const uniqueMilitaires = Array.from(uniqueMilitairesMap.values());
         
-            // 1. Mise à jour des compteurs principaux (avec vérification de l'existence des éléments)
+            // 1. Mise à jour des compteurs principaux
             const elTotalCandidats = document.getElementById('dashTotalCandidats');
             const elTotalInstructeurs = document.getElementById('dashTotalInstructeurs');
             const elTotalInaptes = document.getElementById('dashTotalInaptes');
@@ -1839,31 +1839,17 @@
             });
             if (elTotalInaptes) elTotalInaptes.textContent = inaptesFiltres.length;
         
-            // 2. Calculs du statut médical VMA (prend en compte les anciens sans date)
-            let countVMAPerimee = 0;
-            let countVMARenouveler = 0;
-        
-            uniqueMilitaires.forEach(m => {
-                if (typeof getStatutMedicalVMA === 'function') {
-                    // Si la date est absente (anciens dossiers), on les compte direct comme périmés/à valider
-                    if (!m.dateVMA) {
-                        countVMAPerimee++;
-                    } else {
-                        const st = getStatutMedicalVMA(m.dateVMA);
-                        const statusValue = (typeof st === 'object' && st !== null) ? (st.status || st.etat) : st;
-                        
-                        if (statusValue && String(statusValue).toUpperCase() === 'PERIME') countVMAPerimee++;
-                        if (statusValue && String(statusValue).toUpperCase() === 'ALERTE') countVMARenouveler++;
-                    }
-                }
-            });
+            // 2. Calculs du statut médical VMA (Total - Ceux qui ont une VMA)
+            const totalMilitaires = uniqueMilitaires.length;
+            const avecVMA = uniqueMilitaires.filter(m => m.dateVMA && m.dateVMA.trim() !== "").length;
+            const countVMAPerimee = totalMilitaires - avecVMA;
         
             const elVMAPerimee = document.getElementById('dashTotalVMAPerimee');
             const elVMARenouveler = document.getElementById('dashTotalVMARenouveler');
             if (elVMAPerimee) elVMAPerimee.textContent = countVMAPerimee;
-            if (elVMARenouveler) elVMARenouveler.textContent = countVMARenouveler;
+            if (elVMARenouveler) elVMARenouveler.textContent = 0; // Remis à 0 pour éviter les conflits
         
-            // 3. Calculs des évaluations et taux de réussite (insensible à la casse)
+            // 3. Calculs des évaluations et taux de réussite
             const evals = filteredEff.filter(e => e.eval && (e.eval.evaluee === true || e.eval.evaluee === 'true' || e.eval.evaluee === 1));
             const admis = evals.filter(e => e.eval.resultat && String(e.eval.resultat).trim().toLowerCase() === 'admis').length;
             const ajournes = evals.filter(e => e.eval.resultat && (String(e.eval.resultat).trim().toLowerCase() === 'ajourné' || String(e.eval.resultat).trim().toLowerCase() === 'ajourne')).length;
