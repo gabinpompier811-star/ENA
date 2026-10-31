@@ -667,6 +667,7 @@
                         <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
+                        <input type="date" id="pDateVMA" required class="bg-input border rounded px-2.5 py-1.5 text-xs" title="Date de la Visite Médicale (VMA)">
                         <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs font-bold text-blue-300">
                             <option value="N/A">N/A (Sans affectation)</option>
                             <option value="CPA 10">CPA 10</option>
@@ -1691,14 +1692,15 @@
                 if (!checkPermission('MOD')) return;
                 const dt = document.getElementById('pDateTime').value;
                 const dateObj = dt ? new Date(dt) : new Date();
-                db.ref('effectifs').push({
+               db.ref('effectifs').push({
                     id: Date.now().toString(),
                     nom: document.getElementById('pNom').value,
                     grade: document.getElementById('pGrade').value,
                     mat: document.getElementById('pMat').value,
                     aff: document.getElementById('pUnite').value || 'N/A',
                     form: document.getElementById('pForm').value,
-                    dateDemande: `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}`,
+                    dateVMA: document.getElementById('pDateVMA').value, // <--- Ajoute cette ligne ici
+                    dateDemande: `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}`,
                     eval: { evaluee: false }
                 });
                 e.target.reset();
