@@ -1805,42 +1805,89 @@
 
         function updateDashboard() {
             const filterUnite = document.getElementById('dashUniteFilter')?.value || 'TOUTES';
-            let filteredEff = filterUnite === 'TOUTES' ? state.effectifs : state.effectifs.filter(e => (e.aff || 'N/A') === filterUnite);
-
+            const effectifs = state?.effectifs || [];
+            
+            // Filtrage des effectifs par unité
+            let filteredEff = filterUnite === 'TOUTES' 
+                ? effectifs 
+                : effectifs.filter(e => (e.aff || 'N/A') === filterUnite);
+        
+            // Extraction des militaires uniques
             const uniqueMilitairesMap = new Map();
-            filteredEff.forEach(e => { if(!uniqueMilitairesMap.has(e.nom)) uniqueMilitairesMap.set(e.nom, e); });
+            filteredEff.forEach(e => { 
+                if (e.nom && !uniqueMilitairesMap.has(e.nom)) {
+                    uniqueMilitairesMap.set(e.nom, e); 
+                }
+            });
             const uniqueMilitaires = Array.from(uniqueMilitairesMap.values());
-
-            document.getElementById('dashTotalCandidats').textContent = uniqueMilitaires.length;
-            document.getElementById('dashTotalInstructeurs').textContent = state.formateurs.length;
-            document.getElementById('dashTotalInaptes').textContent = state.inaptitudes.length;
-
+        
+            // 1. Mise à jour des compteurs principaux (avec vérification de l'existence des éléments)
+            const elTotalCandidats = document.getElementById('dashTotalCandidats');
+            const elTotalInstructeurs = document.getElementById('dashTotalInstructeurs');
+            const elTotalInaptes = document.getElementById('dashTotalInaptes');
+        
+            if (elTotalCandidats) elTotalCandidats.textContent = uniqueMilitaires.length;
+            if (elTotalInstructeurs) elTotalInstructeurs.textContent = (state?.formateurs || []).length;
+        
+            // Filtrage dynamique des inaptes selon l'unité sélectionnée
+            const inaptesFiltres = (state?.inaptitudes || []).filter(i => {
+                if (filterUnite === 'TOUTES') return true;
+                const mil = effectifs.find(e => e.nom === i.nom);
+                return mil && (mil.aff || 'N/A') === filterUnite;
+            });
+            if (elTotalInaptes) elTotalInaptes.textContent = inaptesFiltres.length;
+        
+            // 2. Calculs du statut médical VMA
             let countVMAPerimee = 0;
             let countVMARenouveler = 0;
-
+        
             uniqueMilitaires.forEach(m => {
-                const st = getStatutMedicalVMA(m.dateVMA);
-                if(st.status === 'PERIME') countVMAPerimee++;
-                if(st.status === 'ALERTE') countVMARenouveler++;
+                if (typeof getStatutMedicalVMA === 'function' && m.dateVMA) {
+                    const st = getStatutMedicalVMA(m.dateVMA);
+                    if (st && st.status === 'PERIME') countVMAPerimee++;
+                    if (st && st.status === 'ALERTE') countVMARenouveler++;
+                }
             });
-
-            document.getElementById('dashTotalVMAPerimee').textContent = countVMAPerimee;
-            document.getElementById('dashTotalVMARenouveler').textContent = countVMARenouveler;
-
+        
+            const elVMAPerimee = document.getElementById('dashTotalVMAPerimee');
+            const elVMARenouveler = document.getElementById('dashTotalVMARenouveler');
+            if (elVMAPerimee) elVMAPerimee.textContent = countVMAPerimee;
+            if (elVMARenouveler) elVMARenouveler.textContent = countVMARenouveler;
+        
+            // 3. Calculs des évaluations et taux de réussite
             const evals = filteredEff.filter(e => e.eval && e.eval.evaluee);
             const admis = evals.filter(e => e.eval.resultat === 'Admis').length;
-            document.getElementById('dashCountAdmis').textContent = admis;
-            document.getElementById('dashCountAjournes').textContent = evals.filter(e => e.eval.resultat === 'Ajourné').length;
-            document.getElementById('dashCountAttente').textContent = filteredEff.length - evals.length;
-            document.getElementById('dashTauxReussite').textContent = (evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0) + '%';
-
+            const ajournes = evals.filter(e => e.eval.resultat === 'Ajourné').length;
+            const attente = filteredEff.length - evals.length;
+            const tauxReussite = evals.length > 0 ? Math.round((admis / evals.length) * 100) : 0;
+        
+            const elAdmis = document.getElementById('dashCountAdmis');
+            const elAjournes = document.getElementById('dashCountAjournes');
+            const elAttente = document.getElementById('dashCountAttente');
+            const elTaux = document.getElementById('dashTauxReussite');
+        
+            if (elAdmis) elAdmis.textContent = admis;
+            if (elAjournes) elAjournes.textContent = ajournes;
+            if (elAttente) elAttente.textContent = attente;
+            if (elTaux) elTaux.textContent = tauxReussite + '%';
+        
+            // 4. Affichage des dernières évaluations évaluées
             const recentContainer = document.getElementById('dashRecentEvals');
-            recentContainer.innerHTML = evals.length === 0 ? '<p class="text-slate-500 text-center py-2">Aucune évaluation.</p>' : evals.slice(-4).reverse().map(e => `
-                <div class="bg-input p-2 rounded flex justify-between items-center">
-                    <div><p class="font-bold text-white">${e.nom}</p><p class="text-[10px] text-blue-400">${e.form}</p></div>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${e.eval.resultat} (${e.eval.note}/20)</span>
-                </div>
-            `).join('');
+            if (recentContainer) {
+                recentContainer.innerHTML = evals.length === 0 
+                    ? '<p class="text-slate-500 text-center py-2 text-xs">Aucune évaluation.</p>' 
+                    : evals.slice(-4).reverse().map(e => `
+                        <div class="bg-input p-2 rounded flex justify-between items-center text-xs">
+                            <div>
+                                <p class="font-bold text-white">${e.nom || 'Inconnu'}</p>
+                                <p class="text-[10px] text-blue-400">${e.form || 'Formation'}</p>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">
+                                ${e.eval.resultat} (${e.eval.note ?? 0}/20)
+                            </span>
+                        </div>
+                    `).join('');
+            }
         }
 
         function renderUnites() {
