@@ -665,305 +665,351 @@
                     </div>
                 </form>
             
-                <!-- SECTION LISTE DES DOSSIERS ENREGISTRÉS (AVEC RECHERCHE ET FILTRES) -->
-                <div class="bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl p-6 space-y-5 shadow-2xl">
-                    
-                    <!-- En-tête & Contrôles de Recherche -->
-                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
-                        <div class="space-y-1">
+                <!-- DOCUMENTS -->
+                <section id="tab-docs" class="tab-content hidden h-full p-6 flex flex-col space-y-5 bg-slate-950 text-slate-100">
+                    <div class="flex items-center justify-between bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800 shadow-xl">
+                        <label class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer flex items-center gap-2.5 shadow-lg shadow-blue-900/30 transition-all active:scale-95">
+                            <i class="fa-solid fa-file-import text-sm"></i> Importer Fichiers (Photos, PDF...)
+                            <input type="file" id="fileInput" multiple class="hidden">
+                        </label>
+                        <span class="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sauvegarde synchro Firebase active
+                        </span>
+                    </div>
+                    <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5 overflow-y-auto custom-scroll flex-1 p-4 bg-slate-900/40 rounded-2xl border border-slate-800/80 shadow-inner"></div>
+                </section>
+                
+                <!-- ENA & FORMATIONS -->
+                <section id="tab-ena" class="tab-content hidden h-full p-6 overflow-y-auto custom-scroll space-y-6 bg-slate-950 text-slate-100">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Ajouter un Instructeur -->
+                        <div class="bg-slate-900/60 backdrop-blur-md p-5 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-user-tie text-sky-400"></i> Ajouter un Instructeur
+                            </h3>
+                            <form id="formAddFormateur" class="space-y-3.5">
+                                <div class="space-y-1">
+                                    <label class="block text-[11px] font-medium text-slate-400">Identité</label>
+                                    <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none transition">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[11px] font-medium text-slate-400">Rôle au sein de l'ENA</label>
+                                    <div class="relative">
+                                        <select id="fmtRole" required class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none transition appearance-none">
+                                            <option value="" disabled selected>-- Sélectionner un rôle --</option>
+                                            <option value="Directeur de l'ENA">Directeur de l'ENA</option>
+                                            <option value="Directeur Adjoint de l'ENA">Directeur Adjoint de l'ENA</option>
+                                            <option value="Chef des Instructeurs">Chef des Instructeurs</option>
+                                            <option value="Formateur Principal">Formateur Principal</option>
+                                            <option value="Instructeur">Instructeur</option>
+                                            <option value="Aspirant instructeur">Aspirant instructeur</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs py-2.5 rounded-xl font-bold shadow-lg shadow-blue-900/30 transition active:scale-95 flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-plus"></i> Ajouter Instructeur
+                                </button>
+                            </form>
+                        </div>
+                
+                        <!-- Corps des Formateurs -->
+                        <div class="md:col-span-2 bg-slate-900/60 backdrop-blur-md p-5 rounded-2xl border border-slate-800 space-y-3 shadow-xl">
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-id-badge text-amber-400"></i> Corps des Formateurs / Instructeurs
+                            </h3>
+                            <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3"></div>
+                        </div>
+                    </div>
+                
+                    <!-- Suivi des Formations & Évaluations -->
+                    <div id="pdfContentEffectifs" class="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
                             <h3 class="text-sm font-bold text-white flex items-center gap-2.5">
                                 <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                                    <i class="fa-solid fa-users-gear text-sm"></i>
+                                    <i class="fa-solid fa-list-check text-sm"></i>
                                 </div>
-                                Registre des Dossiers Enregistrés
+                                Suivi des Formations & Évaluations
                             </h3>
-                            <p class="text-[11px] text-slate-400">Recherchez, modifiez ou supprimez les fiches du personnel militaire.</p>
-                        </div>
-                        
-                        <!-- Barre de recherche et filtres -->
-                        <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-                            <div class="relative flex-1 md:w-72">
-                                <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                                <input type="text" id="searchDossier" oninput="filtrerDossiers()" placeholder="Rechercher par nom, matricule..." class="w-full bg-slate-950 border border-slate-700/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl pl-9 pr-3.5 py-2 text-xs text-white placeholder-slate-500 outline-none transition">
-                            </div>
-                            <div class="relative">
-                                <select id="filterUnite" onchange="filtrerDossiers()" class="bg-slate-950 border border-slate-700/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2 text-xs text-slate-300 font-medium outline-none transition appearance-none pr-8">
-                                    <option value="">Toutes les unités</option>
-                                    <option value="CPA 10">CPA 10</option>
-                                    <option value="4e RHFS">4e RHFS</option>
-                                    <option value="13e RDP">13e RDP</option>
-                                    <option value="Commandos Jaubert (marine)">Commandos Jaubert</option>
-                                    <option value="Groupe de Commandos Parachutistes (GCP)">GCP</option>
-                                    <option value="N/A">N/A</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <div class="relative">
+                                    <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="Rechercher nom, grade..." class="bg-slate-950 border border-slate-700/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl pl-8 pr-3.5 py-2 text-xs text-white placeholder-slate-500 outline-none transition w-56">
+                                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                                </div>
+                                <button onclick="exportToCSV()" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 font-bold transition">
+                                    <i class="fa-solid fa-file-excel"></i> Excel
+                                </button>
+                                <button id="btnExportEffectifsPDF" onclick="generatePDF('pdfContentEffectifs', 'Effectifs_ENA.pdf')" class="bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 font-bold transition">
+                                    <i class="fa-solid fa-file-pdf"></i> PDF
+                                </button>
                             </div>
                         </div>
-                    </div>
                 
-                    <!-- Tableau des dossiers -->
-                    <div class="overflow-x-auto custom-scroll rounded-xl border border-slate-800 bg-slate-950/60 shadow-inner">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider font-bold border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3.5">Militaire / Matricule</th>
-                                    <th class="p-3.5">Grade</th>
-                                    <th class="p-3.5">Unité</th>
-                                    <th class="p-3.5 text-center">Qualifications</th>
-                                    <th class="p-3.5">Aptitude & Sanguin</th>
-                                    <th class="p-3.5 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableDossiersBody" class="divide-y divide-slate-800/60">
-                                <!-- Généré dynamiquement en JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                
-                    <!-- Message aucun dossier -->
-                    <div id="noDossierMessage" class="hidden text-center py-12 text-slate-500 text-xs space-y-2">
-                        <div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto text-slate-600">
-                            <i class="fa-solid fa-folder-open text-xl"></i>
-                        </div>
-                        <p class="font-medium text-slate-400">Aucun dossier militaire enregistré pour le moment.</p>
-                        <p class="text-[10px] text-slate-600">Utilisez le formulaire ci-dessus pour enregistrer ou importer un dossier rétroactif.</p>
-                    </div>
-                </div>
-                </section>
-            <!-- DOCUMENTS -->
-            <section id="tab-docs" class="tab-content hidden h-full p-4 flex flex-col space-y-4">
-                <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
-                    <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
-                        <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
-                        <input type="file" id="fileInput" multiple class="hidden">
-                    </label>
-                    <span class="text-xs text-slate-500">Sauvegarde synchro Firebase active</span>
-                </div>
-                <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-card/30 rounded-xl border"></div>
-            </section>
-
-            <!-- ENA & FORMATIONS -->
-            <section id="tab-ena" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-card p-4 rounded-xl border">
-                        <h3 class="text-sm font-bold text-white mb-3">Ajouter un Instructeur</h3>
-                        <form id="formAddFormateur" class="space-y-3">
-                            <input type="text" id="fmtNom" placeholder="Nom complet (ex: LCL Alex)" required class="w-full bg-input rounded px-2.5 py-1.5 text-xs">
-                            <select id="fmtRole" required class="w-full bg-input rounded px-2.5 py-1.5 text-xs">
-                                <option value="" disabled selected>-- Rôle Instructeur --</option>
-                                <option value="Directeur de l'ENA">Directeur de l'ENA</option>
-                                <option value="Directeur Adjoint de l'ENA">Directeur Adjoint de l'ENA</option>
-                                <option value="Chef des Instructeurs">Chef des Instructeurs</option>
-                                <option value="Formateur Principal">Formateur Principal</option>
-                                <option value="Instructeur">Instructeur</option>
-                                <option value="Aspirant instructeur">Aspirant instructeur</option>
+                        <!-- Formulaire Inscription -->
+                        <form id="formAddPersonnel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2.5 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                            <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-emerald-500">
+                            <input type="text" id="pGrade" placeholder="Grade" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-emerald-500">
+                            <input type="text" id="pMat" placeholder="Matricule" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-amber-300 outline-none focus:border-emerald-500">
+                            <input type="date" id="pDateVMA" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-blue-300 font-bold outline-none focus:border-emerald-500" title="Date de la Visite Médicale (VMA)">
+                            <select id="pUnite" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-blue-300 outline-none focus:border-emerald-500">
+                                <option value="N/A">N/A (Sans affectation)</option>
+                                <option value="CPA 10">CPA 10</option>
+                                <option value="4e RHFS">4e RHFS</option>
+                                <option value="13e RDP">13e RDP</option>
+                                <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
+                                <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
                             </select>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Ajouter Instructeur</button>
+                            <select id="pForm" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-emerald-500">
+                                <option value="" disabled selected>-- Formation / Brevet --</option>
+                                <optgroup label="🎓 Diplômes ENA (Officiels)">
+                                    <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale</option>
+                                    <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
+                                    <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
+                                    <option value="[CC1] Caporal-Chef de 1ère classe">[CC1] Caporal-Chef de 1ère classe</option>
+                                    <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
+                                    <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
+                                    <option value="[BM2] Brevet Militaire de niveau 2">[BM2] Brevet Militaire de niveau 2</option>
+                                    <option value="[FG3] Brevet de Major">[FG3] Brevet de Major</option>
+                                    <option value="[FAE] Formation d'Application">[FAE] Formation d'Application</option>
+                                    <option value="[CDU] Cursus de Chef d'Unité">[CDU] Cursus de Chef d'Unité</option>
+                                    <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major</option>
+                                </optgroup>
+                                <optgroup label="🪂 Brevets & Qualifications">
+                                    <option value="🪂 Brevet Parachutiste">🪂 Brevet Parachutiste</option>
+                                    <option value="🥊 Qualification CQB">🥊 Qualification CQB</option>
+                                </optgroup>
+                                <optgroup label="🚘 Permis & Conduite Véhicules">
+                                    <option value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)">🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)</option>
+                                    <option value="🎯 Opérateur Tourelle">🎯 Opérateur Tourelle</option>
+                                    <option value="🔧 Qualification Mécanicien">🔧 Qualification Mécanicien</option>
+                                    <option value="🪪 Permis B">🪪 Permis B</option>
+                                    <option value="🚛 Permis C">🚛 Permis C</option>
+                                    <option value="🚌 Permis D">🚌 Permis D</option>
+                                    <option value="🚚 Permis SPL (Conducteur SPL)">🚚 Permis SPL</option>
+                                </optgroup>
+                                <optgroup label="🎯 Spécialités de Combat">
+                                    <option value="🎯 Qualification Tireur d'Élite (TE)">🎯 Tireur d'Élite (TE)</option>
+                                    <option value="🔫 Qualification Tireur de Précision (TP)">🔫 Tireur de Précision (TP)</option>
+                                    <option value="🔭 Qualification Spotteur">🔭 Spotteur</option>
+                                    <option value="🩺 Qualification Médecin / Sanitaire">🩺 Médecin / Sanitaire</option>
+                                    <option value="📻 Qualification Transmetteur Radio">📻 Transmetteur Radio</option>
+                                    <option value="🛸 Qualification Opérateur Drone">🛸 Opérateur Drone</option>
+                                </optgroup>
+                            </select>
+                            <input type="datetime-local" id="pDateTime" required class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-emerald-500">
+                            <button type="submit" class="md:col-span-7 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs py-2.5 rounded-xl font-bold shadow-lg shadow-blue-900/30 transition active:scale-95 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-user-plus">+ Inscrire au registre</i>
+                            </button>
                         </form>
-                    </div>
-                    <div class="md:col-span-2 bg-card p-4 rounded-xl border">
-                        <h3 class="text-sm font-bold text-white mb-1">Corps des Formateurs / Instructeurs</h3>
-                        <div id="formateursList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2"></div>
-                    </div>
-                </div>
-
-                <div id="pdfContentEffectifs" class="bg-card p-4 rounded-xl border space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
-                        <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Formations & Évaluations</h3>
-                        <div class="flex items-center gap-2">
-                            <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="🔍 Rechercher nom, grade..." class="bg-input border rounded px-2.5 py-1 text-xs focus:outline-none">
-                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center gap-1"><i class="fa-solid fa-file-excel"></i> Excel</button>
-                            <button id="btnExportEffectifsPDF" onclick="generatePDF('pdfContentEffectifs', 'Effectifs_ENA.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                
+                        <!-- Tableau Effectifs -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60 shadow-inner">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3.5">Militaire</th>
+                                        <th class="p-3.5">Grade</th>
+                                        <th class="p-3.5">Matricule</th>
+                                        <th class="p-3.5">Unité</th>
+                                        <th class="p-3.5">Formation</th>
+                                        <th class="p-3.5">Statut / Note</th>
+                                        <th class="p-3.5 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="effectifsTable" class="divide-y divide-slate-800/60"></tbody>
+                            </table>
                         </div>
                     </div>
-                    <form id="formAddPersonnel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2 mb-3 pt-2">
-                        <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        <input type="date" id="pDateVMA" required class="bg-input border rounded px-2.5 py-1.5 text-xs" title="Date de la Visite Médicale (VMA)">
-                        <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs font-bold text-blue-300">
-                            <option value="N/A">N/A (Sans affectation)</option>
-                            <option value="CPA 10">CPA 10</option>
-                            <option value="4e RHFS">4e RHFS</option>
-                            <option value="13e RDP">13e RDP</option>
-                            <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                            <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
-                        </select>
-                        <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                            <option value="" disabled selected>-- Formation / Brevet / Permis --</option>
-                            <optgroup label="🎓 Diplômes ENA (Officiels)">
-                                <option value="[FGI] Formation Général Initiale">[FGI] Formation Général Initiale (Soldat 1cl)</option>
-                                <option value="[CAT1] Brevet Caporal">[CAT1] Brevet Caporal</option>
-                                <option value="[CME] Brevet Caporal-Chef">[CME] Brevet Caporal-Chef</option>
-                                <option value="[CC1] Caporal-Chef de 1ère classe">[CC1] Caporal-Chef de 1ère classe</option>
-                                <option value="[FG1 / BS1] Brevet de Sergent">[FG1 / BS1] Brevet de Sergent</option>
-                                <option value="[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste">[FG2 / BSTAT] Brevet d'Adjoint & Spécialiste</option>
-                                <option value="[BM2] Brevet Militaire de niveau 2">[BM2] Brevet Militaire de niveau 2</option>
-                                <option value="[FG3] Brevet de Major">[FG3] Brevet de Major</option>
-                                <option value="[FAE] Formation d'Application">[FAE] Formation d'Application (Lieutenant)</option>
-                                <option value="[CDU] Cursus de Chef d'Unité">[CDU] Cursus de Chef d'Unité (Capitaine)</option>
-                                <option value="[DEM] Diplôme d'État-Major">[DEM] Diplôme d'État-Major (Commandant)</option>
-                            </optgroup>
-                            <optgroup label="🪂 Brevets & Qualifications">
-                                <option value="🪂 Brevet Parachutiste">🪂 Brevet Parachutiste</option>
-                                <option value="🥊 Qualification CQB">🥊 Qualification CQB</option>
-                            </optgroup>
-                            <optgroup label="🚘 Permis & Conduite Véhicules">
-                                <option value="🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)">🚘 Pilote Blindés (VBCI/VAB/VBMR/GBC)</option>
-                                <option value="🎯 Opérateur Tourelle">🎯 Opérateur Tourelle</option>
-                                <option value="🔧 Qualification Mécanicien">🔧 Qualification Mécanicien</option>
-                                <option value="🪪 Permis B">🪪 Permis B</option>
-                                <option value="🚛 Permis C">🚛 Permis C</option>
-                                <option value="🚌 Permis D">🚌 Permis D</option>
-                                <option value="🚚 Permis SPL (Conducteur SPL)">🚚 Permis SPL (Conducteur SPL)</option>
-                            </optgroup>
-                            <optgroup label="🎯 Spécialités de Combat">
-                                <option value="🎯 Qualification Tireur d'Élite (TE)">🎯 Qualification Tireur d'Élite (TE)</option>
-                                <option value="🔫 Qualification Tireur de Précision (TP)">🔫 Qualification Tireur de Précision (TP)</option>
-                                <option value="🔭 Qualification Spotteur">🔭 Qualification Spotteur</option>
-                                <option value="🩺 Qualification Médecin / Sanitaire">🩺 Qualification Médecin / Sanitaire</option>
-                                <option value="📻 Qualification Transmetteur Radio">📻 Qualification Transmetteur Radio</option>
-                                <option value="🛸 Qualification Opérateur Drone">🛸 Qualification Opérateur Drone</option>
-                            </optgroup>
-                        </select>
-                        <input type="datetime-local" id="pDateTime" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded font-medium">+ Inscrire</button>
-                    </form>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-input text-slate-400 uppercase text-[10px]">
-                                <tr><th class="p-2">Militaire</th><th class="p-2">Grade</th><th class="p-2">Matricule</th><th class="p-2">Unité</th><th class="p-2">Formation</th><th class="p-2">Statut / Note</th><th class="p-2 text-right">Action</th></tr>
-                            </thead>
-                            <tbody id="effectifsTable" class="divide-y divide-slate-800"></tbody>
-                        </table>
+                </section>
+                
+                <!-- UNITÉS & SECTIONS -->
+                <section id="tab-unites" class="tab-content hidden h-full p-6 overflow-y-auto custom-scroll space-y-6 bg-slate-950 text-slate-100">
+                    <div class="bg-slate-900/60 backdrop-blur-md p-5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                        <div class="space-y-1">
+                            <h2 class="text-base font-bold text-white flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                                    <i class="fa-solid fa-users-viewfinder text-sm"></i>
+                                </div>
+                                Répertoire des Unités Forces Spéciales
+                            </h2>
+                            <p class="text-xs text-slate-400">Effectifs engagés par régiment spécialisé</p>
+                        </div>
+                        <div class="w-full sm:w-72 relative">
+                            <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl p-2.5 text-xs font-bold text-slate-200 outline-none appearance-none pr-8">
+                                <option value="TOUTES">Toutes les Unités</option>
+                                <option value="N/A">N/A (Sans affectation)</option>
+                                <option value="CPA 10">CPA 10</option>
+                                <option value="4e RHFS">4e RHFS</option>
+                                <option value="13e RDP">13e RDP</option>
+                                <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
+                                <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
+                        </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- UNITÉS & SECTIONS -->
-            <section id="tab-unites" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <div class="bg-card p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users-viewfinder text-blue-500"></i> Répertoire des Unités Forces Spéciales</h2>
-                        <p class="text-xs text-slate-400">Effectifs engagés par régiment spécialisé</p>
-                    </div>
-                    <div class="w-full sm:w-72">
-                        <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-input border rounded p-2 text-xs font-bold">
-                            <option value="TOUTES">Toutes les Unités</option>
-                            <option value="N/A">N/A (Sans affectation)</option>
-                            <option value="CPA 10">CPA 10</option>
-                            <option value="4e RHFS">4e RHFS</option>
-                            <option value="13e RDP">13e RDP</option>
-                            <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                            <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="unitesListGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-            </section>
-
-            <!-- TIRS, MÉDICAL & INAPTITUDES GITA -->
-            <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
-                <!-- FORMULAIRE VISITE MEDICALE -->
-                <div class="bg-card p-4 rounded-xl border space-y-3">
-                    <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                        <i class="fa-solid fa-heart-pulse text-red-500"></i> Formulaire de Visite Médicale (Aptitude VMA Obligatoire tous les 2 Mois)
-                    </h3>
-                    <form id="formFullVisiteMedicale" class="space-y-3 text-xs">
-                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Militaire Concerné *</label>
-                                <select id="medMilitaire" required class="w-full bg-input border rounded p-2 font-bold text-white"></select>
+                    <div id="unitesListGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </section>
+                
+                <!-- TIRS, MÉDICAL & INAPTITUDES GITA -->
+                <section id="tab-tirs" class="tab-content hidden h-full p-6 overflow-y-auto custom-scroll space-y-6 bg-slate-950 text-slate-100">
+                    
+                    <!-- FORMULAIRE VISITE MEDICALE -->
+                    <div class="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2.5 border-b border-slate-800 pb-3">
+                            <div class="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
+                                <i class="fa-solid fa-heart-pulse text-sm"></i>
                             </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Date de la Visite *</label>
-                                <input type="date" id="medDateVMA" required class="w-full bg-input border rounded p-2 font-bold text-blue-300">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Tension Artérielle (ex: 12/8)</label>
-                                <input type="text" id="medTension" placeholder="12/8" class="w-full bg-input border rounded p-2">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Taille (cm) & Poids (kg)</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="number" id="medTaille" placeholder="180 cm" class="bg-input border rounded p-2">
-                                    <input type="number" id="medPoids" placeholder="78 kg" class="bg-input border rounded p-2">
+                            Formulaire de Visite Médicale (Aptitude VMA Obligatoire tous les 2 Mois)
+                        </h3>
+                        <form id="formFullVisiteMedicale" class="space-y-4 text-xs">
+                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Militaire Concerné <span class="text-red-500">*</span></label>
+                                    <select id="medMilitaire" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 font-bold text-white outline-none focus:border-emerald-500"></select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Date de la Visite <span class="text-red-500">*</span></label>
+                                    <input type="date" id="medDateVMA" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 font-bold text-blue-300 outline-none focus:border-emerald-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Tension Artérielle</label>
+                                    <input type="text" id="medTension" placeholder="12/8" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Taille (cm) & Poids (kg)</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="number" id="medTaille" placeholder="180 cm" class="bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                        <input type="number" id="medPoids" placeholder="78 kg" class="bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Test Vision (/10)</label>
-                                <input type="text" id="medVision" placeholder="10/10" class="w-full bg-input border rounded p-2">
+                
+                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Test Vision (/10)</label>
+                                    <input type="text" id="medVision" placeholder="10/10" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Test Auditif</label>
+                                    <select id="medAudition" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                        <option value="Bonne">🟢 Audition Normale</option>
+                                        <option value="Moyenne">🟡 Légère baisse</option>
+                                        <option value="Inapte">🔴 Inapte Auditif</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Aptitude Décidée</label>
+                                    <select id="medAptitudeFinal" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 font-bold text-emerald-400 outline-none focus:border-emerald-500">
+                                        <option value="Apte Service FS">🟢 Apte Service FS</option>
+                                        <option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option>
+                                        <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire (GITA)</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Médecin Examinateur <span class="text-red-500">*</span></label>
+                                    <input type="text" id="medMedecin" placeholder="ex: Dr. CPT Martin" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Test Auditif</label>
-                                <select id="medAudition" class="w-full bg-input border rounded p-2">
-                                    <option value="Bonne">🟢 Audition Normale</option>
-                                    <option value="Moyenne">🟡 Légère baisse</option>
-                                    <option value="Inapte">🔴 Inapte Auditif</option>
-                                </select>
+                
+                            <div class="space-y-1">
+                                <label class="block text-slate-400 font-medium">Avis du Médecin & Remarques</label>
+                                <input type="text" id="medRemarques" placeholder="Observations médicales..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
                             </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Aptitude Décidée</label>
-                                <select id="medAptitudeFinal" class="w-full bg-input border rounded p-2 font-bold text-emerald-400">
-                                    <option value="Apte Service FS">🟢 Apte Service FS</option>
-                                    <option value="Apte avec Restrictions">🟡 Apte avec Restrictions</option>
-                                    <option value="Inapte Temporaire (GITA)">🔴 Inapte Temporaire (GITA)</option>
-                                </select>
+                
+                            <div class="flex justify-end pt-2">
+                                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl shadow-lg shadow-red-900/30 flex items-center gap-2 transition active:scale-95">
+                                    <i class="fa-solid fa-notes-medical"></i> Enregistrer Visite Médicale
+                                </button>
                             </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-semibold">Médecin Examinateur</label>
-                                <input type="text" id="medMedecin" placeholder="ex: Dr. CPT Martin" required class="w-full bg-input border rounded p-2">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-slate-400 mb-1 font-semibold">Avis du Médecin & Remarques</label>
-                            <input type="text" id="medRemarques" placeholder="Observations médicales..." class="w-full bg-input border rounded p-2">
-                        </div>
-
-                        <div class="flex justify-end pt-1">
-                            <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded shadow flex items-center gap-2">
-                                <i class="fa-solid fa-notes-medical"></i> Enregistrer Visite Médicale
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- CARNET DE TIR -->
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir</h3>
-                        <form id="formAddScoreTir" class="space-y-3 text-xs">
-                            <div><label class="block text-slate-400 mb-1">Tireur</label><select id="tirMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <div><label class="block text-slate-400 mb-1">Arme</label><select id="tirArme" required class="w-full bg-input border rounded p-2"><option value="HK416">HK416</option><option value="PAMAS / Glock">Glock / PAMAS</option><option value="SCAR-H">SCAR-H</option><option value="Sniper / PGM">Sniper PGM</option></select></div>
-                                <div><label class="block text-slate-400 mb-1">Barème</label><select id="tirBareme" required class="w-full bg-input border rounded p-2 font-bold text-amber-300"><option value="20">/ 20</option><option value="50">/ 50</option><option value="100" selected>/ 100</option><option value="10">/ 10</option></select></div>
-                                <div><label class="block text-slate-400 mb-1">Score Obtenu</label><input type="number" id="tirScore" min="0" placeholder="18" required class="w-full bg-input border rounded p-2"></div>
-                            </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded">+ Enregistrer Tir</button>
                         </form>
-                        <div class="border-t border-slate-700/60 pt-3"><h4 class="text-xs font-bold text-slate-200 mb-2">Derniers Scores :</h4><div id="tirsHistoryList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div></div>
                     </div>
-
-                    <!-- INAPTITUDES GITA -->
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
-                        <form id="formAddInaptitude" class="space-y-3 text-xs">
-                            <div><label class="block text-slate-400 mb-1">Militaire</label><select id="inapteMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div><label class="block text-slate-400 mb-1">Type</label><select id="inapteType" required class="w-full bg-input border rounded p-2"><option value="Sport & Examens Physiques">Sport</option><option value="Inapte Tir de Combat">Tir de Combat</option><option value="Inapte Saut Parachutiste">Saut Para</option><option value="Inaptitude Totale (GITA)">Totale (GITA)</option></select></div>
-                                <div><label class="block text-slate-400 mb-1">Fin</label><input type="date" id="inapteDateFin" required class="w-full bg-input border rounded p-2"></div>
+                
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- CARNET DE TIR -->
+                        <div class="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir
+                            </h3>
+                            <form id="formAddScoreTir" class="space-y-3.5 text-xs">
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Tireur</label>
+                                    <select id="tirMilitaire" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 font-bold text-white outline-none focus:border-emerald-500"></select>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2.5">
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-400 font-medium">Arme</label>
+                                        <select id="tirArme" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                            <option value="HK416">HK416</option>
+                                            <option value="PAMAS / Glock">Glock / PAMAS</option>
+                                            <option value="SCAR-H">SCAR-H</option>
+                                            <option value="Sniper / PGM">Sniper PGM</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-400 font-medium">Barème</label>
+                                        <select id="tirBareme" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 font-bold text-amber-300 outline-none focus:border-emerald-500">
+                                            <option value="20">/ 20</option>
+                                            <option value="50">/ 50</option>
+                                            <option value="100" selected>/ 100</option>
+                                            <option value="10">/ 10</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-400 font-medium">Score</label>
+                                        <input type="number" id="tirScore" min="0" placeholder="18" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-emerald-400 font-mono font-bold outline-none focus:border-emerald-500">
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-red-900/30 transition active:scale-95">
+                                    + Enregistrer Tir
+                                </button>
+                            </form>
+                            <div class="border-t border-slate-800 pt-3 space-y-2">
+                                <h4 class="text-xs font-bold text-slate-300">Derniers Scores :</h4>
+                                <div id="tirsHistoryList" class="space-y-2 max-h-48 overflow-y-auto custom-scroll text-xs"></div>
                             </div>
-                            <div><label class="block text-slate-400 mb-1">Motif</label><input type="text" id="inapteMotif" placeholder="ex: Entorse" required class="w-full bg-input border rounded p-2"></div>
-                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded">+ Déclarer Inapte</button>
-                        </form>
-                        <div class="border-t border-slate-700/60 pt-3"><h4 class="text-xs font-bold text-slate-200 mb-2">Actuellement Inaptes :</h4><div id="inaptesActiveList" class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll text-xs"></div></div>
+                        </div>
+                
+                        <!-- INAPTITUDES GITA -->
+                        <div class="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)
+                            </h3>
+                            <form id="formAddInaptitude" class="space-y-3.5 text-xs">
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Militaire</label>
+                                    <select id="inapteMilitaire" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 font-bold text-white outline-none focus:border-emerald-500"></select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-400 font-medium">Type</label>
+                                        <select id="inapteType" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                            <option value="Sport & Examens Physiques">Sport</option>
+                                            <option value="Inapte Tir de Combat">Tir de Combat</option>
+                                            <option value="Inapte Saut Parachutiste">Saut Para</option>
+                                            <option value="Inaptitude Totale (GITA)">Totale (GITA)</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-400 font-medium">Fin d'inaptitude</label>
+                                        <input type="date" id="inapteDateFin" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-300 font-bold outline-none focus:border-emerald-500">
+                                    </div>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-slate-400 font-medium">Motif</label>
+                                    <input type="text" id="inapteMotif" placeholder="ex: Entorse" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none focus:border-emerald-500">
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-amber-900/30 transition active:scale-95">
+                                    + Déclarer Inapte
+                                </button>
+                            </form>
+                            <div class="border-t border-slate-800 pt-3 space-y-2">
+                                <h4 class="text-xs font-bold text-slate-300">Actuellement Inaptes :</h4>
+                                <div id="inaptesActiveList" class="space-y-2 max-h-48 overflow-y-auto custom-scroll text-xs"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
             <!-- FICHES INDIVIDUELLES -->
             <section id="tab-fiches" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
