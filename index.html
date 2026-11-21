@@ -2173,11 +2173,11 @@
             if(dossiers.length === 0) return;
             const mil = dossiers[0]; state.selectedMilitaireId = nom;
 
-            document.getElementById('fNom').textContent = mil.nom;
-            document.getElementById('fGrade').textContent = mil.grade;
-            document.getElementById('fMat').textContent = mil.mat;
-            document.getElementById('fAff').textContent = mil.aff || 'N/A';
-            document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis').length;
+        document.getElementById('fNomEdit').value = mil.nom;
+        document.getElementById('fGradeEdit').value = mil.grade;
+        document.getElementById('fMat').textContent = mil.mat;
+        document.getElementById('fAff').textContent = mil.aff || 'N/A';
+        document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.ealuée && d.eval.resultat === 'Admis').length;
 
             renderAutomaticQualifications(dossiers);
 
