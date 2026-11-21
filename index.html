@@ -1014,13 +1014,6 @@
                         </div>
                     </div>
 
-                    <!-- BOUTON SAUVEGARDE IDENTITÉ (NOM / GRADE) -->
-                    <div class="flex justify-end">
-                        <button onclick="saveIdentityData()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-950/50 flex items-center gap-2 transition-all active:scale-95">
-                            <i class="fa-solid fa-floppy-disk"></i> Enregistrer les modifications d'identité
-                        </button>
-                    </div>
-
                     <!-- QUALIFICATIONS AUTOMATIQUES -->
                     <div class="bg-card p-4 rounded-xl border space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
@@ -1128,7 +1121,7 @@
                                 </div>
                             </div>
                     
-                            <!-- BOUTON D'ENREGISTREMENT -->
+                            <!-- BOUTON D'ENREGISTREMENT MÉDICAL -->
                             <div class="flex justify-end pt-2 border-t border-slate-800/60">
                                 <button onclick="saveMedicalData()" class="px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-950/50 flex items-center gap-2 transition-all transform active:scale-95">
                                     <i class="fa-solid fa-floppy-disk"></i> Enregistrer Fiche Médicale
@@ -1144,7 +1137,6 @@
                                     <i class="fa-solid fa-award text-sm"></i> Décorations & Distinctions
                                 </h4>
                                 <div id="fDecorationsList" class="flex flex-wrap gap-2 text-xs min-h-[48px] items-center">
-                                    <!-- Badges d'exemple -->
                                     <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-lg flex items-center gap-1.5 shadow-sm">
                                         <i class="fa-solid fa-medal text-amber-400"></i> Croix de la Valeur Militaire
                                     </span>
@@ -1186,7 +1178,6 @@
                                     <i class="fa-solid fa-graduation-cap text-amber-400 text-sm"></i> Historique Formations
                                 </h4>
                                 <div id="fHistoriqueFormations" class="space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs custom-scroll">
-                                    <!-- Élément de formation modèle -->
                                     <div class="p-2.5 bg-slate-950/40 border border-slate-800/70 rounded-xl flex justify-between items-center hover:border-slate-700 transition">
                                         <div class="space-y-0.5">
                                             <div class="font-bold text-slate-200">Stage Commando Nivel 2</div>
@@ -1224,6 +1215,15 @@
                         </div>
                     
                     </div>
+
+                    <!-- BOUTON GLOBAL DE SAUVEGARDE DE TOUTES LES MODIFICATIONS -->
+                    <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                        <button onclick="saveFicheComplete()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-950/50 flex items-center gap-2 transition-all active:scale-95">
+                            <i class="fa-solid fa-floppy-disk"></i> Enregistrer toutes les modifications du dossier
+                        </button>
+                    </div>
+
+                </div>
             </section>
 
             <!-- PLANNING -->
@@ -2157,78 +2157,63 @@
             }
         };
 
-        function updateFichesSelect() {
-            const select = document.getElementById('selectFicheMilitaire'); if(!select) return;
-            const val = select.value; select.innerHTML = '<option value="">-- Sélectionner --</option>';
-            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
-            unique.forEach(m => select.innerHTML += `<option value="${m.nom}">${m.grade} ${m.nom} (${m.mat})</option>`);
-            select.value = val;
-        }
-
-        window.loadFicheMilitaire = () => {
-            const nom = document.getElementById('selectFicheMilitaire').value;
-            const container = document.getElementById('ficheContainer');
-            if (!nom) { container.classList.add('hidden'); state.selectedMilitaireId = null; return; }
-            const dossiers = state.effectifs.filter(e => e.nom === nom);
-            if(dossiers.length === 0) return;
-            const mil = dossiers[0]; state.selectedMilitaireId = nom;
-
-        document.getElementById('fNomEdit').value = mil.nom;
-        document.getElementById('fGradeEdit').value = mil.grade;
-        document.getElementById('fMat').textContent = mil.mat;
-        document.getElementById('fAff').textContent = mil.aff || 'N/A';
-        document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis').length;
-
-            renderAutomaticQualifications(dossiers);
-
-            const vmaStatus = getStatutMedicalVMA(mil.dateVMA);
-            const badgeEl = document.getElementById('fVMABadgeStatus');
-            badgeEl.className = `px-3.5 py-1.5 rounded-full text-xs font-semibold border ${vmaStatus.class} flex items-center gap-2 shadow-sm`;
-            badgeEl.innerHTML = `<span class="w-2 h-2 rounded-full ${vmaStatus.status === 'PERIME' ? 'bg-red-400' : 'bg-emerald-400'} animate-pulse"></span><span>${vmaStatus.label}</span>`;
-
-            document.getElementById('fSang').value = mil.sang || 'Non renseigné';
-            
-            if (vmaStatus.status === 'PERIME') {
-                document.getElementById('fAptitudeVMA').value = 'Inapte Temporaire (GITA)';
+        function saveFicheComplete() {
+        // 1. Récupérer l'identifiant (le nom actuel stocké dans state.selectedMilitaireId)
+            const ancienNom = state.selectedMilitaireId;
+            if (!ancienNom) {
+                alert("Aucun militaire sélectionné.");
+                return;
+            }
+        
+            // 2. Trouver tous les enregistrements de ce militaire dans state.effectifs
+            let dossiersMilitaire = state.effectifs.filter(e => e.nom === ancienNom);
+            if (dossiersMilitaire.length === 0) return;
+        
+            // 3. Récupérer les nouvelles valeurs modifiées dans les inputs de la fiche
+            const nouveauNom = document.getElementById('fNomEdit').value.trim();
+            const nouveauGrade = document.getElementById('fGradeEdit').value.trim();
+            const nouveauSang = document.getElementById('fSang').value;
+            const nouvelleAptitude = document.getElementById('fAptitudeVMA').value;
+            const nouvelleDateVMA = document.getElementById('fDateVMA').value;
+            const nouvellesNotes = document.getElementById('fNotesPerso').value;
+        
+            // 4. Mettre à jour chaque entrée correspondante dans state.effectifs
+            state.effectifs.forEach(e => {
+                if (e.nom === ancienNom) {
+                    e.nom = nouveauNom;
+                    e.grade = nouveauGrade;
+                    e.sang = nouveauSang;
+                    e.aptitudeVMA = nouvelleAptitude;
+                    e.dateVMA = nouvelleDateVMA;
+                    e.notesPerso = nouvellesNotes;
+                }
+            });
+        
+            // 5. Mettre à jour l'ID sélectionné en mémoire
+            state.selectedMilitaireId = nouveauNom;
+        
+            // 6. Sauvegarder dans le localStorage (si tu l'utilises pour la persistance)
+            if (typeof saveStateToFirebase === 'function') {
+                saveStateToFirebase(); // ou ta fonction de sauvegarde locale/cloud
             } else {
-                document.getElementById('fAptitudeVMA').value = mil.aptitudeVMA || 'Apte Service FS';
+                localStorage.setItem('stateEffectifs', JSON.stringify(state.effectifs));
             }
-
-            document.getElementById('fDateVMA').value = mil.dateVMA || '';
-            document.getElementById('fDetailsMed').value = mil.detailsMedicalExam || 'Aucun bilan récent';
-            document.getElementById('fMedecinExam').value = mil.medecinExaminateur || 'Non renseigné';
-
-            const decos = state.decorations.filter(d => d.nom === nom);
-            document.getElementById('fDecorationsList').innerHTML = decos.length === 0 ? '<span class="text-slate-500 italic">Aucune.</span>' : decos.map(d => `<span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-lg flex items-center gap-1.5 shadow-sm"><i class="fa-solid fa-medal text-amber-400"></i> ${d.titre}</span>`).join('');
-
-            const inaptes = state.inaptitudes.filter(i => i.nom === nom);
-            let inaptText = inaptes.length === 0 ? '<div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-2.5 w-full"><i class="fa-solid fa-circle-check text-base"></i><span class="font-medium">Aptitude opérationnelle complète. Aucune restriction enregistrée.</span></div>' : inaptes.map(i => `<div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center gap-2.5 w-full"><i class="fa-solid fa-triangle-exclamation text-base"></i><span class="font-medium">${i.type} (${i.motif})</span></div>`).join('');
-            if(vmaStatus.status === 'PERIME') {
-                inaptText += `<div class="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-2.5 w-full mt-2"><i class="fa-solid fa-circle-xmark text-base"></i><span class="font-medium">Visite Médicale (VMA) Périmée (&gt;2 mois)</span></div>`;
+        
+            // 7. RAFRAÎCHIR TOUT LE SITE INSTANTANÉMENT
+            if (typeof updateFichesSelect === 'function') updateFichesSelect();
+            if (typeof filtrerDossiers === 'function') filtrerDossiers();
+            if (typeof renderEffectifs === 'function') renderEffectifs();
+            if (typeof renderUnites === 'function') renderUnites();
+        
+            // Re-sélectionner automatiquement le militaire mis à jour dans le menu déroulant
+            const select = document.getElementById('selectFicheMilitaire');
+            if (select) {
+                select.value = nouveauNom;
+                loadFicheMilitaire();
             }
-            document.getElementById('fInaptitudesList').innerHTML = inaptText;
-
-            document.getElementById('fHistoriqueFormations').innerHTML = dossiers.map(d => {
-                const isVal = d.eval && d.eval.evaluee;
-                return `
-                    <div class="p-2.5 bg-slate-950/40 border border-slate-800/70 rounded-xl flex justify-between items-center hover:border-slate-700 transition">
-                        <div class="space-y-0.5">
-                            <div class="font-bold text-slate-200">${d.form}</div>
-                            <div class="text-[10px] text-slate-400 flex items-center gap-2">
-                                <span><i class="fa-solid fa-calendar text-slate-500"></i> ${d.dateDemande}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400 font-semibold text-[10px]">En cours</span>'}
-                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 rounded-lg text-[10px] font-bold transition">Diplôme</button>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            document.getElementById('fNotesPerso').value = mil.notesPerso || '';
-            container.classList.remove('hidden');
-        };
+        
+            alert("Dossier mis à jour et synchronisé avec succès dans tout le système !");
+        }
         
         function renderAutomaticQualifications(dossiersMilitaire) {
             const groupBrevets = document.getElementById('group_brevets');
