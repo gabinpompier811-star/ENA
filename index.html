@@ -677,17 +677,17 @@
                                 </div>
                                 Registre des Dossiers Enregistrés
                             </h3>
-                            <p class="text-[11px] text-slate-400">Recherchez, modifiez ou supprimez les fiches du personnel militaire.</p>
+                            <p class="text-[11px] text-slate-400">Recherchez par nom, grade, matricule ou qualifications, modifiez ou supprimez les fiches.</p>
                         </div>
                         
                         <!-- Barre de recherche et filtres -->
                         <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-                            <div class="relative flex-1 md:w-72">
+                            <div class="relative flex-1 md:w-80">
                                 <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                                <input type="text" id="searchDossier" oninput="filtrerDossiers()" placeholder="Rechercher par nom, matricule..." class="w-full bg-slate-950 border border-slate-700/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl pl-9 pr-3.5 py-2 text-xs text-white placeholder-slate-500 outline-none transition">
+                                <input type="text" id="searchDossier" oninput="filtrerDossiers()" placeholder="Rechercher (nom, grade, matricule...)" class="w-full bg-slate-950 border border-slate-700/85 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl pl-9 pr-3.5 py-2 text-xs text-white placeholder-slate-500 outline-none transition">
                             </div>
                             <div class="relative">
-                                <select id="filterUnite" onchange="filtrerDossiers()" class="bg-slate-950 border border-slate-700/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2 text-xs text-slate-300 font-medium outline-none transition appearance-none pr-8">
+                                <select id="filterUnite" onchange="filtrerDossiers()" class="bg-slate-950 border border-slate-700/85 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2 text-xs text-slate-300 font-medium outline-none transition appearance-none pr-8">
                                     <option value="">Toutes les unités</option>
                                     <option value="CPA 10">CPA 10</option>
                                     <option value="4e RHFS">4e RHFS</option>
@@ -730,17 +730,20 @@
                     </div>
                 </div>
                 </section>
-            <!-- DOCUMENTS -->
-            <section id="tab-docs" class="tab-content hidden h-full p-4 flex flex-col space-y-4">
-                <div class="flex items-center justify-between bg-card p-3 rounded-xl border">
-                    <label class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg cursor-pointer flex items-center gap-2">
-                        <i class="fa-solid fa-file-import"></i> Importer Fichiers (Photos, PDF...)
-                        <input type="file" id="fileInput" multiple class="hidden">
-                    </label>
-                    <span class="text-xs text-slate-500">Sauvegarde synchro Firebase active</span>
-                </div>
-                <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-y-auto custom-scroll flex-1 p-2 bg-card/30 rounded-xl border"></div>
-            </section>
+                
+                <!-- DOCUMENTS -->
+                <section id="tab-docs" class="tab-content hidden h-full p-6 flex flex-col space-y-5 bg-slate-950 text-slate-100">
+                    <div class="flex items-center justify-between bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800 shadow-xl">
+                        <label class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer flex items-center gap-2.5 shadow-lg shadow-blue-900/30 transition-all active:scale-95">
+                            <i class="fa-solid fa-file-import text-sm"></i> Importer Fichiers (Photos, PDF...)
+                            <input type="file" id="fileInput" multiple class="hidden">
+                        </label>
+                        <span class="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sauvegarde synchro Firebase active
+                        </span>
+                    </div>
+                    <div id="fileList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5 overflow-y-auto custom-scroll flex-1 p-4 bg-slate-900/40 rounded-2xl border border-slate-800/80 shadow-inner"></div>
+                </section>
 
             <!-- ENA & FORMATIONS -->
             <section id="tab-ena" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
