@@ -2177,14 +2177,14 @@
         document.getElementById('fGradeEdit').value = mil.grade;
         document.getElementById('fMat').textContent = mil.mat;
         document.getElementById('fAff').textContent = mil.aff || 'N/A';
-        document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.ealuée && d.eval.resultat === 'Admis').length;
+        document.getElementById('fCountValide').textContent = dossiers.filter(d => d.eval && d.eval.evaluee && d.eval.resultat === 'Admis').length;
 
             renderAutomaticQualifications(dossiers);
 
             const vmaStatus = getStatutMedicalVMA(mil.dateVMA);
             const badgeEl = document.getElementById('fVMABadgeStatus');
-            badgeEl.className = `px-3 py-1 rounded text-xs font-bold border ${vmaStatus.class}`;
-            badgeEl.textContent = vmaStatus.label;
+            badgeEl.className = `px-3.5 py-1.5 rounded-full text-xs font-semibold border ${vmaStatus.class} flex items-center gap-2 shadow-sm`;
+            badgeEl.innerHTML = `<span class="w-2 h-2 rounded-full ${vmaStatus.status === 'PERIME' ? 'bg-red-400' : 'bg-emerald-400'} animate-pulse"></span><span>${vmaStatus.label}</span>`;
 
             document.getElementById('fSang').value = mil.sang || 'Non renseigné';
             
@@ -2199,23 +2199,28 @@
             document.getElementById('fMedecinExam').value = mil.medecinExaminateur || 'Non renseigné';
 
             const decos = state.decorations.filter(d => d.nom === nom);
-            document.getElementById('fDecorationsList').innerHTML = decos.length === 0 ? '<span class="text-slate-500 italic">Aucune.</span>' : decos.map(d => `<span class="px-2.5 py-1 bg-amber-900/40 text-amber-300 rounded-full font-bold"><i class="fa-solid fa-medal"></i> ${d.titre}</span>`).join('');
+            document.getElementById('fDecorationsList').innerHTML = decos.length === 0 ? '<span class="text-slate-500 italic">Aucune.</span>' : decos.map(d => `<span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-lg flex items-center gap-1.5 shadow-sm"><i class="fa-solid fa-medal text-amber-400"></i> ${d.titre}</span>`).join('');
 
             const inaptes = state.inaptitudes.filter(i => i.nom === nom);
-            let inaptText = inaptes.length === 0 ? '<span class="text-emerald-400 font-bold">Aptitude opérationnelle complète</span>' : inaptes.map(i => `<div class="text-amber-400 font-bold">⚠️ ${i.type} (${i.motif})</div>`).join('');
+            let inaptText = inaptes.length === 0 ? '<div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-2.5 w-full"><i class="fa-solid fa-circle-check text-base"></i><span class="font-medium">Aptitude opérationnelle complète. Aucune restriction enregistrée.</span></div>' : inaptes.map(i => `<div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center gap-2.5 w-full"><i class="fa-solid fa-triangle-exclamation text-base"></i><span class="font-medium">${i.type} (${i.motif})</span></div>`).join('');
             if(vmaStatus.status === 'PERIME') {
-                inaptText += `<div class="text-red-400 font-bold mt-1">🔴 Visite Médicale (VMA) Périmée (&gt;2 mois)</div>`;
+                inaptText += `<div class="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-2.5 w-full mt-2"><i class="fa-solid fa-circle-xmark text-base"></i><span class="font-medium">Visite Médicale (VMA) Périmée (&gt;2 mois)</span></div>`;
             }
             document.getElementById('fInaptitudesList').innerHTML = inaptText;
 
             document.getElementById('fHistoriqueFormations').innerHTML = dossiers.map(d => {
                 const isVal = d.eval && d.eval.evaluee;
                 return `
-                    <div class="bg-input p-2 rounded flex justify-between items-center text-xs">
-                        <div><p class="font-bold text-white">${d.form}</p><p class="text-[10px] text-slate-400">${d.dateDemande}</p></div>
+                    <div class="p-2.5 bg-slate-950/40 border border-slate-800/70 rounded-xl flex justify-between items-center hover:border-slate-700 transition">
+                        <div class="space-y-0.5">
+                            <div class="font-bold text-slate-200">${d.form}</div>
+                            <div class="text-[10px] text-slate-400 flex items-center gap-2">
+                                <span><i class="fa-solid fa-calendar text-slate-500"></i> ${d.dateDemande}</span>
+                            </div>
+                        </div>
                         <div class="flex items-center gap-2">
-                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400">En cours</span>'}
-                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
+                            ${isVal ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.eval.resultat === 'Admis' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}">${d.eval.resultat} (${d.eval.note}/20)</span>` : '<span class="text-amber-400 font-semibold text-[10px]">En cours</span>'}
+                            ${isVal && d.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${d.id}')" class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 rounded-lg text-[10px] font-bold transition">Diplôme</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -2224,7 +2229,7 @@
             document.getElementById('fNotesPerso').value = mil.notesPerso || '';
             container.classList.remove('hidden');
         };
-
+        
         function renderAutomaticQualifications(dossiersMilitaire) {
             const groupBrevets = document.getElementById('group_brevets');
             const groupPermis = document.getElementById('group_permis');
