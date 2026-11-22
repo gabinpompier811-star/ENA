@@ -762,6 +762,9 @@
                 <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="operations" title="Planification des opérations">
                     <i class="fa-solid fa-map-location-dot text-red-400"></i> Opérations
                 </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="cartography" title="Cartographie tactique">
+                    <i class="fa-solid fa-map text-teal-400"></i> Cartographie
+                </button>
                 <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="intelligence" title="Renseignements et veille">
                     <i class="fa-solid fa-binoculars text-fuchsia-400"></i> Renseignement
                 </button>
@@ -1749,64 +1752,28 @@
             <section id="tab-chat" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card border p-3 rounded-xl flex flex-wrap items-center gap-2">
                     <button class="module-subtab active px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="messages"><i class="fa-solid fa-message mr-2 text-blue-400"></i>Messages</button>
-                    <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="calls"><i class="fa-solid fa-phone-volume mr-2 text-emerald-400"></i>Appels</button>
-                    <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="voice"><i class="fa-solid fa-headset mr-2 text-cyan-400"></i>Vocaux</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="groups"><i class="fa-solid fa-user-group mr-2 text-violet-400"></i>Groupes</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="announcements"><i class="fa-solid fa-bullhorn mr-2 text-amber-400"></i>Annonces</button>
                 </div>
 
                 <div id="chat-messages" class="module-panel grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-4">
                     <div class="bg-card border rounded-xl p-3 space-y-2">
-                        <button class="w-full text-left p-3 rounded-lg bg-blue-950/40 border border-blue-500/30">
-                            <div class="flex items-center justify-between"><strong class="text-xs">Centre opérationnel</strong><span class="status-dot bg-emerald-400 text-emerald-400"></span></div>
-                            <p class="text-[10px] text-slate-400 mt-1">Point logistique à 14h00</p>
-                        </button>
-                        <button class="w-full text-left p-3 rounded-lg bg-input border border-slate-700/60">
-                            <strong class="text-xs">Section Alpha</strong><p class="text-[10px] text-slate-400 mt-1">2 nouveaux messages</p>
-                        </button>
-                        <button class="w-full text-left p-3 rounded-lg bg-input border border-slate-700/60">
-                            <strong class="text-xs">État-major</strong><p class="text-[10px] text-slate-400 mt-1">Compte-rendu disponible</p>
-                        </button>
+                        <div class="p-3 rounded-lg bg-blue-950/30 border border-blue-500/20">
+                            <strong class="text-xs">Messagerie générale</strong>
+                            <p class="text-[10px] text-slate-400 mt-1">Messages synchronisés en temps réel</p>
+                        </div>
                     </div>
                     <div class="bg-card border rounded-xl flex flex-col min-h-[360px]">
                         <div class="p-3 border-b border-slate-700/60 flex items-center justify-between">
-                            <div><h3 class="text-sm font-bold">Centre opérationnel</h3><p class="text-[10px] text-emerald-400">En ligne</p></div>
-                            <button class="bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-lg text-xs"><i class="fa-solid fa-phone mr-2"></i>Appeler</button>
+                            <div><h3 class="text-sm font-bold">Centre opérationnel</h3><p class="text-[10px] text-slate-400">Messagerie interne</p></div>
                         </div>
                         <div id="chatMessages" class="flex-1 p-4 space-y-3 overflow-y-auto custom-scroll">
-                            <div class="max-w-[75%] bg-input border border-slate-700/60 rounded-xl p-3 text-xs">Point quotidien confirmé. Préparer les effectifs à 13h30.</div>
-                            <div class="max-w-[75%] ml-auto bg-blue-600/25 border border-blue-500/30 rounded-xl p-3 text-xs">Reçu. La section sera prête.</div>
+                            <p class="text-slate-500 text-xs italic text-center py-8">Aucun message.</p>
                         </div>
                         <form id="chatSendForm" class="p-3 border-t border-slate-700/60 flex gap-2">
                             <input id="chatMessageInput" class="bg-input border flex-1 rounded-lg px-3 py-2 text-xs" placeholder="Écrire un message..." autocomplete="off">
                             <button class="bg-blue-600 hover:bg-blue-500 px-4 rounded-lg text-xs font-bold"><i class="fa-solid fa-paper-plane"></i></button>
                         </form>
-                    </div>
-                </div>
-
-                <div id="chat-calls" class="module-panel hidden grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-card border rounded-xl p-4"><h3 class="text-sm font-bold"><i class="fa-solid fa-phone text-emerald-400 mr-2"></i>Appel vocal</h3><p class="text-xs text-slate-400 mt-2">Centre opérationnel · 4 participants</p><button class="mt-4 w-full bg-emerald-600 text-xs font-bold py-2 rounded-lg">Rejoindre</button></div>
-                    <div class="bg-card border rounded-xl p-4"><h3 class="text-sm font-bold"><i class="fa-solid fa-video text-blue-400 mr-2"></i>Visioconférence</h3><p class="text-xs text-slate-400 mt-2">Briefing état-major · 09:30</p><button class="mt-4 w-full bg-blue-600 text-xs font-bold py-2 rounded-lg">Créer un lien</button></div>
-                    <div class="bg-card border rounded-xl p-4"><h3 class="text-sm font-bold"><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-2"></i>Historique</h3><p class="text-xs text-slate-400 mt-2">8 appels aujourd'hui · 6 terminés</p><button class="mt-4 w-full bg-input border text-xs font-bold py-2 rounded-lg">Voir l'historique</button></div>
-                </div>
-
-                <div id="chat-voice" class="module-panel hidden grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
-                    <div class="bg-card border rounded-xl p-4 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div><h3 class="text-sm font-bold"><i class="fa-solid fa-satellite-dish text-cyan-400 mr-2"></i>Canal vocal général</h3><p class="text-[10px] text-emerald-400 mt-1">Salle ouverte · 6 connectés</p></div>
-                            <button id="btnJoinVoice" onclick="toggleVoiceChannel(this)" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-headset mr-2"></i>Rejoindre</button>
-                        </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            <div class="bg-input border rounded-xl p-3 text-center"><div class="w-10 h-10 mx-auto rounded-full bg-emerald-600/30 flex items-center justify-center text-emerald-300"><i class="fa-solid fa-user"></i></div><p class="text-xs font-bold mt-2">CPT Martin</p><p class="text-[9px] text-emerald-400">Micro actif</p></div>
-                            <div class="bg-input border rounded-xl p-3 text-center"><div class="w-10 h-10 mx-auto rounded-full bg-slate-700 flex items-center justify-center text-slate-300"><i class="fa-solid fa-user"></i></div><p class="text-xs font-bold mt-2">SGT Moreau</p><p class="text-[9px] text-slate-500">En écoute</p></div>
-                            <div class="bg-input border rounded-xl p-3 text-center"><div class="w-10 h-10 mx-auto rounded-full bg-slate-700 flex items-center justify-center text-slate-300"><i class="fa-solid fa-user"></i></div><p class="text-xs font-bold mt-2">CPL Diallo</p><p class="text-[9px] text-slate-500">En écoute</p></div>
-                        </div>
-                    </div>
-                    <div class="bg-card border rounded-xl p-4 space-y-2">
-                        <h3 class="text-sm font-bold">Salons vocales</h3>
-                        <button class="w-full bg-input border rounded-lg p-3 text-left text-xs flex justify-between"><span><i class="fa-solid fa-lock text-amber-400 mr-2"></i>Coordination</span><b class="text-slate-400">3</b></button>
-                        <button class="w-full bg-input border rounded-lg p-3 text-left text-xs flex justify-between"><span><i class="fa-solid fa-lock-open text-emerald-400 mr-2"></i>Briefing</span><b class="text-slate-400">0</b></button>
-                        <button class="w-full bg-input border rounded-lg p-3 text-left text-xs flex justify-between"><span><i class="fa-solid fa-plus text-blue-400 mr-2"></i>Créer un salon</span></button>
                     </div>
                 </div>
 
@@ -1820,33 +1787,45 @@
                         </form>
                     </article>
                     <div id="chatGroupsDynamic" class="contents"></div>
-                    <article class="bg-card border rounded-xl p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-sm">Section Alpha</h3><span class="text-[10px] px-2 py-1 bg-emerald-950/50 text-emerald-300 rounded">12 membres</span></div><p class="text-xs text-slate-400 mt-2">Canal tactique de l'unité Alpha.</p></article>
-                    <article class="bg-card border rounded-xl p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-sm">État-major</h3><span class="text-[10px] px-2 py-1 bg-violet-950/50 text-violet-300 rounded">8 membres</span></div><p class="text-xs text-slate-400 mt-2">Décisions et directives.</p></article>
-                    <article class="bg-card border rounded-xl p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-sm">Intervention</h3><span class="text-[10px] px-2 py-1 bg-red-950/50 text-red-300 rounded">Prioritaire</span></div><p class="text-xs text-slate-400 mt-2">Coordination des missions urgentes.</p></article>
                 </div>
 
                 <div id="chat-announcements" class="module-panel hidden space-y-3">
-                    <article class="bg-card border-l-4 border-l-amber-400 border rounded-xl p-4"><div class="flex justify-between gap-3"><h3 class="text-sm font-bold">Contrôle général à 15h00</h3><span class="text-[10px] text-slate-500">Aujourd'hui</span></div><p class="text-xs text-slate-400 mt-2">Présence obligatoire sur la place d'armes. Tenue réglementaire.</p></article>
-                    <article class="bg-card border-l-4 border-l-blue-400 border rounded-xl p-4"><div class="flex justify-between gap-3"><h3 class="text-sm font-bold">Nouveau formulaire disponible</h3><span class="text-[10px] text-slate-500">Hier</span></div><p class="text-xs text-slate-400 mt-2">Les demandes de matériel doivent désormais passer par la Logistique.</p></article>
+                    <form id="chatAnnouncementForm" class="bg-card border rounded-xl p-4 grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] gap-2">
+                        <input id="chatAnnouncementTitle" required maxlength="100" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Titre de l'annonce">
+                        <input id="chatAnnouncementContent" required maxlength="500" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Contenu">
+                        <button class="bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded-lg text-xs font-bold">Publier</button>
+                    </form>
+                    <div id="chatAnnouncementsDynamic" class="space-y-3"></div>
                 </div>
             </section>
 
             <!-- LOGISTIQUE -->
             <section id="tab-logistique" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Demandes actives</p><p class="text-2xl font-bold text-amber-400 mt-1">7</p></div>
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Références en stock</p><p class="text-2xl font-bold text-emerald-400 mt-1">184</p></div>
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Véhicules disponibles</p><p class="text-2xl font-bold text-blue-400 mt-1">12/16</p></div>
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Alertes seuil bas</p><p class="text-2xl font-bold text-red-400 mt-1">3</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Demandes actives</p><p id="logisticsActiveRequestsCount" class="text-2xl font-bold text-amber-400 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Références en stock</p><p id="logisticsStockCount" class="text-2xl font-bold text-emerald-400 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Véhicules disponibles</p><p id="logisticsVehicleCount" class="text-2xl font-bold text-blue-400 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Alertes seuil bas</p><p id="logisticsLowStockCount" class="text-2xl font-bold text-red-400 mt-1">0</p></div>
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                     <div class="bg-card border rounded-xl p-4 space-y-3">
                         <h3 class="text-sm font-bold"><i class="fa-solid fa-boxes-stacked text-orange-400 mr-2"></i>Gestion des stocks</h3>
-                        <div class="overflow-x-auto custom-scroll"><table class="w-full text-xs"><thead class="text-slate-500"><tr><th class="text-left p-2">Article</th><th class="p-2">Stock</th><th class="p-2">Statut</th></tr></thead><tbody id="logisticsStockList" class="divide-y divide-slate-800"><tr><td class="p-2">Tenue complète</td><td class="p-2 text-center">48</td><td class="p-2 text-center text-emerald-400">Disponible</td></tr><tr><td class="p-2">Kits médicaux</td><td class="p-2 text-center">6</td><td class="p-2 text-center text-amber-400">Faible</td></tr><tr><td class="p-2">Radio tactique</td><td class="p-2 text-center">31</td><td class="p-2 text-center text-emerald-400">Disponible</td></tr></tbody></table></div>
+                        <form id="logisticsStockForm" class="grid grid-cols-1 sm:grid-cols-[1fr_80px_80px_auto] gap-2">
+                            <input id="logisticsStockName" required maxlength="80" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Article">
+                            <input id="logisticsStockQuantity" required type="number" min="0" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Qté">
+                            <input id="logisticsStockMinimum" required type="number" min="0" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Minimum">
+                            <button class="bg-orange-600 hover:bg-orange-500 px-3 rounded-lg text-xs font-bold">Ajouter</button>
+                        </form>
+                        <div class="overflow-x-auto custom-scroll"><table class="w-full text-xs"><thead class="text-slate-500"><tr><th class="text-left p-2">Article</th><th class="p-2">Stock</th><th class="p-2">Statut</th><th class="p-2"></th></tr></thead><tbody id="logisticsStockList" class="divide-y divide-slate-800"><tr><td colspan="4" class="p-3 text-center text-slate-500">Aucun stock enregistré.</td></tr></tbody></table></div>
                     </div>
                     <div class="bg-card border rounded-xl p-4 space-y-3">
                         <h3 class="text-sm font-bold"><i class="fa-solid fa-truck text-blue-400 mr-2"></i>Véhicules & missions</h3>
-                        <div id="logisticsVehicleList" class="space-y-2"><div class="bg-input border rounded-lg p-3 flex justify-between text-xs"><span>VAB-04</span><span class="text-emerald-400">Disponible</span></div><div class="bg-input border rounded-lg p-3 flex justify-between text-xs"><span>VT4-12</span><span class="text-amber-400">Maintenance</span></div><div class="bg-input border rounded-lg p-3 flex justify-between text-xs"><span>Véhicule léger 03</span><span class="text-blue-400">En mission</span></div></div>
+                        <form id="logisticsVehicleForm" class="grid grid-cols-1 sm:grid-cols-[1fr_150px_auto] gap-2">
+                            <input id="logisticsVehicleName" required maxlength="80" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Véhicule">
+                            <select id="logisticsVehicleStatus" class="bg-input border rounded-lg px-3 py-2 text-xs"><option>Disponible</option><option>En mission</option><option>Maintenance</option><option>Indisponible</option></select>
+                            <button class="bg-blue-600 hover:bg-blue-500 px-3 rounded-lg text-xs font-bold">Ajouter</button>
+                        </form>
+                        <div id="logisticsVehicleList" class="space-y-2"><p class="text-slate-500 text-xs text-center py-3">Aucun véhicule enregistré.</p></div>
                     </div>
                 </div>
             </section>
@@ -1855,28 +1834,54 @@
             <section id="tab-operations" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 bg-card border p-4 rounded-xl">
                     <div><h2 class="text-base font-bold"><i class="fa-solid fa-map-location-dot text-red-400 mr-2"></i>Centre d'opérations</h2><p class="text-xs text-slate-400 mt-1">Vue synthétique des missions et phases</p></div>
-                    <button class="bg-red-600 hover:bg-red-500 text-xs font-bold px-4 py-2 rounded-lg"><i class="fa-solid fa-plus mr-2"></i>Nouvelle opération</button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-card border rounded-xl p-4 space-y-3"><span class="text-[10px] text-red-300 bg-red-950/50 px-2 py-1 rounded font-bold">EN COURS</span><h3 class="font-bold">OP. SENTINELLE</h3><p class="text-xs text-slate-400">Zone Sud · 24 opérateurs</p><div class="h-1.5 bg-slate-800 rounded"><div class="h-full w-3/4 bg-red-500 rounded"></div></div></div>
-                    <div class="bg-card border rounded-xl p-4 space-y-3"><span class="text-[10px] text-amber-300 bg-amber-950/50 px-2 py-1 rounded font-bold">PLANIFIÉE</span><h3 class="font-bold">EX. ARÉNA</h3><p class="text-xs text-slate-400">Camp 2 · 18 participants</p><div class="h-1.5 bg-slate-800 rounded"><div class="h-full w-1/3 bg-amber-500 rounded"></div></div></div>
-                    <div class="bg-card border rounded-xl p-4 space-y-3"><span class="text-[10px] text-emerald-300 bg-emerald-950/50 px-2 py-1 rounded font-bold">TERMINÉE</span><h3 class="font-bold">OP. HORIZON</h3><p class="text-xs text-slate-400">Zone Est · Compte-rendu prêt</p><div class="h-1.5 bg-slate-800 rounded"><div class="h-full w-full bg-emerald-500 rounded"></div></div></div>
+                <form id="operationsCreateForm" class="bg-card border rounded-xl p-4 grid grid-cols-1 md:grid-cols-[1fr_1fr_130px_auto] gap-2">
+                    <input id="operationTitle" required maxlength="100" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Nom de l'opération">
+                    <input id="operationDetails" maxlength="300" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Zone, objectifs ou détail">
+                    <select id="operationStatus" class="bg-input border rounded-lg px-3 py-2 text-xs"><option>PLANIFIÉE</option><option>EN COURS</option><option>TERMINÉE</option></select>
+                    <button class="bg-red-600 hover:bg-red-500 px-4 rounded-lg text-xs font-bold">Créer</button>
+                </form>
+                <div id="operationsDynamicList" class="grid grid-cols-1 md:grid-cols-3 gap-4"><p class="col-span-full text-slate-500 text-xs text-center py-8">Aucune opération enregistrée.</p></div>
+            </section>
+
+            <!-- CARTOGRAPHIE -->
+            <section id="tab-cartography" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-5">
+                <div class="bg-card border rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+                    <div><h2 class="text-base font-bold"><i class="fa-solid fa-map text-teal-400 mr-2"></i>Cartographie tactique</h2><p class="text-xs text-slate-400 mt-1">Points, zones et repères synchronisés en temps réel</p></div>
+                    <span id="cartographyMarkerCount" class="text-xs px-3 py-1.5 rounded-lg bg-teal-950/40 text-teal-300">0 repère</span>
+                </div>
+                <form id="cartographyCreateForm" class="bg-card border rounded-xl p-4 grid grid-cols-1 md:grid-cols-[1fr_1fr_130px_130px_auto] gap-2">
+                    <input id="cartographyName" required maxlength="100" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Nom du repère">
+                    <input id="cartographyCoordinates" maxlength="100" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Coordonnées / zone">
+                    <select id="cartographyType" class="bg-input border rounded-lg px-3 py-2 text-xs"><option>Point</option><option>Zone</option><option>Danger</option><option>Ralliement</option></select>
+                    <select id="cartographyStatus" class="bg-input border rounded-lg px-3 py-2 text-xs"><option>Actif</option><option>À surveiller</option><option>Clos</option></select>
+                    <button class="bg-teal-600 hover:bg-teal-500 px-4 rounded-lg text-xs font-bold">Ajouter</button>
+                </form>
+                <div id="cartographyList" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                    <p class="col-span-full text-slate-500 text-xs text-center py-8">Aucun repère enregistré.</p>
                 </div>
             </section>
 
             <!-- RENSEIGNEMENT -->
             <section id="tab-intelligence" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Dossiers actifs</p><p class="text-2xl font-bold text-fuchsia-400 mt-1">14</p></div>
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Notes de veille</p><p class="text-2xl font-bold text-blue-400 mt-1">38</p></div>
-                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Sources à vérifier</p><p class="text-2xl font-bold text-amber-400 mt-1">5</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Dossiers actifs</p><p id="intelligenceDossierCount" class="text-2xl font-bold text-fuchsia-400 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Notes de veille</p><p class="text-2xl font-bold text-blue-400 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-4"><p class="text-[10px] uppercase text-slate-500 font-bold">Sources à vérifier</p><p class="text-2xl font-bold text-amber-400 mt-1">0</p></div>
                 </div>
                 <div class="bg-card border rounded-xl p-4 space-y-3">
-                    <div class="flex items-center justify-between"><h3 class="text-sm font-bold"><i class="fa-solid fa-file-shield text-fuchsia-400 mr-2"></i>Derniers dossiers</h3><button class="text-xs text-fuchsia-300"><i class="fa-solid fa-plus mr-1"></i>Ajouter</button></div>
-                    <div id="intelligenceList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <article class="bg-input border rounded-xl p-3"><div class="flex justify-between"><strong class="text-xs">DOSSIER NORD-17</strong><span class="text-[10px] text-amber-400">Priorité moyenne</span></div><p class="text-[11px] text-slate-400 mt-2">Analyse locale mise à jour il y a 2h.</p></article>
-                        <article class="bg-input border rounded-xl p-3"><div class="flex justify-between"><strong class="text-xs">VEILLE OP. ARÉNA</strong><span class="text-[10px] text-emerald-400">Confirmé</span></div><p class="text-[11px] text-slate-400 mt-2">Informations consolidées pour la mission.</p></article>
+                    <h3 class="text-sm font-bold"><i class="fa-solid fa-file-shield text-fuchsia-400 mr-2"></i>Dossiers de renseignement</h3>
+                    <form id="intelligenceCreateForm" class="grid grid-cols-1 md:grid-cols-[1fr_2fr_130px_auto] gap-2">
+                        <input id="intelligenceTitle" required maxlength="100" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Titre du dossier">
+                        <input id="intelligenceDetails" maxlength="500" class="bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Résumé ou analyse">
+                        <select id="intelligencePriority" class="bg-input border rounded-lg px-3 py-2 text-xs"><option>Priorité faible</option><option>Priorité moyenne</option><option>Priorité haute</option></select>
+                        <button class="bg-fuchsia-600 hover:bg-fuchsia-500 px-4 rounded-lg text-xs font-bold">Ajouter</button>
+                    </form>
+                    <div class="flex flex-wrap gap-2">
+                        <input id="intelligenceSearch" type="search" class="bg-input border rounded-lg px-3 py-2 text-xs flex-1 min-w-48" placeholder="Rechercher un dossier ou une analyse...">
+                        <select id="intelligencePriorityFilter" class="bg-input border rounded-lg px-3 py-2 text-xs"><option value="">Toutes les priorités</option><option>Priorité faible</option><option>Priorité moyenne</option><option>Priorité haute</option></select>
                     </div>
+                    <div id="intelligenceList" class="grid grid-cols-1 md:grid-cols-2 gap-3"><p class="col-span-full text-slate-500 text-xs text-center py-6">Aucun dossier enregistré.</p></div>
                 </div>
             </section>
 
@@ -1887,11 +1892,23 @@
                     <p class="text-xs text-slate-400">Validez les demandes, choisissez un rôle et accordez les onglets nécessaires. Les permissions sont également vérifiées par les règles Firebase.</p>
                 </div>
                 <div class="bg-card p-4 rounded-xl border space-y-3">
-                    <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-user-clock text-amber-400"></i> Demandes en attente</h3>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-user-clock text-amber-400"></i> Demandes en attente <span id="adminApplicationsCount" class="text-[10px] text-amber-300"></span></h3>
+                        <label class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
+                            <input id="adminApplicationSearch" type="search" placeholder="Rechercher une demande..." class="bg-slate-900 border border-slate-700 rounded-lg py-2 pl-8 pr-3 text-xs text-white w-56">
+                        </label>
+                    </div>
                     <div id="adminApplicationsList" class="space-y-2 text-xs"></div>
                 </div>
                 <div class="bg-card p-4 rounded-xl border space-y-3">
-                    <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres et permissions</h3>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres et permissions <span id="adminUsersCount" class="text-[10px] text-blue-300"></span></h3>
+                        <label class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
+                            <input id="adminMemberSearch" type="search" placeholder="Nom, e-mail ou rôle..." class="bg-slate-900 border border-slate-700 rounded-lg py-2 pl-8 pr-3 text-xs text-white w-56">
+                        </label>
+                    </div>
                     <div id="adminUsersList" class="space-y-3 text-xs"></div>
                 </div>
             </section>
@@ -2060,6 +2077,7 @@
             { id: 'chat', label: 'Chat' },
             { id: 'logistique', label: 'Logistique' },
             { id: 'operations', label: 'Opérations' },
+            { id: 'cartography', label: 'Cartographie' },
             { id: 'intelligence', label: 'Renseignement' },
             { id: 'admin', label: 'Administration' },
             { id: 'medical', label: 'Données médicales confidentielles' }
@@ -2069,9 +2087,9 @@
             'Fondateur': ACCESS_TABS.map(tab => tab.id),
             'Co-Fondateur': ACCESS_TABS.map(tab => tab.id),
             'Administrateur': ACCESS_TABS.map(tab => tab.id),
-            'Modérateur': ['dashboard', 'creerdossier', 'docs', 'ena', 'unites', 'tirs', 'fiches', 'planning', 'decorations', 'programmes', 'notes', 'changelog', 'chat', 'logistique', 'operations', 'intelligence'],
-            'Personnel ENA': ['dashboard', 'creerdossier', 'docs', 'ena', 'unites', 'fiches', 'planning', 'decorations', 'programmes', 'chat', 'logistique'],
-            'Personnel Opérateur': ['dashboard', 'fiches', 'chat', 'operations']
+            'Modérateur': ['dashboard', 'creerdossier', 'docs', 'ena', 'unites', 'tirs', 'fiches', 'planning', 'decorations', 'programmes', 'notes', 'changelog', 'chat', 'logistique', 'operations', 'cartography', 'intelligence'],
+            'Personnel ENA': ['dashboard', 'creerdossier', 'docs', 'ena', 'unites', 'fiches', 'planning', 'decorations', 'programmes', 'chat', 'logistique', 'cartography'],
+            'Personnel Opérateur': ['dashboard', 'fiches', 'chat', 'operations', 'cartography']
         };
 
         const state = {
@@ -2083,9 +2101,9 @@
             role: 'En attente',
             files: [], notes: [], activeNoteId: null,
             effectifs: [], effectifsBase: [], medicalRecords: {}, formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [], visitesMedicales: [],
-            chatMessages: [], chatAnnouncements: [], chatGroups: [], chatCalls: [],
+            chatMessages: [], chatAnnouncements: [], chatGroups: [],
             stocks: [], vehicles: [], logisticsRequests: [],
-            operations: [], intelligence: [],
+            operations: [], cartography: [], intelligence: [],
             notifications: [], logs: [], selectedMilitaireId: null, medicalMigrationComplete: false
         };
         const activeSubscriptions = [];
@@ -2238,6 +2256,11 @@
             return String(value == null ? '' : value).replace(/[&<>"']/g, char => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
             })[char]);
+        }
+
+        function setDashboardText(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = String(value);
         }
 
         function militaryIdentity(militaire) {
@@ -2479,26 +2502,33 @@
         function renderChatMessages() {
             const container = document.getElementById('chatMessages');
             if (!container) return;
-            if (!state.chatMessages.length) return;
+            if (!state.chatMessages.length) {
+                container.innerHTML = '<p class="text-slate-500 text-xs italic text-center py-8">Aucun message.</p>';
+                return;
+            }
             container.innerHTML = state.chatMessages.map(message => {
                 const mine = state.user && message.uid === state.user.uid;
                 return `<div class="max-w-[75%] ${mine ? 'ml-auto bg-blue-600/25 border-blue-500/30' : 'bg-input border-slate-700/60'} border rounded-xl p-3 text-xs">
                     ${mine ? '' : `<strong class="block text-[10px] text-slate-400 mb-1">${escapeHtml(message.author || 'Utilisateur')}</strong>`}
                     ${escapeHtml(message.text || '')}
-                    <span class="block text-[9px] text-slate-500 mt-1">${escapeHtml(message.date || '')}</span>
+                    <span class="flex items-center justify-between gap-3 text-[9px] text-slate-500 mt-1"><span>${escapeHtml(message.date || '')}</span>${mine || isAccessAdmin() ? `<button type="button" onclick="deleteChatMessage('${escapeHtml(message._fbKey)}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>` : ''}</span>
                 </div>`;
             }).join('');
             container.scrollTop = container.scrollHeight;
         }
 
         function renderChatAnnouncements() {
-            const container = document.getElementById('chat-announcements');
+            const container = document.getElementById('chatAnnouncementsDynamic');
             if (!container) return;
-            if (!state.chatAnnouncements.length) return;
+            if (!state.chatAnnouncements.length) {
+                container.innerHTML = '<p class="text-slate-500 text-xs text-center py-4">Aucune annonce publiée.</p>';
+                return;
+            }
             container.innerHTML = state.chatAnnouncements.map(item => `
                 <article class="bg-card border-l-4 border-l-amber-400 border rounded-xl p-4">
                     <div class="flex justify-between gap-3"><h3 class="text-sm font-bold">${escapeHtml(item.title || 'Annonce')}</h3><span class="text-[10px] text-slate-500">${escapeHtml(item.date || '')}</span></div>
                     <p class="text-xs text-slate-400 mt-2">${escapeHtml(item.content || '')}</p>
+                    ${isAccessAdmin() ? `<button type="button" onclick="deleteChatAnnouncement('${escapeHtml(item._fbKey)}')" class="mt-3 text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash mr-1"></i>Supprimer</button>` : ''}
                 </article>`).join('');
         }
 
@@ -2513,47 +2543,99 @@
                     </div>
                     <p class="text-xs text-slate-400 mt-2">${escapeHtml(group.description || 'Groupe opérationnel')}</p>
                     <p class="text-[9px] text-slate-500 mt-3">Créé par ${escapeHtml(group.owner || 'Utilisateur')}</p>
+                    ${(state.user && group.ownerUid === state.user.uid) || isAccessAdmin() ? `<button type="button" onclick="deleteChatGroup('${escapeHtml(group._fbKey)}')" class="mt-3 text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash mr-1"></i>Supprimer</button>` : ''}
                 </article>`).join('');
         }
 
         function renderLogistics() {
             const stockContainer = document.getElementById('logisticsStockList');
-            if (stockContainer && state.stocks.length) {
+            if (stockContainer) {
+                if (!state.stocks.length) {
+                    stockContainer.innerHTML = '<tr><td colspan="4" class="p-3 text-center text-slate-500">Aucun stock enregistré.</td></tr>';
+                } else {
                 stockContainer.innerHTML = state.stocks.map(item => {
                     const quantity = Number(item.quantity || 0);
-                    const alertClass = quantity <= Number(item.minimum || 0) ? 'text-amber-400' : 'text-emerald-400';
-                    return `<tr><td class="p-2">${escapeHtml(item.name || 'Article')}</td><td class="p-2 text-center">${quantity}</td><td class="p-2 text-center ${alertClass}">${quantity <= Number(item.minimum || 0) ? 'Faible' : 'Disponible'}</td></tr>`;
+                    const minimum = Number(item.minimum || 0);
+                    const alertClass = quantity <= minimum ? 'text-amber-400' : 'text-emerald-400';
+                    return `<tr><td class="p-2">${escapeHtml(item.name || 'Article')}</td><td class="p-2 text-center">${quantity}</td><td class="p-2 text-center ${alertClass}">${quantity <= minimum ? 'Faible' : 'Disponible'}</td><td class="p-2 text-center"><button type="button" onclick="deleteLogisticsStock('${escapeHtml(item._fbKey)}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button></td></tr>`;
                 }).join('');
+                }
             }
             const vehicleContainer = document.getElementById('logisticsVehicleList');
-            if (vehicleContainer && state.vehicles.length) {
+            if (vehicleContainer) {
+                if (!state.vehicles.length) {
+                    vehicleContainer.innerHTML = '<p class="text-slate-500 text-xs text-center py-3">Aucun véhicule enregistré.</p>';
+                } else {
                 vehicleContainer.innerHTML = state.vehicles.map(item => {
                     const statusClass = item.status === 'Disponible' ? 'text-emerald-400' : item.status === 'Maintenance' ? 'text-amber-400' : 'text-blue-400';
-                    return `<div class="bg-input border rounded-lg p-3 flex justify-between text-xs"><span>${escapeHtml(item.name || 'Véhicule')}</span><span class="${statusClass}">${escapeHtml(item.status || 'Indisponible')}</span></div>`;
+                    return `<div class="bg-input border rounded-lg p-3 flex items-center justify-between gap-3 text-xs"><span>${escapeHtml(item.name || 'Véhicule')}</span><span class="${statusClass}">${escapeHtml(item.status || 'Indisponible')}</span><button type="button" onclick="deleteLogisticsVehicle('${escapeHtml(item._fbKey)}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button></div>`;
                 }).join('');
+                }
             }
+            setDashboardText('logisticsStockCount', state.stocks.length);
+            setDashboardText('logisticsVehicleCount', state.vehicles.filter(item => item.status === 'Disponible').length);
+            setDashboardText('logisticsLowStockCount', state.stocks.filter(item => Number(item.quantity || 0) <= Number(item.minimum || 0)).length);
+            setDashboardText('logisticsActiveRequestsCount', (state.logisticsRequests || []).filter(item => item.status !== 'TERMINEE').length);
         }
 
         function renderOperations() {
-            const container = document.getElementById('operationsList');
-            if (!container || !state.operations.length) return;
+            const container = document.getElementById('operationsDynamicList');
+            if (!container) return;
+            if (!state.operations.length) {
+                container.innerHTML = '<p class="col-span-full text-slate-500 text-xs text-center py-8">Aucune opération enregistrée.</p>';
+                return;
+            }
             container.innerHTML = state.operations.map(item => {
                 const status = item.status || 'PLANIFIÉE';
                 const progress = Math.max(0, Math.min(100, Number(item.progress || 0)));
                 const statusClass = status === 'EN COURS' ? 'text-red-300 bg-red-950/50' : status === 'TERMINÉE' ? 'text-emerald-300 bg-emerald-950/50' : 'text-amber-300 bg-amber-950/50';
                 const barClass = status === 'EN COURS' ? 'bg-red-500' : status === 'TERMINÉE' ? 'bg-emerald-500' : 'bg-amber-500';
-                return `<div class="bg-card border rounded-xl p-4 space-y-3"><span class="text-[10px] ${statusClass} px-2 py-1 rounded font-bold">${escapeHtml(status)}</span><h3 class="font-bold">${escapeHtml(item.title || 'Opération')}</h3><p class="text-xs text-slate-400">${escapeHtml(item.details || '')}</p><div class="h-1.5 bg-slate-800 rounded"><div class="h-full ${barClass} rounded" style="width:${progress}%"></div></div></div>`;
+                return `<div class="bg-card border rounded-xl p-4 space-y-3"><div class="flex items-center justify-between gap-2"><span class="text-[10px] ${statusClass} px-2 py-1 rounded font-bold">${escapeHtml(status)}</span><button type="button" onclick="deleteOperation('${escapeHtml(item._fbKey)}')" class="text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash"></i></button></div><h3 class="font-bold">${escapeHtml(item.title || 'Opération')}</h3><p class="text-xs text-slate-400">${escapeHtml(item.details || '')}</p><div class="h-1.5 bg-slate-800 rounded"><div class="h-full ${barClass} rounded" style="width:${progress}%"></div></div></div>`;
             }).join('');
         }
 
         function renderIntelligence() {
             const container = document.getElementById('intelligenceList');
-            if (!container || !state.intelligence.length) return;
-            container.innerHTML = state.intelligence.map(item => `
+            if (!container) return;
+            const query = (document.getElementById('intelligenceSearch')?.value || '').trim().toLocaleLowerCase('fr');
+            const priorityFilter = document.getElementById('intelligencePriorityFilter')?.value || '';
+            const dossiers = state.intelligence.filter(item =>
+                (!query || `${item.title || ''} ${item.details || ''}`.toLocaleLowerCase('fr').includes(query)) &&
+                (!priorityFilter || item.priority === priorityFilter)
+            );
+            setDashboardText('intelligenceDossierCount', state.intelligence.length);
+            if (!dossiers.length) {
+                container.innerHTML = '<p class="col-span-full text-slate-500 text-xs text-center py-6">Aucun dossier ne correspond.</p>';
+                return;
+            }
+            container.innerHTML = dossiers.map(item => `
                 <article class="bg-input border rounded-xl p-3">
-                    <div class="flex justify-between"><strong class="text-xs">${escapeHtml(item.title || 'Dossier')}</strong><span class="text-[10px] text-slate-400">${escapeHtml(item.priority || '')}</span></div>
+                    <div class="flex justify-between gap-2"><strong class="text-xs">${escapeHtml(item.title || 'Dossier')}</strong><span class="text-[10px] text-slate-400">${escapeHtml(item.priority || '')}</span></div>
                     <p class="text-[11px] text-slate-400 mt-2">${escapeHtml(item.details || '')}</p>
+                    <button type="button" onclick="deleteIntelligence('${escapeHtml(item._fbKey)}')" class="mt-3 text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash mr-1"></i>Supprimer</button>
                 </article>`).join('');
+        }
+
+        function renderCartography() {
+            const container = document.getElementById('cartographyList');
+            if (!container) return;
+            setDashboardText('cartographyMarkerCount', `${state.cartography.length} repère${state.cartography.length > 1 ? 's' : ''}`);
+            if (!state.cartography.length) {
+                container.innerHTML = '<p class="col-span-full text-slate-500 text-xs text-center py-8">Aucun repère enregistré.</p>';
+                return;
+            }
+            container.innerHTML = state.cartography.map(item => {
+                const typeClass = item.type === 'Danger' ? 'text-red-300 bg-red-950/50'
+                    : item.type === 'Zone' ? 'text-teal-300 bg-teal-950/50'
+                    : item.type === 'Ralliement' ? 'text-blue-300 bg-blue-950/50'
+                    : 'text-slate-300 bg-slate-800';
+                return `<article class="bg-card border rounded-xl p-4 space-y-2">
+                    <div class="flex items-center justify-between gap-2"><span class="text-[10px] px-2 py-1 rounded font-bold ${typeClass}">${escapeHtml(item.type || 'Point')}</span><button type="button" onclick="deleteCartography('${escapeHtml(item._fbKey)}')" class="text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash"></i></button></div>
+                    <h3 class="font-bold text-sm">${escapeHtml(item.name || 'Repère')}</h3>
+                    <p class="text-xs text-slate-400">${escapeHtml(item.coordinates || 'Coordonnées non renseignées')}</p>
+                    <p class="text-[10px] text-teal-300">${escapeHtml(item.status || 'Actif')}</p>
+                </article>`;
+            }).join('');
         }
 
         function startDataListeners() {
@@ -2595,22 +2677,20 @@
                 subscribeValue('chat/messages', snap => { state.chatMessages = toFirebaseList(snap); renderChatMessages(); });
                 subscribeValue('chat/announcements', snap => { state.chatAnnouncements = toFirebaseList(snap); renderChatAnnouncements(); });
                 subscribeValue('chat/groups', snap => { state.chatGroups = toFirebaseList(snap); renderChatGroups(); });
-                subscribeValue('chat/calls', snap => { state.chatCalls = toFirebaseList(snap); });
             }
             if (hasTabAccess('logistique')) {
                 subscribeValue('logistique/stocks', snap => { state.stocks = toFirebaseList(snap); renderLogistics(); });
                 subscribeValue('logistique/vehicles', snap => { state.vehicles = toFirebaseList(snap); renderLogistics(); });
-                subscribeValue('logistique/requests', snap => { state.logisticsRequests = toFirebaseList(snap); });
+                subscribeValue('logistique/requests', snap => { state.logisticsRequests = toFirebaseList(snap); renderLogistics(); });
             }
             if (hasTabAccess('operations')) {
                 subscribeValue('operations/missions', snap => { state.operations = toFirebaseList(snap); renderOperations(); });
             }
+            if (hasTabAccess('cartography')) {
+                subscribeValue('cartographie/markers', snap => { state.cartography = toFirebaseList(snap); renderCartography(); });
+            }
             if (hasTabAccess('intelligence')) {
                 subscribeValue('intelligence/dossiers', snap => { state.intelligence = toFirebaseList(snap); renderIntelligence(); });
-                subscribeValue('intelligence/veille', snap => {
-                    state.intelligence = [...state.intelligence, ...toFirebaseList(snap).map(item => ({ ...item, title: item.title || item.subject }))];
-                    renderIntelligence();
-                });
             }
 
             if (isAccessAdmin()) {
@@ -3243,12 +3323,78 @@
                 db.ref('chat/groups').push().set({
                     name,
                     description,
+                    ownerUid: state.user ? state.user.uid : '',
                     owner: state.user ? (state.user.displayName || state.user.email || 'Utilisateur') : 'Utilisateur',
                     createdAt: new Date().toLocaleString('fr-FR')
                 }).then(() => {
                     event.target.reset();
                     addLog('CHAT_GROUP', `Groupe créé : ${name}`);
                 }).catch(showSyncError);
+            });
+            document.getElementById('chatAnnouncementForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const title = document.getElementById('chatAnnouncementTitle').value.trim();
+                const content = document.getElementById('chatAnnouncementContent').value.trim();
+                if (!title || !content) return;
+                db.ref('chat/announcements').push().set({
+                    title, content,
+                    authorUid: state.user ? state.user.uid : '',
+                    author: state.user ? (state.user.displayName || state.user.email || 'Utilisateur') : 'Utilisateur',
+                    date: new Date().toLocaleString('fr-FR')
+                }).then(() => event.target.reset()).catch(showSyncError);
+            });
+            document.getElementById('logisticsStockForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const name = document.getElementById('logisticsStockName').value.trim();
+                const quantity = Number(document.getElementById('logisticsStockQuantity').value);
+                const minimum = Number(document.getElementById('logisticsStockMinimum').value);
+                if (!name || !Number.isFinite(quantity) || !Number.isFinite(minimum)) return;
+                db.ref('logistique/stocks').push().set({ name, quantity, minimum, updatedAt: new Date().toISOString() })
+                    .then(() => event.target.reset()).catch(showSyncError);
+            });
+            document.getElementById('logisticsVehicleForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const name = document.getElementById('logisticsVehicleName').value.trim();
+                const status = document.getElementById('logisticsVehicleStatus').value;
+                if (!name) return;
+                db.ref('logistique/vehicles').push().set({ name, status, updatedAt: new Date().toISOString() })
+                    .then(() => event.target.reset()).catch(showSyncError);
+            });
+            document.getElementById('operationsCreateForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const title = document.getElementById('operationTitle').value.trim();
+                const details = document.getElementById('operationDetails').value.trim();
+                const status = document.getElementById('operationStatus').value;
+                if (!title) return;
+                db.ref('operations/missions').push().set({
+                    title, details, status, progress: status === 'TERMINÉE' ? 100 : status === 'EN COURS' ? 25 : 0,
+                    createdAt: new Date().toISOString()
+                }).then(() => event.target.reset()).catch(showSyncError);
+            });
+            document.getElementById('intelligenceSearch')?.addEventListener('input', renderIntelligence);
+            document.getElementById('intelligencePriorityFilter')?.addEventListener('change', renderIntelligence);
+            document.getElementById('intelligenceCreateForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const title = document.getElementById('intelligenceTitle').value.trim();
+                const details = document.getElementById('intelligenceDetails').value.trim();
+                const priority = document.getElementById('intelligencePriority').value;
+                if (!title) return;
+                db.ref('intelligence/dossiers').push().set({
+                    title, details, priority, createdAt: new Date().toISOString()
+                }).then(() => event.target.reset()).catch(showSyncError);
+            });
+            document.getElementById('cartographyCreateForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const name = document.getElementById('cartographyName').value.trim();
+                const coordinates = document.getElementById('cartographyCoordinates').value.trim();
+                const type = document.getElementById('cartographyType').value;
+                const status = document.getElementById('cartographyStatus').value;
+                if (!name) return;
+                db.ref('cartographie/markers').push().set({
+                    name, coordinates, type, status,
+                    createdBy: state.user ? (state.user.displayName || state.user.email || 'Utilisateur') : 'Utilisateur',
+                    createdAt: new Date().toISOString()
+                }).then(() => event.target.reset()).catch(showSyncError);
             });
             document.addEventListener('click', event => {
                 const approve = event.target.closest('button[data-approve-application]');
@@ -3266,6 +3412,16 @@
                 if (!roleSelect) return;
                 const defaults = new Set(DEFAULT_TABS_BY_ROLE[roleSelect.value] || []);
                 document.querySelectorAll(`input[data-application-uid="${roleSelect.dataset.applicationRole}"]`).forEach(input => {
+                    input.checked = defaults.has(input.dataset.tabId);
+                });
+            });
+            document.getElementById('adminMemberSearch')?.addEventListener('input', renderAdminUsers);
+            document.getElementById('adminApplicationSearch')?.addEventListener('input', renderAdminUsers);
+            document.getElementById('adminUsersList').addEventListener('change', event => {
+                const roleSelect = event.target.closest('select[data-member-role]');
+                if (!roleSelect) return;
+                const defaults = new Set(DEFAULT_TABS_BY_ROLE[roleSelect.value] || []);
+                document.querySelectorAll(`input[data-member-uid="${roleSelect.dataset.memberRole}"]`).forEach(input => {
                     input.checked = defaults.has(input.dataset.tabId);
                 });
             });
@@ -3767,6 +3923,8 @@
             const applicationsContainer = document.getElementById('adminApplicationsList');
             const membersContainer = document.getElementById('adminUsersList');
             if (!applicationsContainer || !membersContainer || !isAccessAdmin()) return;
+            const applicationQuery = (document.getElementById('adminApplicationSearch')?.value || '').trim().toLocaleLowerCase('fr');
+            const memberQuery = (document.getElementById('adminMemberSearch')?.value || '').trim().toLocaleLowerCase('fr');
 
             const assignableRoles = state.access.role === 'Fondateur'
                 ? ['Fondateur', 'Co-Fondateur', 'Administrateur', 'Modérateur', 'Personnel ENA', 'Personnel Opérateur']
@@ -3782,7 +3940,12 @@
                     <span>${escapeHtml(tab.label)}</span>
                 </label>`).join('');
 
-            const pending = state.applications.filter(application => application.status === 'pending');
+            const allPending = state.applications.filter(application => application.status === 'pending');
+            const pending = allPending.filter(application =>
+                `${application.name || ''} ${application.email || ''} ${application.reason || ''}`.toLocaleLowerCase('fr').includes(applicationQuery)
+            );
+            const applicationsCount = document.getElementById('adminApplicationsCount');
+            if (applicationsCount) applicationsCount.textContent = allPending.length ? `${pending.length}/${allPending.length}` : '';
             applicationsContainer.innerHTML = pending.length ? pending.map(application => {
                 const defaultRole = 'Personnel Opérateur';
                 const selectedTabs = Object.fromEntries((DEFAULT_TABS_BY_ROLE[defaultRole] || []).map(tabId => [tabId, true]));
@@ -3799,10 +3962,16 @@
                 </article>`;
             }).join('') : '<p class="text-slate-500 italic">Aucune demande en attente.</p>';
 
-            membersContainer.innerHTML = state.accessProfiles.length ? state.accessProfiles.map(profile => {
+            const profiles = state.accessProfiles.filter(profile =>
+                `${profile.name || ''} ${profile.email || ''} ${profile.role || ''} ${profile._fbKey || ''}`.toLocaleLowerCase('fr').includes(memberQuery)
+            );
+            const usersCount = document.getElementById('adminUsersCount');
+            if (usersCount) usersCount.textContent = state.accessProfiles.length ? `${profiles.length}/${state.accessProfiles.length}` : '';
+            membersContainer.innerHTML = profiles.length ? profiles.map(profile => {
                 const protectedRole = ['Fondateur', 'Co-Fondateur'].includes(profile.role);
                 const editable = (!protectedRole || state.access.role === 'Fondateur') &&
                     !(profile.role === 'Administrateur' && state.access.role === 'Administrateur');
+                const canRevoke = profile._fbKey !== state.user.uid && canAssignRole('Personnel Opérateur', profile.role);
                 const memberRoles = editable ? Array.from(new Set([...assignableRoles, profile.role])) : [profile.role];
                 const memberRoleOptions = memberRoles.map(role =>
                     `<option value="${escapeHtml(role)}" ${profile.role === role ? 'selected' : ''}>${escapeHtml(role)}</option>`
@@ -3813,7 +3982,7 @@
                         <div class="flex items-center gap-2">
                             <select data-member-role="${escapeHtml(profile._fbKey)}" ${editable ? '' : 'disabled'} class="bg-slate-900 border border-slate-700 rounded p-1.5">${memberRoleOptions}</select>
                             <button type="button" data-save-member="${escapeHtml(profile._fbKey)}" ${editable ? '' : 'disabled'} class="bg-blue-700 hover:bg-blue-600 disabled:opacity-40 text-white px-3 py-1.5 rounded">Enregistrer</button>
-                            ${profile._fbKey !== state.user.uid ? `<button type="button" data-revoke-member="${escapeHtml(profile._fbKey)}" class="bg-red-900/60 text-red-200 px-3 py-1.5 rounded">Révoquer</button>` : ''}
+                            ${canRevoke ? `<button type="button" data-revoke-member="${escapeHtml(profile._fbKey)}" class="bg-red-900/60 text-red-200 px-3 py-1.5 rounded">Révoquer</button>` : ''}
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-1.5">${permissionHtml(profile._fbKey, profile.tabs || {}, 'member')}</div>
@@ -4038,6 +4207,14 @@
         window.openImageViewer = (src, title) => { document.getElementById('viewerImage').src = src; document.getElementById('viewerTitle').textContent = title; document.getElementById('imageViewerModal').classList.remove('hidden'); };
         window.closeImageViewer = () => document.getElementById('imageViewerModal').classList.add('hidden');
         window.deleteFile = (k) => { if(confirm("Supprimer ce fichier ?")) db.ref('files/' + k).remove(); };
+        window.deleteChatMessage = k => { if (k && confirm('Supprimer ce message ?')) db.ref('chat/messages/' + k).remove().catch(showSyncError); };
+        window.deleteChatGroup = k => { if (k && confirm('Supprimer ce groupe ?')) db.ref('chat/groups/' + k).remove().catch(showSyncError); };
+        window.deleteChatAnnouncement = k => { if (k && confirm('Supprimer cette annonce ?')) db.ref('chat/announcements/' + k).remove().catch(showSyncError); };
+        window.deleteLogisticsStock = k => { if (k && confirm('Supprimer cet article ?')) db.ref('logistique/stocks/' + k).remove().catch(showSyncError); };
+        window.deleteLogisticsVehicle = k => { if (k && confirm('Supprimer ce véhicule ?')) db.ref('logistique/vehicles/' + k).remove().catch(showSyncError); };
+        window.deleteOperation = k => { if (k && confirm("Supprimer cette opération ?")) db.ref('operations/missions/' + k).remove().catch(showSyncError); };
+        window.deleteCartography = k => { if (k && confirm('Supprimer ce repère ?')) db.ref('cartographie/markers/' + k).remove().catch(showSyncError); };
+        window.deleteIntelligence = k => { if (k && confirm('Supprimer ce dossier ?')) db.ref('intelligence/dossiers/' + k).remove().catch(showSyncError); };
         window.deleteSession = (k) => { if(confirm("Supprimer cette session ?")) db.ref('sessions/' + k).remove(); };
         window.deleteDecoration = (k) => { if(confirm("Supprimer cette décoration ?")) db.ref('decorations/' + k).remove(); };
         window.deleteFormateur = (k, name) => { if(confirm(`Supprimer ${name} ?`)) db.ref('formateurs/' + k).remove(); };
