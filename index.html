@@ -37,6 +37,16 @@
         html[data-theme="oled"] .bg-card { background-color: #0a0a0a; border-color: #262626; }
         html[data-theme="oled"] .bg-header { background-color: #000000; border-color: #262626; }
         html[data-theme="oled"] .bg-input { background-color: #171717; border-color: #404040; color: #fff; }
+        html[data-theme="military"] body { background-color: #11170f; color: #edf2e7; }
+        html[data-theme="military"] .bg-card { background-color: #1a2114; border-color: #37412c; }
+        html[data-theme="military"] .bg-header { background-color: #171d12; border-color: #37412c; }
+        html[data-theme="military"] .bg-input { background-color: #293222; border-color: #4b573f; color: #fff; }
+        html[data-density="compact"] #app main { font-size: 90%; }
+        html[data-density="compact"] .bg-card { padding: .75rem; }
+        html[data-density="comfortable"] #app main { font-size: 100%; }
+        html[data-reduced-motion="true"] * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+        body.privacy-mode [data-medical-field], body.privacy-mode #medRemarques { filter: blur(7px); transition: filter .12s ease; }
+        body.privacy-mode [data-medical-field]:hover, body.privacy-mode [data-medical-field]:focus, body.privacy-mode #medRemarques:hover { filter: blur(0); }
 
         .tab-btn.active { border-bottom: 2px solid var(--accent-color); color: var(--accent-light); background-color: var(--accent-bg); }
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -393,7 +403,7 @@
 
     <!-- Modal Paramètres & Couleurs -->
     <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-card border rounded-xl p-6 w-full max-w-md shadow-2xl space-y-4">
+        <div class="bg-card border rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
             <div class="flex justify-between items-center border-b border-slate-700/60 pb-3">
                 <h3 class="font-bold text-white text-base flex items-center gap-2">
                     <i class="fa-solid fa-sliders text-blue-400"></i> Paramètres du Portail & Apparence
@@ -408,6 +418,7 @@
                         <option value="slate">🌙 Night Slate (Foncé Tactique)</option>
                         <option value="desert">🏜️ Desert Camo (Nuances Sable / Olive)</option>
                         <option value="oled">🖤 OLED Black (Noir Absolu)</option>
+                        <option value="military">🪖 Military Green (Vert opérationnel)</option>
                     </select>
                 </div>
 
@@ -421,6 +432,42 @@
                         <button onclick="changeAccent('purple')" class="py-2 rounded font-bold text-white bg-purple-600">Violet</button>
                     </div>
                 </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-2">Densité de l’interface</label>
+                        <select id="densitySelector" onchange="changeDensity(this.value)" class="w-full bg-input border rounded p-2">
+                            <option value="comfortable">Confortable</option>
+                            <option value="compact">Compacte</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-2">Navigation des onglets</label>
+                        <select id="navPositionSelector" onchange="changeNavPosition(this.value)" class="w-full bg-input border rounded p-2">
+                            <option value="top">En haut</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-input border">
+                        <span><b>Notifications navigateur</b><small class="block text-slate-500">Alertes même hors onglet</small></span>
+                        <input id="browserNotificationsToggle" type="checkbox" onchange="changeBrowserNotifications(this.checked)" class="accent-blue-600">
+                    </label>
+                    <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-input border">
+                        <span><b>Son des notifications</b><small class="block text-slate-500">Signal sonore bref</small></span>
+                        <input id="notificationSoundToggle" type="checkbox" onchange="changeNotificationSound(this.checked)" class="accent-blue-600">
+                    </label>
+                    <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-input border">
+                        <span><b>Réduire les animations</b><small class="block text-slate-500">Interface plus statique</small></span>
+                        <input id="reducedMotionToggle" type="checkbox" onchange="changeReducedMotion(this.checked)" class="accent-blue-600">
+                    </label>
+                    <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-input border">
+                        <span><b>Masquer les données sensibles</b><small class="block text-slate-500">Floutage rapide</small></span>
+                        <input id="privacyModeToggle" type="checkbox" onchange="changePrivacyMode(this.checked)" class="accent-blue-600">
+                    </label>
+                </div>
+                <button onclick="resetPreferences()" class="w-full py-2 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-arrow-rotate-left mr-2"></i>Réinitialiser mes préférences
+                </button>
             </div>
 
             <div class="pt-3 border-t border-slate-700/60 flex justify-end">
@@ -637,10 +684,18 @@
                         <i class="fa-solid fa-bell text-slate-300 text-sm"></i>
                         <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
                     </button>
-                    <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-card border rounded-xl shadow-2xl p-3 z-50 text-xs space-y-2 max-h-80 overflow-y-auto custom-scroll">
+                    <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-96 bg-card border rounded-xl shadow-2xl p-3 z-50 text-xs space-y-2 max-h-[430px] overflow-y-auto custom-scroll">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
                             <span class="font-bold text-white"><i class="fa-solid fa-bell text-blue-400 mr-1"></i> Notifications</span>
-                            <button onclick="clearNotifications()" class="text-[10px] text-slate-400 hover:text-red-400">Effacer</button>
+                            <div class="flex items-center gap-2">
+                                <button onclick="markNotificationsRead()" class="text-[10px] text-blue-300 hover:text-blue-200"><i class="fa-solid fa-check-double mr-1"></i>Tout lire</button>
+                                <button onclick="clearNotifications()" class="text-[10px] text-slate-400 hover:text-red-400"><i class="fa-solid fa-trash mr-1"></i>Effacer</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-2" id="notifFilters">
+                            <button data-notif-filter="all" onclick="setNotificationFilter('all')" class="module-subtab active px-2 py-1 text-[10px]">Tout</button>
+                            <button data-notif-filter="unread" onclick="setNotificationFilter('unread')" class="module-subtab px-2 py-1 text-[10px]">Non lues</button>
+                            <button data-notif-filter="important" onclick="setNotificationFilter('important')" class="module-subtab px-2 py-1 text-[10px]">Importantes</button>
                         </div>
                         <div id="notifList" class="space-y-1.5">
                             <p class="text-slate-500 text-center py-2">Aucune alerte récente.</p>
@@ -756,6 +811,16 @@
                             <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Militaires</span>
                             <p id="dashTotalCandidats" class="text-2xl font-black text-white">0</p>
                         </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Effectifs actifs</p><p id="dashEffectifsActifs" class="text-xl font-black text-blue-300 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">VMA valides</p><p id="dashVMAValides" class="text-xl font-black text-emerald-400 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Sessions à venir</p><p id="dashSessionsUpcoming" class="text-xl font-black text-violet-300 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Décorations</p><p id="dashDecorationsCount" class="text-xl font-black text-amber-300 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Scores de tir</p><p id="dashTirsCount" class="text-xl font-black text-red-300 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Demandes logistique</p><p id="dashLogisticsCount" class="text-xl font-black text-orange-300 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Opérations actives</p><p id="dashOperationsCount" class="text-xl font-black text-fuchsia-300 mt-1">0</p></div>
+                        <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Alertes actives</p><p id="dashNotificationsCount" class="text-xl font-black text-red-300 mt-1">0</p></div>
                     </div>
                     <div class="bg-card border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3 shadow-sm">
                         <div class="p-3 bg-emerald-600/20 text-emerald-400 rounded-lg flex items-center justify-center">
@@ -1209,6 +1274,11 @@
 
             <!-- TIRS, MÉDICAL & INAPTITUDES GITA -->
             <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="bg-card border p-3 rounded-xl flex flex-wrap items-center gap-2">
+                    <button class="module-subtab active px-3 py-2 text-xs font-bold" data-tir-panel="medical"><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Médical & VMA</button>
+                    <button class="module-subtab px-3 py-2 text-xs font-bold" data-tir-panel="scores"><i class="fa-solid fa-crosshair text-amber-400 mr-2"></i>Carnet de tir</button>
+                    <button class="module-subtab px-3 py-2 text-xs font-bold" data-tir-panel="inaptitudes"><i class="fa-solid fa-user-shield text-cyan-400 mr-2"></i>Inaptitudes</button>
+                </div>
                 <!-- FORMULAIRE VISITE MEDICALE -->
                 <div id="tab-tirs-medical" class="bg-card p-4 rounded-xl border space-y-3">
                     <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2 border-b border-slate-700/60 pb-2">
@@ -1280,9 +1350,9 @@
                     </form>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="tirSecondaryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- CARNET DE TIR -->
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                    <div id="tirScoresPanel" class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-crosshair text-red-500"></i> Enregistrer un Score de Tir</h3>
                         <form id="formAddScoreTir" class="space-y-3 text-xs">
                             <div><label class="block text-slate-400 mb-1">Tireur</label><select id="tirMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
@@ -1297,7 +1367,7 @@
                     </div>
 
                     <!-- INAPTITUDES GITA -->
-                    <div id="tab-fiche-inaptitudes" class="bg-card p-4 rounded-xl border space-y-3">
+                    <div id="tirInaptitudesPanel" class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
                         <form id="formAddInaptitude" class="space-y-3 text-xs">
                             <div><label class="block text-slate-400 mb-1">Militaire</label><select id="inapteMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
@@ -1597,6 +1667,12 @@
 
             <!-- PLANNING -->
             <section id="tab-planning" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Sessions programmées</p><p id="planningSessionsCount" class="text-xl font-black text-blue-300 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Cette semaine</p><p id="planningWeekCount" class="text-xl font-black text-emerald-300 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Aujourd’hui</p><p id="planningTodayCount" class="text-xl font-black text-amber-300 mt-1">0</p></div>
+                    <div class="bg-card border rounded-xl p-3"><p class="text-[9px] uppercase text-slate-500 font-bold">Instructeurs disponibles</p><p id="planningInstructorCount" class="text-xl font-black text-violet-300 mt-1">0</p></div>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-calendar-plus text-blue-500"></i> Programmer une Session</h3>
@@ -1674,6 +1750,7 @@
                 <div class="bg-card border p-3 rounded-xl flex flex-wrap items-center gap-2">
                     <button class="module-subtab active px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="messages"><i class="fa-solid fa-message mr-2 text-blue-400"></i>Messages</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="calls"><i class="fa-solid fa-phone-volume mr-2 text-emerald-400"></i>Appels</button>
+                    <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="voice"><i class="fa-solid fa-headset mr-2 text-cyan-400"></i>Vocaux</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="groups"><i class="fa-solid fa-user-group mr-2 text-violet-400"></i>Groupes</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="announcements"><i class="fa-solid fa-bullhorn mr-2 text-amber-400"></i>Annonces</button>
                 </div>
@@ -1713,7 +1790,36 @@
                     <div class="bg-card border rounded-xl p-4"><h3 class="text-sm font-bold"><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-2"></i>Historique</h3><p class="text-xs text-slate-400 mt-2">8 appels aujourd'hui · 6 terminés</p><button class="mt-4 w-full bg-input border text-xs font-bold py-2 rounded-lg">Voir l'historique</button></div>
                 </div>
 
+                <div id="chat-voice" class="module-panel hidden grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
+                    <div class="bg-card border rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div><h3 class="text-sm font-bold"><i class="fa-solid fa-satellite-dish text-cyan-400 mr-2"></i>Canal vocal général</h3><p class="text-[10px] text-emerald-400 mt-1">Salle ouverte · 6 connectés</p></div>
+                            <button id="btnJoinVoice" onclick="toggleVoiceChannel(this)" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-headset mr-2"></i>Rejoindre</button>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div class="bg-input border rounded-xl p-3 text-center"><div class="w-10 h-10 mx-auto rounded-full bg-emerald-600/30 flex items-center justify-center text-emerald-300"><i class="fa-solid fa-user"></i></div><p class="text-xs font-bold mt-2">CPT Martin</p><p class="text-[9px] text-emerald-400">Micro actif</p></div>
+                            <div class="bg-input border rounded-xl p-3 text-center"><div class="w-10 h-10 mx-auto rounded-full bg-slate-700 flex items-center justify-center text-slate-300"><i class="fa-solid fa-user"></i></div><p class="text-xs font-bold mt-2">SGT Moreau</p><p class="text-[9px] text-slate-500">En écoute</p></div>
+                            <div class="bg-input border rounded-xl p-3 text-center"><div class="w-10 h-10 mx-auto rounded-full bg-slate-700 flex items-center justify-center text-slate-300"><i class="fa-solid fa-user"></i></div><p class="text-xs font-bold mt-2">CPL Diallo</p><p class="text-[9px] text-slate-500">En écoute</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-card border rounded-xl p-4 space-y-2">
+                        <h3 class="text-sm font-bold">Salons vocales</h3>
+                        <button class="w-full bg-input border rounded-lg p-3 text-left text-xs flex justify-between"><span><i class="fa-solid fa-lock text-amber-400 mr-2"></i>Coordination</span><b class="text-slate-400">3</b></button>
+                        <button class="w-full bg-input border rounded-lg p-3 text-left text-xs flex justify-between"><span><i class="fa-solid fa-lock-open text-emerald-400 mr-2"></i>Briefing</span><b class="text-slate-400">0</b></button>
+                        <button class="w-full bg-input border rounded-lg p-3 text-left text-xs flex justify-between"><span><i class="fa-solid fa-plus text-blue-400 mr-2"></i>Créer un salon</span></button>
+                    </div>
+                </div>
+
                 <div id="chat-groups" class="module-panel hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <article class="bg-card border border-dashed border-blue-500/40 rounded-xl p-4">
+                        <h3 class="font-bold text-sm"><i class="fa-solid fa-plus text-blue-400 mr-2"></i>Créer un groupe</h3>
+                        <form id="chatCreateGroupForm" class="mt-3 space-y-2">
+                            <input id="chatGroupName" required maxlength="50" class="w-full bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Nom du groupe">
+                            <input id="chatGroupDescription" maxlength="120" class="w-full bg-input border rounded-lg px-3 py-2 text-xs" placeholder="Description">
+                            <button class="w-full bg-blue-600 hover:bg-blue-500 rounded-lg py-2 text-xs font-bold">Créer le groupe</button>
+                        </form>
+                    </article>
+                    <div id="chatGroupsDynamic" class="contents"></div>
                     <article class="bg-card border rounded-xl p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-sm">Section Alpha</h3><span class="text-[10px] px-2 py-1 bg-emerald-950/50 text-emerald-300 rounded">12 membres</span></div><p class="text-xs text-slate-400 mt-2">Canal tactique de l'unité Alpha.</p></article>
                     <article class="bg-card border rounded-xl p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-sm">État-major</h3><span class="text-[10px] px-2 py-1 bg-violet-950/50 text-violet-300 rounded">8 membres</span></div><p class="text-xs text-slate-400 mt-2">Décisions et directives.</p></article>
                     <article class="bg-card border rounded-xl p-4"><div class="flex items-center justify-between"><h3 class="font-bold text-sm">Intervention</h3><span class="text-[10px] px-2 py-1 bg-red-950/50 text-red-300 rounded">Prioritaire</span></div><p class="text-xs text-slate-400 mt-2">Coordination des missions urgentes.</p></article>
@@ -2051,6 +2157,55 @@
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
         function changeTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('ena_theme', t); }
         function changeAccent(c) { document.documentElement.setAttribute('data-accent', c); localStorage.setItem('ena_accent', c); }
+        function changeDensity(value) {
+            document.documentElement.setAttribute('data-density', value);
+            localStorage.setItem('ena_density', value);
+        }
+        function changeNavPosition() {}
+        function changeReducedMotion(enabled) {
+            document.documentElement.setAttribute('data-reduced-motion', enabled ? 'true' : 'false');
+            localStorage.setItem('ena_reduced_motion', enabled ? 'true' : 'false');
+        }
+        function changePrivacyMode(enabled) {
+            document.body.classList.toggle('privacy-mode', enabled);
+            localStorage.setItem('ena_privacy_mode', enabled ? 'true' : 'false');
+        }
+        function changeNotificationSound(enabled) {
+            localStorage.setItem('ena_notification_sound', enabled ? 'true' : 'false');
+        }
+        async function changeBrowserNotifications(enabled) {
+            if (!enabled) {
+                localStorage.setItem('ena_browser_notifications', 'false');
+                return;
+            }
+            if (!('Notification' in window)) {
+                alert('Les notifications navigateur ne sont pas prises en charge.');
+                document.getElementById('browserNotificationsToggle').checked = false;
+                return;
+            }
+            const permission = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+            if (permission !== 'granted') {
+                document.getElementById('browserNotificationsToggle').checked = false;
+                localStorage.setItem('ena_browser_notifications', 'false');
+                alert('Permission des notifications refusée.');
+                return;
+            }
+            localStorage.setItem('ena_browser_notifications', 'true');
+        }
+        function resetPreferences() {
+            ['ena_theme','ena_accent','ena_density','ena_reduced_motion','ena_privacy_mode','ena_notification_sound','ena_browser_notifications'].forEach(key => localStorage.removeItem(key));
+            document.documentElement.setAttribute('data-theme', 'slate');
+            document.documentElement.setAttribute('data-accent', 'blue');
+            document.documentElement.setAttribute('data-density', 'comfortable');
+            document.documentElement.setAttribute('data-reduced-motion', 'false');
+            document.body.classList.remove('privacy-mode');
+            document.getElementById('themeSelector').value = 'slate';
+            document.getElementById('densitySelector').value = 'comfortable';
+            document.getElementById('browserNotificationsToggle').checked = false;
+            document.getElementById('notificationSoundToggle').checked = false;
+            document.getElementById('reducedMotionToggle').checked = false;
+            document.getElementById('privacyModeToggle').checked = false;
+        }
 
         function getUserRole() { return state.access ? state.access.role : 'En attente'; }
 
@@ -2347,6 +2502,20 @@
                 </article>`).join('');
         }
 
+        function renderChatGroups() {
+            const container = document.getElementById('chatGroupsDynamic');
+            if (!container) return;
+            container.innerHTML = state.chatGroups.map(group => `
+                <article class="bg-card border rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-sm">${escapeHtml(group.name || 'Groupe')}</h3>
+                        <span class="text-[10px] px-2 py-1 bg-violet-950/50 text-violet-300 rounded">Nouveau</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2">${escapeHtml(group.description || 'Groupe opérationnel')}</p>
+                    <p class="text-[9px] text-slate-500 mt-3">Créé par ${escapeHtml(group.owner || 'Utilisateur')}</p>
+                </article>`).join('');
+        }
+
         function renderLogistics() {
             const stockContainer = document.getElementById('logisticsStockList');
             if (stockContainer && state.stocks.length) {
@@ -2425,7 +2594,7 @@
             if (hasTabAccess('chat')) {
                 subscribeValue('chat/messages', snap => { state.chatMessages = toFirebaseList(snap); renderChatMessages(); });
                 subscribeValue('chat/announcements', snap => { state.chatAnnouncements = toFirebaseList(snap); renderChatAnnouncements(); });
-                subscribeValue('chat/groups', snap => { state.chatGroups = toFirebaseList(snap); });
+                subscribeValue('chat/groups', snap => { state.chatGroups = toFirebaseList(snap); renderChatGroups(); });
                 subscribeValue('chat/calls', snap => { state.chatCalls = toFirebaseList(snap); });
             }
             if (hasTabAccess('logistique')) {
@@ -2723,7 +2892,35 @@
             }, accountSubscriptions);
         }
 
+        function loadPreferences() {
+            const theme = localStorage.getItem('ena_theme') || 'slate';
+            const accent = localStorage.getItem('ena_accent') || 'blue';
+            const density = localStorage.getItem('ena_density') || 'comfortable';
+            const reduced = localStorage.getItem('ena_reduced_motion') === 'true';
+            const privacy = localStorage.getItem('ena_privacy_mode') === 'true';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-accent', accent);
+            document.documentElement.setAttribute('data-density', density);
+            document.documentElement.setAttribute('data-reduced-motion', reduced ? 'true' : 'false');
+            document.body.classList.toggle('privacy-mode', privacy);
+            const selectors = {
+                themeSelector: theme,
+                densitySelector: density,
+                browserNotificationsToggle: localStorage.getItem('ena_browser_notifications') === 'true',
+                notificationSoundToggle: localStorage.getItem('ena_notification_sound') === 'true',
+                reducedMotionToggle: reduced,
+                privacyModeToggle: privacy
+            };
+            Object.entries(selectors).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (!element) return;
+                if (element.type === 'checkbox') element.checked = Boolean(value);
+                else element.value = value;
+            });
+        }
+
         function init() {
+            loadPreferences();
             const dtInput = document.getElementById('pDateTime');
             if (dtInput) {
                 const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -3010,6 +3207,17 @@
                     document.getElementById(`chat-${button.dataset.chatPanel}`)?.classList.remove('hidden');
                 });
             });
+            document.querySelectorAll('[data-tir-panel]').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('[data-tir-panel]').forEach(item => item.classList.remove('active'));
+                    button.classList.add('active');
+                    const panel = button.dataset.tirPanel;
+                    document.getElementById('tab-tirs-medical')?.classList.toggle('hidden', panel !== 'medical');
+                    document.getElementById('tirSecondaryGrid')?.classList.toggle('hidden', panel === 'medical');
+                    document.getElementById('tirScoresPanel')?.classList.toggle('hidden', panel !== 'scores');
+                    document.getElementById('tirInaptitudesPanel')?.classList.toggle('hidden', panel !== 'inaptitudes');
+                });
+            });
             document.getElementById('chatSendForm')?.addEventListener('submit', event => {
                 event.preventDefault();
                 const input = document.getElementById('chatMessageInput');
@@ -3025,6 +3233,21 @@
                 }).then(() => {
                     input.value = '';
                     addLog('CHAT_MESSAGE', 'Message envoyé dans le Chat');
+                }).catch(showSyncError);
+            });
+            document.getElementById('chatCreateGroupForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                const name = document.getElementById('chatGroupName').value.trim();
+                const description = document.getElementById('chatGroupDescription').value.trim();
+                if (!name) return;
+                db.ref('chat/groups').push().set({
+                    name,
+                    description,
+                    owner: state.user ? (state.user.displayName || state.user.email || 'Utilisateur') : 'Utilisateur',
+                    createdAt: new Date().toLocaleString('fr-FR')
+                }).then(() => {
+                    event.target.reset();
+                    addLog('CHAT_GROUP', `Groupe créé : ${name}`);
                 }).catch(showSyncError);
             });
             document.addEventListener('click', event => {
@@ -3418,6 +3641,25 @@
             if (elAjournes) elAjournes.textContent = ajournes;
             if (elAttente) elAttente.textContent = attente;
             if (elTaux) elTaux.textContent = tauxReussite + '%';
+
+            const now = Date.now();
+            const upcomingSessions = (state.sessions || []).filter(session => {
+                const timestamp = new Date(session.date || session.dateHeure || '').getTime();
+                return !Number.isNaN(timestamp) && timestamp >= now;
+            }).length;
+            const vmaValides = statutsVMA.filter(status => status === 'VALIDE').length;
+            const setDashboardText = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            };
+            setDashboardText('dashEffectifsActifs', totalMilitaires);
+            setDashboardText('dashVMAValides', vmaValides);
+            setDashboardText('dashSessionsUpcoming', upcomingSessions);
+            setDashboardText('dashDecorationsCount', (state.decorations || []).length);
+            setDashboardText('dashTirsCount', (state.tirs || []).length);
+            setDashboardText('dashLogisticsCount', (state.logisticsRequests || []).length);
+            setDashboardText('dashOperationsCount', (state.operations || []).filter(operation => String(operation.status || '').toUpperCase() !== 'TERMINEE').length);
+            setDashboardText('dashNotificationsCount', (state.notifications || []).filter(notification => !notification.read).length);
         
             // 4. Affichage des dernières évaluations évaluées
             const recentContainer = document.getElementById('dashRecentEvals');
@@ -3697,15 +3939,83 @@
             `).join('');
         }
 
+        let notificationFilter = 'all';
+        let lastNotificationCount = 0;
+
         function toggleNotifications() { document.getElementById('notifDropdown').classList.toggle('hidden'); }
         function clearNotifications() { db.ref('notifications').remove(); }
+        function setNotificationFilter(filter) {
+            notificationFilter = filter;
+            document.querySelectorAll('[data-notif-filter]').forEach(button => button.classList.toggle('active', button.dataset.notifFilter === filter));
+            renderNotifications();
+        }
+        function markNotificationsRead() {
+            state.notifications.forEach(notification => {
+                if (!notification._fbKey || notification.read) return;
+                db.ref(`notifications/${notification._fbKey}/read`).set(true);
+            });
+        }
         function renderNotifications() {
             const container = document.getElementById('notifList');
             const badge = document.getElementById('notifBadge');
             if(!container) return;
-            if(state.notifications.length === 0) { container.innerHTML = '<p class="text-slate-500 text-center py-2">Aucune alerte.</p>'; badge.classList.add('hidden'); }
-            else { badge.textContent = state.notifications.length; badge.classList.remove('hidden'); container.innerHTML = state.notifications.slice(-10).reverse().map(n => `<div class="p-2 bg-input rounded text-[11px]"><span class="text-slate-400 text-[9px] block">${n.date}</span>${n.text}</div>`).join(''); }
+            const unread = state.notifications.filter(n => !n.read);
+            const visible = state.notifications.filter(n => {
+                if (notificationFilter === 'unread') return !n.read;
+                if (notificationFilter === 'important') return n.important === true || /urgent|critique|périmée|périmé/i.test(n.text || '');
+                return true;
+            }).slice(-20).reverse();
+            if(state.notifications.length === 0) {
+                container.innerHTML = '<p class="text-slate-500 text-center py-4">Aucune alerte.</p>';
+                badge.classList.add('hidden');
+            } else {
+                const unreadCount = unread.length;
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.classList.toggle('hidden', unreadCount === 0);
+                container.innerHTML = visible.length ? visible.map(n => `
+                    <button onclick="markNotificationRead('${n._fbKey || ''}')" class="w-full text-left p-2.5 rounded-lg border ${n.read ? 'bg-input border-slate-700/50 opacity-70' : 'bg-blue-950/30 border-blue-500/30'}">
+                        <span class="flex items-center justify-between gap-2">
+                            <span class="text-[9px] text-slate-400">${escapeHtml(n.date || '')}</span>
+                            ${n.read ? '' : '<span class="w-2 h-2 rounded-full bg-blue-400"></span>'}
+                        </span>
+                        <span class="block mt-1">${escapeHtml(n.text || '')}</span>
+                    </button>`).join('') : '<p class="text-slate-500 text-center py-4">Aucune notification dans ce filtre.</p>';
+            }
+            if (state.notifications.length > lastNotificationCount && lastNotificationCount > 0) {
+                const latest = state.notifications[state.notifications.length - 1];
+                if (localStorage.getItem('ena_browser_notifications') === 'true' && 'Notification' in window && Notification.permission === 'granted') {
+                    new Notification('ENA Workspace', { body: latest.text || 'Nouvelle notification' });
+                }
+                if (localStorage.getItem('ena_notification_sound') === 'true') {
+                    try {
+                        const context = new (window.AudioContext || window.webkitAudioContext)();
+                        const oscillator = context.createOscillator();
+                        const gain = context.createGain();
+                        oscillator.frequency.value = 660;
+                        gain.gain.value = 0.03;
+                        oscillator.connect(gain);
+                        gain.connect(context.destination);
+                        oscillator.start();
+                        oscillator.stop(context.currentTime + 0.12);
+                    } catch (_) {}
+                }
+            }
+            lastNotificationCount = state.notifications.length;
+            updateDashboard();
         }
+        function markNotificationRead(key) {
+            if (key) db.ref(`notifications/${key}/read`).set(true);
+        }
+        window.toggleVoiceChannel = button => {
+            const joined = button.dataset.joined === 'true';
+            button.dataset.joined = joined ? 'false' : 'true';
+            button.className = joined
+                ? 'bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-xs font-bold'
+                : 'bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg text-xs font-bold';
+            button.innerHTML = joined
+                ? '<i class="fa-solid fa-headset mr-2"></i>Rejoindre'
+                : '<i class="fa-solid fa-phone-slash mr-2"></i>Quitter';
+        };
 
         function updateInstructeursSelects() {
             const selectSess = document.getElementById('sessInstructeur'); if(!selectSess) return;
@@ -3880,6 +4190,16 @@
                     <button onclick="deleteSession('${s._fbKey}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
+            const now = new Date();
+            const today = now.toISOString().slice(0, 10);
+            const weekEnd = new Date(now);
+            weekEnd.setDate(now.getDate() + 7);
+            const dates = state.sessions.map(session => new Date(session.date || session.dateHeure || ''));
+            const setText = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
+            setText('planningSessionsCount', state.sessions.length);
+            setText('planningTodayCount', dates.filter(date => !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === today).length);
+            setText('planningWeekCount', dates.filter(date => !Number.isNaN(date.getTime()) && date >= now && date <= weekEnd).length);
+            setText('planningInstructorCount', (state.formateurs || []).length);
         }
 
         function renderFiles() {
