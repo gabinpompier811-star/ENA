@@ -163,6 +163,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        #ficheSearchResults {
+            position: absolute;
+            z-index: 40;
+            max-height: 18rem;
+            overflow-y: auto;
+        }
+
+        #ficheSearchResults button {
+            width: 100%;
+            text-align: left;
+        }
+
         .bg-card {
             box-shadow: var(--surface-shadow);
             transition: border-color .18s ease, box-shadow .18s ease;
@@ -1273,9 +1285,25 @@
                         <h2 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-blue-500"></i> Dossier Militaire, Qualifications & Suivi Médical (VMA)</h2>
                         <p class="text-xs text-slate-400">Statut des brevets validés en formation, permis et aptitude opérationnelle</p>
                     </div>
-                    <div class="w-full sm:w-72">
-                        <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-input border rounded p-2 text-xs font-bold">
-                            <option value="">-- Sélectionner un Militaire --</option>
+                    <div class="w-full sm:w-[28rem] space-y-2">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                            <input id="ficheSearchInput" type="search" autocomplete="off" placeholder="Nom, matricule, grade ou unité..." class="w-full bg-input border rounded-lg pl-9 pr-9 py-2.5 text-xs" aria-label="Rechercher un militaire">
+                            <button id="ficheSearchClear" type="button" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-slate-500 hover:text-white hidden" aria-label="Effacer la recherche">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                            <div id="ficheSearchResults" class="hidden left-0 right-0 mt-1 bg-card border border-slate-700 rounded-xl shadow-2xl p-1.5 custom-scroll"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="ficheSearchGrade" class="w-full bg-input border rounded-lg p-2 text-[11px]" aria-label="Filtrer par grade">
+                                <option value="">Tous les grades</option>
+                            </select>
+                            <select id="ficheSearchUnite" class="w-full bg-input border rounded-lg p-2 text-[11px]" aria-label="Filtrer par unité">
+                                <option value="">Toutes les unités</option>
+                            </select>
+                        </div>
+                        <select id="selectFicheMilitaire" onchange="loadFicheMilitaire()" class="w-full bg-input border rounded-lg p-2 text-[11px] font-bold" aria-label="Sélection rapide">
+                            <option value="">Sélection rapide dans la liste...</option>
                         </select>
                     </div>
                 </div>
@@ -1914,6 +1942,14 @@
             return String(militaire.mat || militaire.nom || '').trim().toLocaleLowerCase('fr-FR');
         }
 
+        function normalizeFicheSearch(value) {
+            return String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLocaleLowerCase('fr-FR')
+                .trim();
+        }
+
         function getUniqueMilitaires() {
             const uniques = new Map();
             state.effectifs.forEach(militaire => {
@@ -1934,6 +1970,22 @@
             select.innerHTML = '<option value="">-- Sélectionner un Militaire --</option>' +
                 getUniqueMilitaires().map(m => `<option value="${escapeHtml(militaryIdentity(m))}">${escapeHtml(m.grade)} ${escapeHtml(m.nom)}${m.mat ? ` — ${escapeHtml(m.mat)}` : ''}</option>`).join('');
             if (selectedIdentity && getMilitaryRecords(selectedIdentity).length) select.value = selectedIdentity;
+
+            const gradeSelect = document.getElementById('ficheSearchGrade');
+            const uniteSelect = document.getElementById('ficheSearchUnite');
+            if (gradeSelect) {
+                const selectedGrade = gradeSelect.value;
+                const grades = Array.from(new Set(getUniqueMilitaires().map(m => m.grade).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'fr'));
+                gradeSelect.innerHTML = '<option value="">Tous les grades</option>' + grades.map(grade => `<option value="${escapeHtml(grade)}">${escapeHtml(grade)}</option>`).join('');
+                gradeSelect.value = grades.includes(selectedGrade) ? selectedGrade : '';
+            }
+            if (uniteSelect) {
+                const selectedUnite = uniteSelect.value;
+                const units = Array.from(new Set(getUniqueMilitaires().map(m => m.aff).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'fr'));
+                uniteSelect.innerHTML = '<option value="">Toutes les unités</option>' + units.map(unit => `<option value="${escapeHtml(unit)}">${escapeHtml(unit)}</option>`).join('');
+                uniteSelect.value = units.includes(selectedUnite) ? selectedUnite : '';
+            }
+            renderFicheSearchResults();
         }
 
         window.filtrerDossiers = () => {
@@ -2010,6 +2062,8 @@
                 return;
             }
             state.selectedMilitaireId = identity;
+            if (select) select.value = identity;
+            document.getElementById('ficheSearchResults')?.classList.add('hidden');
             const militaire = records[0];
             container.classList.remove('hidden');
             document.getElementById('fNomEdit').value = militaire.nom || '';
@@ -2439,6 +2493,7 @@
             const todayStr = new Date().toISOString().slice(0, 10);
             if(document.getElementById('medDateVMA')) document.getElementById('medDateVMA').value = todayStr;
             setupListeners();
+            setupFicheSearch();
             setupNavigationEnhancements();
             db.ref('.info/connected').on('value', snap => {
                 const statusEl = document.getElementById('connection-status');
@@ -2502,6 +2557,106 @@
             });
 
             requestAnimationFrame(updateScrollControls);
+        }
+
+        function renderFicheSearchResults() {
+            const input = document.getElementById('ficheSearchInput');
+            const container = document.getElementById('ficheSearchResults');
+            const clearButton = document.getElementById('ficheSearchClear');
+            const gradeFilter = document.getElementById('ficheSearchGrade')?.value || '';
+            const uniteFilter = document.getElementById('ficheSearchUnite')?.value || '';
+            if (!input || !container) return;
+
+            const query = normalizeFicheSearch(input.value);
+            clearButton?.classList.toggle('hidden', !input.value && !gradeFilter && !uniteFilter);
+
+            let militaires = getUniqueMilitaires();
+            if (gradeFilter) militaires = militaires.filter(m => m.grade === gradeFilter);
+            if (uniteFilter) militaires = militaires.filter(m => m.aff === uniteFilter);
+            if (query) {
+                militaires = militaires.filter(m => normalizeFicheSearch([
+                    m.nom, m.mat, m.grade, m.aff, m.id
+                ].filter(Boolean).join(' ')).includes(query));
+            }
+
+            militaires.sort((a, b) => {
+                const gradeDiff = String(a.grade || '').localeCompare(String(b.grade || ''), 'fr');
+                return gradeDiff || String(a.nom || '').localeCompare(String(b.nom || ''), 'fr');
+            });
+
+            const hasFilter = Boolean(query || gradeFilter || uniteFilter);
+            if (!hasFilter) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            const results = militaires.slice(0, 12);
+            if (!results.length) {
+                container.innerHTML = '<div class="px-3 py-4 text-xs text-slate-500 text-center">Aucun militaire ne correspond à cette recherche.</div>';
+            } else {
+                container.innerHTML = results.map(m => {
+                    const identity = militaryIdentity(m);
+                    return `<button type="button" data-fiche-result="${escapeHtml(identity)}" class="rounded-lg px-3 py-2.5 hover:bg-blue-950/50 border border-transparent hover:border-blue-500/20">
+                        <span class="flex items-center justify-between gap-3">
+                            <span>
+                                <span class="block text-sm font-bold text-slate-100">${escapeHtml(m.grade || 'Grade inconnu')} ${escapeHtml(m.nom || 'Nom inconnu')}</span>
+                                <span class="block mt-0.5 text-[10px] text-slate-400">${escapeHtml(m.mat || 'Sans matricule')} · ${escapeHtml(m.aff || 'Affectation inconnue')}</span>
+                            </span>
+                            <i class="fa-solid fa-chevron-right text-slate-500"></i>
+                        </span>
+                    </button>`;
+                }).join('');
+            }
+            container.classList.remove('hidden');
+        }
+
+        function setupFicheSearch() {
+            const input = document.getElementById('ficheSearchInput');
+            const container = document.getElementById('ficheSearchResults');
+            const clearButton = document.getElementById('ficheSearchClear');
+            const gradeFilter = document.getElementById('ficheSearchGrade');
+            const uniteFilter = document.getElementById('ficheSearchUnite');
+            if (!input || !container) return;
+
+            input.addEventListener('input', renderFicheSearchResults);
+            gradeFilter?.addEventListener('change', renderFicheSearchResults);
+            uniteFilter?.addEventListener('change', renderFicheSearchResults);
+
+            clearButton?.addEventListener('click', () => {
+                input.value = '';
+                if (gradeFilter) gradeFilter.value = '';
+                if (uniteFilter) uniteFilter.value = '';
+                renderFicheSearchResults();
+                input.focus();
+            });
+
+            container.addEventListener('click', event => {
+                const result = event.target.closest('[data-fiche-result]');
+                if (!result) return;
+                document.getElementById('selectFicheMilitaire').value = result.dataset.ficheResult;
+                loadFicheMilitaire();
+                container.classList.add('hidden');
+            });
+
+            input.addEventListener('keydown', event => {
+                if (event.key === 'Escape') {
+                    container.classList.add('hidden');
+                }
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    const firstResult = container.querySelector('[data-fiche-result]');
+                    if (firstResult) firstResult.click();
+                }
+            });
+
+            document.addEventListener('click', event => {
+                if (!event.target.closest('#ficheSearchInput, #ficheSearchResults, #ficheSearchGrade, #ficheSearchUnite, #ficheSearchClear')) {
+                    container.classList.add('hidden');
+                }
+            });
+
+            updateFichesSelect();
         }
 
         function showApp() {
