@@ -96,12 +96,50 @@
             scrollbar-width: thin;
         }
 
+        #mainNav {
+            gap: .25rem;
+            padding: .35rem .5rem;
+            background:
+                linear-gradient(180deg, rgba(15, 23, 42, .96), rgba(15, 23, 42, .82));
+            backdrop-filter: blur(14px);
+        }
+
+        #mainNav .nav-scroll {
+            min-width: 0;
+            scroll-behavior: smooth;
+            scroll-padding-inline: 1rem;
+        }
+
+        .nav-edge {
+            position: relative;
+            z-index: 2;
+            width: 2rem;
+            min-width: 2rem;
+            height: 2.25rem;
+            border: 1px solid rgba(148, 163, 184, .16);
+            border-radius: .65rem;
+            background: rgba(15, 23, 42, .92);
+            color: #94a3b8;
+        }
+
+        .nav-edge:hover {
+            color: #fff;
+            border-color: var(--accent-light);
+        }
+
         .tab-btn {
             position: relative;
             flex-shrink: 0;
             min-height: 2.85rem;
+            margin-inline: .08rem;
             border-bottom: 2px solid transparent;
+            border-radius: .55rem .55rem 0 0;
             transition: color .18s ease, background-color .18s ease, border-color .18s ease;
+        }
+
+        .tab-btn i {
+            width: 1.15rem;
+            text-align: center;
         }
 
         .tab-btn:not(.active):hover {
@@ -587,50 +625,56 @@
         </header>
 
         <!-- Navigation par Onglets -->
-        <nav class="bg-header border-b flex items-center px-2 overflow-x-auto custom-scroll">
-            <button class="tab-btn active px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="dashboard">
-                <i class="fa-solid fa-chart-pie"></i> Tableau de Bord
+        <nav id="mainNav" class="bg-header border-b flex items-center">
+            <button id="navScrollLeft" type="button" class="nav-edge hidden items-center justify-center" aria-label="Voir les onglets précédents">
+                <i class="fa-solid fa-chevron-left"></i>
             </button>
-            
-            <button class="tab-btn px-4 py-2.5 text-xs font-bold text-emerald-400 flex items-center gap-2 whitespace-nowrap bg-emerald-950/20 border-r border-emerald-500/30" data-tab="creerdossier">
-                <i class="fa-solid fa-user-plus text-emerald-400"></i> 📁 Créer Dossier
-            </button>
-
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="docs">
-                <i class="fa-solid fa-folder-tree"></i> Documents & Fichiers
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="ena">
-                <i class="fa-solid fa-graduation-cap"></i> ENA & Formations
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="unites">
-                <i class="fa-solid fa-users-viewfinder"></i> Unités & Sections
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="tirs">
-                <i class="fa-solid fa-crosshair"></i> Tirs, Médical & Inaptitudes
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches">
-                <i class="fa-solid fa-user-id-card"></i> Fiches & Médical
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="planning">
-                <i class="fa-solid fa-calendar-days"></i> Planning & Sessions
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="decorations">
-                <i class="fa-solid fa-medal"></i> Décorations
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="programmes">
-                <i class="fa-solid fa-book-bookmark"></i> Référentiel
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes">
-                <i class="fa-solid fa-note-sticky"></i> Notes
-            </button>
-            <button id="navAdminBtn" class="tab-btn hidden px-4 py-2.5 text-xs font-medium text-amber-400 flex items-center gap-2 whitespace-nowrap border-l border-amber-500/30 bg-amber-950/20" data-tab="admin">
-                <i class="fa-solid fa-user-gear"></i> Administration & Hiérarchie
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog">
-                <i class="fa-solid fa-code-commit"></i> Mises à jour
-            </button>
-            <button class="tab-btn px-4 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="logs">
-                <i class="fa-solid fa-list-check"></i> Logs
+            <div id="navScroll" class="nav-scroll flex items-center flex-1 overflow-x-auto custom-scroll">
+                <button class="tab-btn active px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="dashboard" title="Accueil">
+                    <i class="fa-solid fa-chart-pie text-blue-400"></i> Tableau de bord
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-bold text-emerald-400 flex items-center gap-2 whitespace-nowrap" data-tab="creerdossier" title="Créer un dossier">
+                    <i class="fa-solid fa-user-plus text-emerald-400"></i> Créer dossier
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="fiches" title="Fiches militaires">
+                    <i class="fa-solid fa-user-id-card text-sky-400"></i> Fiches
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="ena" title="ENA et formations">
+                    <i class="fa-solid fa-graduation-cap text-violet-400"></i> ENA
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="planning" title="Planning et sessions">
+                    <i class="fa-solid fa-calendar-days text-amber-400"></i> Planning
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="unites" title="Unités et sections">
+                    <i class="fa-solid fa-users-viewfinder text-cyan-400"></i> Unités
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="tirs" title="Tirs et médical">
+                    <i class="fa-solid fa-crosshair text-rose-400"></i> Tirs & médical
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="docs" title="Documents">
+                    <i class="fa-solid fa-folder-tree text-orange-400"></i> Documents
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="decorations" title="Décorations">
+                    <i class="fa-solid fa-medal text-yellow-400"></i> Décorations
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="programmes" title="Référentiel">
+                    <i class="fa-solid fa-book-bookmark text-indigo-400"></i> Référentiel
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="notes" title="Notes">
+                    <i class="fa-solid fa-note-sticky text-lime-400"></i> Notes
+                </button>
+                <button id="navAdminBtn" class="tab-btn hidden px-3 py-2.5 text-xs font-medium text-amber-400 flex items-center gap-2 whitespace-nowrap" data-tab="admin" title="Administration">
+                    <i class="fa-solid fa-user-gear"></i> Administration
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="logs" title="Journaux">
+                    <i class="fa-solid fa-list-check text-slate-300"></i> Logs
+                </button>
+                <button class="tab-btn px-3 py-2.5 text-xs font-medium text-slate-400 flex items-center gap-2 whitespace-nowrap" data-tab="changelog" title="Historique des mises à jour">
+                    <i class="fa-solid fa-code-commit text-teal-400"></i> Mises à jour
+                </button>
+            </div>
+            <button id="navScrollRight" type="button" class="nav-edge hidden items-center justify-center" aria-label="Voir les onglets suivants">
+                <i class="fa-solid fa-chevron-right"></i>
             </button>
         </nav>
 
@@ -2331,9 +2375,26 @@
                 }
 
                 subscribeValue(`userAccess/${uid}`, snapshot => {
+                    const wasApproved = state.access && state.access.approved === true;
                     state.access = snapshot.val();
                     state.role = getUserRole();
                     if (!state.access || state.access.approved !== true) {
+                        if (!wasApproved && !snapshot.val()) {
+                            if (state.application) {
+                                showAccessStatus(
+                                    state.application.status === 'rejected'
+                                        ? 'Ta demande a été refusée. Tu peux envoyer une nouvelle demande avec des informations complémentaires.'
+                                        : 'Ta demande a été envoyée et attend la validation d’un administrateur.',
+                                    { showApplication: state.application.status === 'rejected' }
+                                );
+                            } else {
+                                showAccessStatus(
+                                    'Ton adresse est vérifiée. Envoie une demande pour obtenir l’accès au portail.',
+                                    { showApplication: true }
+                                );
+                            }
+                            return;
+                        }
                         stopDataListeners();
                         showAccessStatus('Ton accès au portail a été suspendu ou révoqué.');
                         return;
@@ -2378,6 +2439,7 @@
             const todayStr = new Date().toISOString().slice(0, 10);
             if(document.getElementById('medDateVMA')) document.getElementById('medDateVMA').value = todayStr;
             setupListeners();
+            setupNavigationEnhancements();
             db.ref('.info/connected').on('value', snap => {
                 const statusEl = document.getElementById('connection-status');
                 if (!statusEl) return;
@@ -2393,6 +2455,53 @@
                 return;
             }
             auth.onAuthStateChanged(handleAuthStateChange, showSyncError);
+        }
+
+        function setupNavigationEnhancements() {
+            const navScroll = document.getElementById('navScroll');
+            const leftButton = document.getElementById('navScrollLeft');
+            const rightButton = document.getElementById('navScrollRight');
+            if (!navScroll || !leftButton || !rightButton) return;
+
+            const updateScrollControls = () => {
+                const overflow = navScroll.scrollWidth > navScroll.clientWidth + 2;
+                leftButton.classList.toggle('hidden', !overflow);
+                leftButton.classList.toggle('flex', overflow);
+                rightButton.classList.toggle('hidden', !overflow);
+                rightButton.classList.toggle('flex', overflow);
+                leftButton.style.opacity = navScroll.scrollLeft <= 2 ? '.45' : '1';
+                rightButton.style.opacity = navScroll.scrollLeft + navScroll.clientWidth >= navScroll.scrollWidth - 2 ? '.45' : '1';
+            };
+
+            const scrollNavigation = direction => {
+                navScroll.scrollBy({ left: direction * Math.max(220, navScroll.clientWidth * .55), behavior: 'smooth' });
+            };
+
+            leftButton.addEventListener('click', () => scrollNavigation(-1));
+            rightButton.addEventListener('click', () => scrollNavigation(1));
+            navScroll.addEventListener('scroll', updateScrollControls, { passive: true });
+            window.addEventListener('resize', updateScrollControls);
+
+            document.querySelectorAll('.tab-btn[data-tab]').forEach(button => {
+                button.addEventListener('click', () => {
+                    requestAnimationFrame(() => button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }));
+                });
+            });
+
+            document.addEventListener('keydown', event => {
+                if (!event.altKey || event.shiftKey || event.ctrlKey || event.metaKey) return;
+                if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                const visibleButtons = Array.from(document.querySelectorAll('.tab-btn[data-tab]'))
+                    .filter(button => !button.classList.contains('hidden') && canOpenTab(button.dataset.tab));
+                if (!visibleButtons.length) return;
+                const currentIndex = Math.max(0, visibleButtons.findIndex(button => button.classList.contains('active')));
+                const direction = event.key === 'ArrowRight' ? 1 : -1;
+                const nextIndex = (currentIndex + direction + visibleButtons.length) % visibleButtons.length;
+                event.preventDefault();
+                visibleButtons[nextIndex].click();
+            });
+
+            requestAnimationFrame(updateScrollControls);
         }
 
         function showApp() {
