@@ -9,6 +9,7 @@
     
     <!-- Firebase SDK (v9 compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <!-- Librairie Export PDF -->
@@ -42,6 +43,219 @@
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
         .row-valide { background-color: rgba(22, 101, 52, 0.35) !important; border-left: 4px solid #22c55e !important; }
+
+        :root {
+            color-scheme: dark;
+            --surface-shadow: 0 16px 38px rgba(0, 0, 0, .22);
+            --surface-shadow-hover: 0 20px 46px rgba(0, 0, 0, .32);
+            --focus-ring: color-mix(in srgb, var(--accent-color, #3b82f6) 35%, transparent);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            background-image:
+                radial-gradient(ellipse at 12% 0%, rgba(37, 99, 235, .09), transparent 34rem),
+                radial-gradient(ellipse at 95% 100%, rgba(16, 185, 129, .055), transparent 32rem);
+            background-attachment: fixed;
+        }
+
+        #authModal {
+            background:
+                radial-gradient(ellipse at 50% 15%, rgba(37, 99, 235, .16), transparent 42%),
+                rgba(2, 6, 23, .88);
+            backdrop-filter: blur(12px);
+        }
+
+        #authModal > .bg-card {
+            position: relative;
+            overflow: hidden;
+            border-color: rgba(96, 165, 250, .24);
+            border-radius: 1.25rem;
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .55);
+        }
+
+        #authModal > .bg-card::before {
+            position: absolute;
+            inset: 0 0 auto;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), #34d399, transparent);
+            content: "";
+        }
+
+        #app > header {
+            min-height: 3.75rem;
+            border-color: rgba(148, 163, 184, .14);
+            backdrop-filter: blur(16px);
+        }
+
+        #app > nav {
+            position: relative;
+            z-index: 19;
+            min-height: 2.9rem;
+            border-color: rgba(148, 163, 184, .12);
+            scrollbar-width: thin;
+        }
+
+        .tab-btn {
+            position: relative;
+            flex-shrink: 0;
+            min-height: 2.85rem;
+            border-bottom: 2px solid transparent;
+            transition: color .18s ease, background-color .18s ease, border-color .18s ease;
+        }
+
+        .tab-btn:not(.active):hover {
+            color: #e2e8f0;
+            background-color: rgba(148, 163, 184, .08);
+        }
+
+        .tab-btn.active {
+            border-bottom-color: var(--accent-color);
+            border-radius: .5rem .5rem 0 0;
+            color: var(--accent-light);
+            background-color: var(--accent-bg);
+        }
+
+        .tab-content {
+            animation: tab-enter .2s ease-out;
+        }
+
+        @keyframes tab-enter {
+            from { opacity: .65; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bg-card {
+            box-shadow: var(--surface-shadow);
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        .bg-card:hover {
+            border-color: rgba(96, 165, 250, .28);
+            box-shadow: var(--surface-shadow-hover);
+        }
+
+        .bg-input {
+            transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+        }
+
+        input:not([type="checkbox"]):not([type="radio"]),
+        select,
+        textarea {
+            max-width: 100%;
+        }
+
+        input:not([type="checkbox"]):not([type="radio"]):focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent-color, #3b82f6) !important;
+            box-shadow: 0 0 0 3px var(--focus-ring);
+            outline: none;
+        }
+
+        button, a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button {
+            transition: filter .16s ease, transform .16s ease, box-shadow .16s ease;
+        }
+
+        button:hover:not(:disabled) {
+            filter: brightness(1.08);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent-light, #60a5fa);
+            outline-offset: 2px;
+        }
+
+        .custom-scroll {
+            scrollbar-color: #475569 transparent;
+            scrollbar-width: thin;
+        }
+
+        @media (max-width: 760px) {
+            #app {
+                height: 100dvh;
+                min-height: 100vh;
+            }
+
+            #app > header {
+                gap: .65rem;
+                flex-wrap: wrap;
+                padding: .65rem .8rem;
+            }
+
+            #app > header > div:last-child {
+                gap: .45rem;
+                flex-wrap: wrap;
+            }
+
+            #app > nav {
+                padding-inline: .35rem;
+            }
+
+            #app > nav .tab-btn {
+                padding-inline: .75rem;
+                font-size: .68rem;
+            }
+
+            #tab-dashboard > div:first-child {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            #tab-dashboard > div:first-child select {
+                width: 100%;
+            }
+
+            #tab-notes > .flex-1 {
+                flex-direction: column;
+            }
+
+            #notesList,
+            #pdfNoteContainer {
+                width: 100%;
+                min-height: 40%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #app > header > div:first-child {
+                gap: .5rem;
+            }
+
+            #app > header > div:last-child {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            #app > header #connection-status {
+                margin-right: auto;
+            }
+
+            #authModal > .bg-card {
+                padding: 1.35rem;
+            }
+
+            .tab-content {
+                padding-inline: .75rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
@@ -54,22 +268,53 @@
                     <i class="fa-solid fa-shield-halved text-2xl"></i>
                 </div>
                 <h2 class="text-xl font-bold text-white">Portail Militaire ENA</h2>
-                <p class="text-xs text-slate-400 mt-1">Identification requise pour l'accès sécurisé</p>
+                <p id="authIntro" class="text-xs text-slate-400 mt-1">Connexion sécurisée par Firebase</p>
             </div>
 
             <form id="authForm" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Identifiant / Email</label>
-                    <input type="email" id="authEmail" placeholder="gabinpompier811@gmail.com" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                <div id="authNameField" class="hidden">
+                    <label for="authName" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom complet</label>
+                    <input type="text" id="authName" autocomplete="name" class="w-full bg-input rounded-lg px-3 py-2 text-sm" placeholder="Nom et prénom">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
-                    <input type="password" id="authPassword" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                    <label for="authEmail" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email</label>
+                    <input type="email" id="authEmail" autocomplete="email" placeholder="nom@exemple.fr" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
                 </div>
-                <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg transition">
-                    Se connecter / S'inscrire
+                <div>
+                    <label for="authPassword" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
+                    <input type="password" id="authPassword" autocomplete="current-password" minlength="8" required class="w-full bg-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                </div>
+                <button id="btnForgotPassword" type="button" class="text-xs text-blue-300 hover:text-blue-200 disabled:opacity-40">Mot de passe oublié ?</button>
+                <p id="authMessage" class="hidden text-xs rounded-lg p-2" role="status" aria-live="polite"></p>
+                <button id="btnAuthSubmit" type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg transition disabled:opacity-40 disabled:cursor-not-allowed">
+                    Se connecter
                 </button>
             </form>
+            <div class="mt-4 text-center text-xs text-slate-400">
+                <span id="authModeLabel">Pas encore de compte ?</span>
+                <button id="btnAuthMode" type="button" class="ml-1 text-blue-300 hover:text-blue-200 font-semibold disabled:opacity-40">Créer un compte</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="accessStatusModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-card border rounded-xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-300 flex items-center justify-center"><i class="fa-solid fa-user-clock"></i></div>
+                <div><h2 class="font-bold text-white">Accès au portail</h2><p id="accessStatusMessage" class="text-xs text-slate-400"></p></div>
+            </div>
+            <div id="applicationFormContainer" class="hidden border-t border-slate-700 pt-4">
+                <form id="applicationForm" class="space-y-3">
+                    <div><label for="applicationName" class="block text-xs text-slate-400 mb-1">Nom complet</label><input id="applicationName" required class="w-full bg-input border rounded-lg p-2 text-sm"></div>
+                    <div><label for="applicationReason" class="block text-xs text-slate-400 mb-1">Pourquoi souhaites-tu rejoindre le portail ?</label><textarea id="applicationReason" rows="3" maxlength="500" required class="w-full bg-input border rounded-lg p-2 text-sm"></textarea></div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-lg py-2">Envoyer ma demande</button>
+                </form>
+            </div>
+            <div class="flex flex-wrap justify-end gap-2 border-t border-slate-700 pt-3">
+                <button id="btnResendVerification" type="button" class="hidden px-3 py-2 bg-blue-700 text-white rounded-lg text-xs">Renvoyer le mail de vérification</button>
+                <button id="btnRefreshVerification" type="button" class="hidden px-3 py-2 bg-slate-700 text-white rounded-lg text-xs">J'ai vérifié mon adresse</button>
+                <button id="btnPendingLogout" type="button" class="px-3 py-2 bg-slate-700 text-white rounded-lg text-xs">Se déconnecter</button>
+            </div>
         </div>
     </div>
 
@@ -430,7 +675,7 @@
                             <p id="dashTauxReussite" class="text-2xl font-black text-emerald-400">0%</p>
                         </div>
                     </div>
-                    <div class="bg-card border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3 shadow-sm">
+                    <div id="dashMedicalRenewalCard" class="bg-card border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3 shadow-sm">
                         <div class="p-3 bg-amber-600/20 text-amber-400 rounded-lg flex items-center justify-center">
                             <i class="fa-solid fa-stethoscope text-xl" aria-hidden="true"></i>
                         </div>
@@ -439,7 +684,7 @@
                             <p id="dashTotalVMARenouveler" class="text-2xl font-black text-amber-400">0</p>
                         </div>
                     </div>
-                    <div class="bg-card border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3 shadow-sm">
+                    <div id="dashMedicalExpiredCard" class="bg-card border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3 shadow-sm">
                         <div class="p-3 bg-red-600/20 text-red-400 rounded-lg flex items-center justify-center">
                             <i class="fa-solid fa-heart-crack text-xl" aria-hidden="true"></i>
                         </div>
@@ -498,7 +743,7 @@
                             Créer / Mettre à Jour un Dossier Militaire Rétroactif
                         </h2>
                         <p class="text-xs text-slate-400 max-w-2xl leading-relaxed">
-                            Formulaire d'enregistrement direct pour les militaires possédant déjà des qualifications. Cochez l'ensemble des brevets et permis acquis pour synchroniser automatiquement le dossier à travers tout le système.
+                            Formulaire de création ou de mise à jour. Cochez les qualifications à ajouter ou mettre à jour ; les qualifications et évaluations existantes sont conservées.
                         </p>
                     </div>
                     <div id="cancelEditContainer" class="hidden">
@@ -518,15 +763,15 @@
                             <i class="fa-solid fa-id-card text-blue-400 text-base" aria-hidden="true"></i> 1. État Civil & Affectation
                         </legend>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="space-y-1.5">
+                            <div class="space-y-1.5" data-medical-field>
                                 <label for="fullNom" class="block text-slate-400 font-medium">Nom & Prénom <span class="text-emerald-500">*</span></label>
                                 <input type="text" id="fullNom" placeholder="ex: CPT Jean Dupont" required class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl p-2.5 text-white outline-none transition">
                             </div>
-                            <div class="space-y-1.5">
+                            <div class="space-y-1.5" data-medical-field>
                                 <label for="fullGrade" class="block text-slate-400 font-medium">Grade <span class="text-emerald-500">*</span></label>
                                 <input type="text" id="fullGrade" placeholder="ex: Capitaine" required class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl p-2.5 text-white outline-none transition">
                             </div>
-                            <div class="space-y-1.5">
+                            <div class="space-y-1.5" data-medical-field>
                                 <label for="fullMat" class="block text-slate-400 font-medium">Matricule <span class="text-emerald-500">*</span></label>
                                 <input type="text" id="fullMat" placeholder="ex: MAT-8890" required class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl p-2.5 font-mono text-amber-300 outline-none transition">
                             </div>
@@ -771,10 +1016,17 @@
                 </div>
 
                 <div id="pdfContentEffectifs" class="bg-card p-4 rounded-xl border space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/60 pb-2">
                         <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-list-check text-blue-500"></i> Suivi des Formations & Évaluations</h3>
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <input type="text" id="searchTable" oninput="renderEffectifs()" placeholder="🔍 Rechercher nom, grade..." class="bg-input border rounded px-2.5 py-1 text-xs focus:outline-none">
+                            <label for="filterFormationStatus" class="sr-only">Filtrer les formations par statut</label>
+                            <select id="filterFormationStatus" onchange="renderEffectifs()" class="bg-input border rounded px-2.5 py-1.5 text-xs">
+                                <option value="all">Tous les statuts</option>
+                                <option value="pending">En attente</option>
+                                <option value="passed">Validées</option>
+                                <option value="retake">À repasser</option>
+                            </select>
                             <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center gap-1"><i class="fa-solid fa-file-excel"></i> Excel</button>
                             <button id="btnExportEffectifsPDF" onclick="generatePDF('pdfContentEffectifs', 'Effectifs_ENA.pdf')" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                         </div>
@@ -783,7 +1035,6 @@
                         <input type="text" id="pNom" placeholder="Nom Prénom" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pGrade" placeholder="Grade" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
-                        <input type="date" id="pDateVMA" required class="bg-input border rounded px-2.5 py-1.5 text-xs" title="Date de la Visite Médicale (VMA)">
                         <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs font-bold text-blue-300">
                             <option value="N/A">N/A (Sans affectation)</option>
                             <option value="CPA 10">CPA 10</option>
@@ -868,10 +1119,13 @@
             <!-- TIRS, MÉDICAL & INAPTITUDES GITA -->
             <section id="tab-tirs" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <!-- FORMULAIRE VISITE MEDICALE -->
-                <div class="bg-card p-4 rounded-xl border space-y-3">
+                <div id="tab-tirs-medical" class="bg-card p-4 rounded-xl border space-y-3">
                     <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2 border-b border-slate-700/60 pb-2">
                         <i class="fa-solid fa-heart-pulse text-red-500"></i> Formulaire de Visite Médicale (Aptitude VMA Obligatoire tous les 2 Mois)
                     </h3>
+                            <p class="text-[11px] text-amber-300 bg-amber-950/30 border border-amber-700/40 rounded-lg px-3 py-2">
+                                N'utilisez pas de vraies données médicales avant d'avoir activé Firebase Authentication, déployé les règles et validé la conformité de l'hébergement.
+                            </p>
                     <form id="formFullVisiteMedicale" class="space-y-3 text-xs">
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                             <div>
@@ -952,7 +1206,7 @@
                     </div>
 
                     <!-- INAPTITUDES GITA -->
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
+                    <div id="tab-fiche-inaptitudes" class="bg-card p-4 rounded-xl border space-y-3">
                         <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-slash text-amber-500"></i> Inaptitude Médicale Temporaire (GITA)</h3>
                         <form id="formAddInaptitude" class="space-y-3 text-xs">
                             <div><label class="block text-slate-400 mb-1">Militaire</label><select id="inapteMilitaire" required class="w-full bg-input border rounded p-2 font-bold"></select></div>
@@ -1043,7 +1297,7 @@
                     <div class="space-y-6 text-slate-200 font-sans">
                     
                         <!-- HEADER DE SECTION / FICHE MÉDICALE -->
-                        <div class="bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl border border-slate-800/80 shadow-2xl space-y-4 transition-all">
+                        <div id="ficheMedicalSection" class="bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl border border-slate-800/80 shadow-2xl space-y-4 transition-all">
                             <div class="flex flex-wrap justify-between items-center border-b border-slate-800 pb-3 gap-3">
                                 <div class="flex items-center gap-3">
                                     <div class="p-2.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
@@ -1120,7 +1374,6 @@
                                     <input type="text" id="fMedecinExam" readonly placeholder="Dr. --" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg p-2 text-slate-300 focus:outline-none text-xs font-mono">
                                 </div>
                             </div>
-                    
                             <!-- BOUTON D'ENREGISTREMENT MÉDICAL -->
                             <div class="flex justify-end pt-2 border-t border-slate-800/60">
                                 <button onclick="saveMedicalData()" class="px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-950/50 flex items-center gap-2 transition-all transform active:scale-95">
@@ -1128,11 +1381,20 @@
                                 </button>
                             </div>
                         </div>
+
+                        <div id="ficheMedicalHistorySection" class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3">
+                            <h4 class="text-xs font-bold text-red-300 uppercase tracking-wider border-b border-slate-800 pb-2">
+                                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Historique des visites médicales
+                            </h4>
+                            <div id="fHistoriqueMedical" class="space-y-2 text-xs">
+                                <p class="text-slate-500 italic">Sélectionnez un militaire pour afficher son historique.</p>
+                            </div>
+                        </div>
                     
                         <!-- DÉCORATIONS ET INAPTITUDES -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- DÉCORATIONS -->
-                            <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3">
+                            <div id="ficheInaptitudesSection" class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80 shadow-lg space-y-3">
                                 <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
                                     <i class="fa-solid fa-award text-sm"></i> Décorations & Distinctions
                                 </h4>
@@ -1303,41 +1565,16 @@
             <!-- ADMINISTRATION HIERARCHIQUE STRICTE (6 RÔLES) -->
             <section id="tab-admin" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="bg-card p-4 rounded-xl border border-amber-500/50 bg-amber-950/10">
-                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1"><i class="fa-solid fa-user-shield text-xl"></i> Administration & Hiérarchie Sécurisée</h2>
-                    <p class="text-xs text-slate-400">
-                        Gestion des 6 rôles : 
-                        <span class="text-amber-300 font-semibold">1. Fondateur</span>, 
-                        <span class="text-purple-300 font-semibold">2. Co-Fondateur</span>, 
-                        <span class="text-red-300 font-semibold">3. Administrateur</span>, 
-                        <span class="text-emerald-300 font-semibold">4. Modérateur</span>, 
-                        <span class="text-cyan-300 font-semibold">5. Personnel ENA</span>, 
-                        <span class="text-slate-300 font-semibold">6. Personnel Opérateur</span>.
-                    </p>
+                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1"><i class="fa-solid fa-user-shield text-xl"></i> Administration des accès</h2>
+                    <p class="text-xs text-slate-400">Validez les demandes, choisissez un rôle et accordez les onglets nécessaires. Les permissions sont également vérifiées par les règles Firebase.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-amber-400"></i> Attribuer un Rôle</h3>
-                        <form id="formAddAllowedUser" class="space-y-3 text-xs">
-                            <div><label class="block text-slate-400 mb-1">Email</label><input type="email" id="adminUserEmail" placeholder="nom@gmail.com" required class="w-full bg-input border rounded p-2"></div>
-                            <div><label class="block text-slate-400 mb-1">Nom / Grade</label><input type="text" id="adminUserNom" placeholder="CPT Thomas" required class="w-full bg-input border rounded p-2"></div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Rôle Hiérarchique</label>
-                                <select id="adminUserRole" class="w-full bg-input border rounded p-2 font-bold text-amber-300">
-                                    <option value="Fondateur">👑 1. Fondateur</option>
-                                    <option value="Co-Fondateur">👑 2. Co-Fondateur</option>
-                                    <option value="Administrateur">⭐ 3. Administrateur</option>
-                                    <option value="Modérateur">🛡️ 4. Modérateur</option>
-                                    <option value="Personnel ENA">🎓 5. Personnel ENA</option>
-                                    <option value="Personnel Opérateur">🪖 6. Personnel Opérateur</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2 rounded">+ Valider le Rôle</button>
-                        </form>
-                    </div>
-                    <div class="md:col-span-2 bg-card p-4 rounded-xl border space-y-3">
-                        <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres & Privilèges Actifs</h3>
-                        <div id="adminUsersList" class="space-y-2 text-xs"></div>
-                    </div>
+                <div class="bg-card p-4 rounded-xl border space-y-3">
+                    <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-user-clock text-amber-400"></i> Demandes en attente</h3>
+                    <div id="adminApplicationsList" class="space-y-2 text-xs"></div>
+                </div>
+                <div class="bg-card p-4 rounded-xl border space-y-3">
+                    <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres et permissions</h3>
+                    <div id="adminUsersList" class="space-y-3 text-xs"></div>
                 </div>
             </section>
 
@@ -1475,22 +1712,65 @@
 
     <!-- JavaScript & Logic Firebase -->
     <script>
-        const firebaseConfig = { databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app" };
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-ljiyhlGJBQbatTbnbQEh1KfPDvXzCL4",
+            authDomain: "forces-speciales-francaises.firebaseapp.com",
+            databaseURL: "https://forces-speciales-francaises-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "forces-speciales-francaises",
+            storageBucket: "forces-speciales-francaises.firebasestorage.app",
+            messagingSenderId: "618860439997",
+            appId: "1:618860439997:web:2242c1f715723c8f5e4ad4"
+        };
+        const firebaseAuthConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId && firebaseConfig.appId);
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebaseAuthConfigured ? firebase.auth() : null;
+        const ACCESS_TABS = [
+            { id: 'dashboard', label: 'Tableau de bord' },
+            { id: 'creerdossier', label: 'Créer dossier' },
+            { id: 'docs', label: 'Documents' },
+            { id: 'ena', label: 'Formations ENA' },
+            { id: 'unites', label: 'Unités' },
+            { id: 'tirs', label: 'Tirs' },
+            { id: 'fiches', label: 'Fiches militaires' },
+            { id: 'planning', label: 'Planning' },
+            { id: 'decorations', label: 'Décorations' },
+            { id: 'programmes', label: 'Programmes' },
+            { id: 'notes', label: 'Notes' },
+            { id: 'changelog', label: 'Historique' },
+            { id: 'logs', label: 'Journaux' },
+            { id: 'admin', label: 'Administration' },
+            { id: 'medical', label: 'Données médicales confidentielles' }
+        ];
+        const ADMIN_ROLES = ['Fondateur', 'Co-Fondateur', 'Administrateur'];
+        const DEFAULT_TABS_BY_ROLE = {
+            'Fondateur': ACCESS_TABS.map(tab => tab.id),
+            'Co-Fondateur': ACCESS_TABS.map(tab => tab.id),
+            'Administrateur': ACCESS_TABS.map(tab => tab.id),
+            'Modérateur': ['dashboard', 'creerdossier', 'docs', 'ena', 'unites', 'tirs', 'fiches', 'planning', 'decorations', 'programmes', 'notes', 'changelog'],
+            'Personnel ENA': ['dashboard', 'creerdossier', 'docs', 'ena', 'unites', 'fiches', 'planning', 'decorations', 'programmes'],
+            'Personnel Opérateur': ['dashboard', 'fiches']
+        };
 
         const state = {
-            user: JSON.parse(localStorage.getItem('ena_user')) || null,
-            role: 'Personnel Opérateur',
+            user: null,
+            access: null,
+            application: null,
+            applications: [],
+            accessProfiles: [],
+            role: 'En attente',
             files: [], notes: [], activeNoteId: null,
-            effectifs: [], formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [],
-            allowedUsers: [], notifications: [], logs: [], selectedMilitaireId: null
+            effectifs: [], effectifsBase: [], medicalRecords: {}, formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [], visitesMedicales: [],
+            notifications: [], logs: [], selectedMilitaireId: null, medicalMigrationComplete: false
         };
+        const activeSubscriptions = [];
+        let migrationStatusWatched = false;
+        const expandedFormationGroups = new Set();
 
         const QUALIFICATIONS_CATALOG = [
             { category: 'brevets', label: '🪂 Brevet Parachutiste', keyMatch: ['Brevet Parachutiste'] },
             { category: 'brevets', label: '🥊 Qualification CQB', keyMatch: ['Qualification CQB'] },
-            { category: 'brevets', label: '🪖 FGI Validé', keyMatch: ['Formation Général Initiale'] },
+            { category: 'brevets', label: '🪖 FGI Validé', keyMatch: ['Formation Général Initiale', 'Formation Générale Initiale'] },
             { category: 'brevets', label: '🎗️ CAT1 (Brevet Caporal)', keyMatch: ['Brevet Caporal'] },
             { category: 'brevets', label: '🎗️ CME (Brevet Caporal-Chef)', keyMatch: ['Brevet Caporal-Chef'] },
             { category: 'brevets', label: '🎗️ CC1 (Caporal-Chef 1cl)', keyMatch: ['Caporal-Chef de 1ère classe'] },
@@ -1553,11 +1833,185 @@
         function changeTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('ena_theme', t); }
         function changeAccent(c) { document.documentElement.setAttribute('data-accent', c); localStorage.setItem('ena_accent', c); }
 
-        function getUserRole(email) {
-            if (!email) return 'Personnel Opérateur';
-            if (email.toLowerCase() === 'gabinpompier811@gmail.com') return 'Fondateur';
-            const found = state.allowedUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-            return found ? found.role : 'Personnel Opérateur';
+        function getUserRole() { return state.access ? state.access.role : 'En attente'; }
+
+        function hasTabAccess(tabId) {
+            return Boolean(state.access && state.access.approved === true && state.access.tabs && state.access.tabs[tabId] === true);
+        }
+
+        function canOpenTab(tabId) {
+            return hasTabAccess(tabId) && (tabId !== 'admin' || isAccessAdmin());
+        }
+
+        function isAccessAdmin() {
+            return Boolean(state.access && state.access.approved === true && ADMIN_ROLES.includes(state.access.role) && hasTabAccess('admin'));
+        }
+
+        function medicalRecordKey(militaire) {
+            const identity = militaryIdentity(militaire);
+            return identity ? encodeURIComponent(identity).replace(/\./g, '%2E') : '';
+        }
+
+        function mergeMedicalData() {
+            state.effectifs = state.effectifsBase.map(record => {
+                if (!hasTabAccess('medical')) return { ...record };
+                const profile = state.medicalRecords[medicalRecordKey(record)] || {};
+                return { ...record, ...profile };
+            });
+        }
+
+        function escapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, char => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[char]);
+        }
+
+        function militaryIdentity(militaire) {
+            return String(militaire.mat || militaire.nom || '').trim().toLocaleLowerCase('fr-FR');
+        }
+
+        function getUniqueMilitaires() {
+            const uniques = new Map();
+            state.effectifs.forEach(militaire => {
+                const identity = militaryIdentity(militaire);
+                if (identity && !uniques.has(identity)) uniques.set(identity, militaire);
+            });
+            return Array.from(uniques.values());
+        }
+
+        function getMilitaryRecords(identity) {
+            return state.effectifs.filter(militaire => militaryIdentity(militaire) === String(identity || '').trim().toLocaleLowerCase('fr-FR'));
+        }
+
+        function updateFichesSelect() {
+            const select = document.getElementById('selectFicheMilitaire');
+            if (!select) return;
+            const selectedIdentity = state.selectedMilitaireId || select.value;
+            select.innerHTML = '<option value="">-- Sélectionner un Militaire --</option>' +
+                getUniqueMilitaires().map(m => `<option value="${escapeHtml(militaryIdentity(m))}">${escapeHtml(m.grade)} ${escapeHtml(m.nom)}${m.mat ? ` — ${escapeHtml(m.mat)}` : ''}</option>`).join('');
+            if (selectedIdentity && getMilitaryRecords(selectedIdentity).length) select.value = selectedIdentity;
+        }
+
+        window.filtrerDossiers = () => {
+            const tbody = document.getElementById('tableDossiersBody');
+            const emptyMessage = document.getElementById('noDossierMessage');
+            if (!tbody) return;
+            const query = (document.getElementById('searchDossier')?.value || '').trim().toLocaleLowerCase('fr-FR');
+            const unit = document.getElementById('filterUnite')?.value || '';
+            const militaires = getUniqueMilitaires().filter(m => {
+                const records = getMilitaryRecords(militaryIdentity(m));
+                const text = [m.nom, m.grade, m.mat, m.aff, ...records.map(item => item.form)].join(' ').toLocaleLowerCase('fr-FR');
+                return (!query || text.includes(query)) && (!unit || (m.aff || 'N/A') === unit);
+            });
+            tbody.innerHTML = militaires.map(m => {
+                const records = getMilitaryRecords(militaryIdentity(m));
+                const qualifications = records.map(item => item.form).filter(Boolean);
+                const status = getStatutMedicalVMA(m.dateVMA);
+                return `<tr class="hover:bg-slate-800/40">
+                    <td class="p-3.5"><strong class="text-white">${escapeHtml(m.nom)}</strong><span class="block text-[10px] text-slate-400 font-mono">${escapeHtml(m.mat || '')}</span></td>
+                    <td class="p-3.5">${escapeHtml(m.grade || '')}</td>
+                    <td class="p-3.5">${escapeHtml(m.aff || 'N/A')}</td>
+                    <td class="p-3.5 text-center">${qualifications.length}</td>
+                    <td class="p-3.5">${hasTabAccess('medical')
+                        ? `<span class="${status.status === 'VALIDE' ? 'text-emerald-300' : status.status === 'ALERTE' ? 'text-amber-300' : 'text-red-300'}">${escapeHtml(m.aptitudeVMA || status.label)}</span><span class="block text-[10px] text-slate-400">${escapeHtml(m.sang || 'Non renseigné')} · ${escapeHtml(m.dateVMA || 'VMA non renseignée')}</span>`
+                        : '<span class="text-slate-500">Confidentiel</span>'}</td>
+                    <td class="p-3.5 text-right whitespace-nowrap">
+                        <button type="button" data-edit-dossier="${encodeURIComponent(militaryIdentity(m))}" class="px-2 py-1 bg-blue-700 text-white rounded text-[10px]">Modifier</button>
+                        <button type="button" data-open-dossier="${encodeURIComponent(militaryIdentity(m))}" class="px-2 py-1 bg-slate-700 text-white rounded text-[10px]">Fiche</button>
+                    </td>
+                </tr>`;
+            }).join('');
+            if (emptyMessage) emptyMessage.classList.toggle('hidden', militaires.length > 0);
+        };
+
+        window.editDossier = identity => {
+            const records = getMilitaryRecords(identity);
+            if (!records.length) return;
+            const militaire = records[0];
+            document.getElementById('editIndex').value = identity;
+            document.getElementById('fullNom').value = militaire.nom || '';
+            document.getElementById('fullGrade').value = militaire.grade || '';
+            document.getElementById('fullMat').value = militaire.mat || '';
+            document.getElementById('fullUnite').value = militaire.aff || 'N/A';
+            document.getElementById('fullSang').value = militaire.sang || 'Non renseigné';
+            document.getElementById('fullDateVMA').value = /^\d{4}-\d{2}-\d{2}$/.test(militaire.dateVMA || '') ? militaire.dateVMA : '';
+            document.getElementById('fullAptitude').value = militaire.aptitudeVMA || 'Apte Service FS';
+            document.getElementById('fullNotes').value = militaire.notesPerso || '';
+            const currentForms = new Set(records.map(record => record.form));
+            document.querySelectorAll('.full-form-check').forEach(check => { check.checked = currentForms.has(check.value); });
+            document.getElementById('formTitle').lastChild.textContent = ' Modifier le Dossier Militaire';
+            document.getElementById('btnSubmitDossier').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Enregistrer les modifications';
+            document.getElementById('cancelEditContainer').classList.remove('hidden');
+            document.getElementById('formFullDossier').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.resetFormulaire = () => {
+            const form = document.getElementById('formFullDossier');
+            if (!form) return;
+            form.reset();
+            document.getElementById('editIndex').value = '-1';
+            document.getElementById('formTitle').lastChild.textContent = ' Créer / Mettre à Jour un Dossier Militaire Rétroactif';
+            document.getElementById('btnSubmitDossier').innerHTML = '<i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Enregistrer Dossier Rétroactif';
+            document.getElementById('cancelEditContainer').classList.add('hidden');
+        };
+
+        function loadFicheMilitaire() {
+            const select = document.getElementById('selectFicheMilitaire');
+            const identity = select ? select.value : state.selectedMilitaireId;
+            const records = getMilitaryRecords(identity);
+            const container = document.getElementById('ficheContainer');
+            if (!records.length) {
+                state.selectedMilitaireId = null;
+                if (container) container.classList.add('hidden');
+                return;
+            }
+            state.selectedMilitaireId = identity;
+            const militaire = records[0];
+            container.classList.remove('hidden');
+            document.getElementById('fNomEdit').value = militaire.nom || '';
+            document.getElementById('fGradeEdit').value = militaire.grade || '';
+            document.getElementById('fMat').textContent = militaire.mat || 'Non renseigné';
+            document.getElementById('fAff').textContent = militaire.aff || 'N/A';
+            document.getElementById('fCountValide').textContent = records.filter(record => record.eval && record.eval.evaluee && record.eval.resultat === 'Admis').length;
+            document.getElementById('fSang').value = militaire.sang || 'Non renseigné';
+            document.getElementById('fAptitudeVMA').value = militaire.aptitudeVMA || 'Apte Service FS';
+            document.getElementById('fDateVMA').value = /^\d{4}-\d{2}-\d{2}$/.test(militaire.dateVMA || '') ? militaire.dateVMA : '';
+            document.getElementById('fDetailsMed').value = militaire.detailsMedicalExam || '';
+            document.getElementById('fMedecinExam').value = militaire.medecinExaminateur || '';
+            document.getElementById('fNotesPerso').value = militaire.notesPerso || '';
+            document.getElementById('noteCharCounter').textContent = `${(militaire.notesPerso || '').length} car.`;
+            const status = getStatutMedicalVMA(militaire.dateVMA);
+            const badge = document.getElementById('fVMABadgeStatus');
+            badge.className = `px-3.5 py-1.5 rounded-full text-xs font-semibold border flex items-center gap-2 shadow-sm ${status.class}`;
+            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-current"></span><span>${escapeHtml(status.label)}</span>`;
+            renderAutomaticQualifications(records);
+            renderMedicalHistory();
+            const decorations = state.decorations.filter(item => item.nom === militaire.nom);
+            document.getElementById('fDecorationsList').innerHTML = decorations.length
+                ? decorations.map(item => `<span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-lg">${escapeHtml(item.titre)}</span>`).join('')
+                : '<span class="text-slate-500 italic">Aucune décoration enregistrée.</span>';
+            const restrictions = state.inaptitudes.filter(item => item.nom === militaire.nom);
+            document.getElementById('fInaptitudesList').innerHTML = restrictions.length
+                ? restrictions.map(item => `<span class="px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">${escapeHtml(item.type)} · fin ${escapeHtml(item.dateFin)}</span>`).join('')
+                : '<span class="text-slate-500 italic">Aucune inaptitude enregistrée.</span>';
+        }
+
+        function renderMedicalHistory() {
+            const container = document.getElementById('fHistoriqueMedical');
+            if (!container) return;
+            const currentRecords = getMilitaryRecords(state.selectedMilitaireId);
+            const matricule = currentRecords.length ? currentRecords[0].mat : '';
+            const nom = currentRecords.length ? currentRecords[0].nom : '';
+            const visits = state.visitesMedicales
+                .filter(visit => (matricule && visit.matricule === matricule) || (!matricule && visit.nom === nom))
+                .sort((a, b) => String(b.dateVMA || '').localeCompare(String(a.dateVMA || '')));
+            container.innerHTML = visits.length ? visits.map(visit => `
+                <article class="bg-slate-950/60 border border-slate-800 rounded-lg p-3 grid grid-cols-1 sm:grid-cols-4 gap-2">
+                    <div><span class="block text-slate-500">Date</span><strong class="text-white">${escapeHtml(visit.dateVMA || 'Non renseignée')}</strong></div>
+                    <div><span class="block text-slate-500">Aptitude</span><strong class="text-emerald-300">${escapeHtml(visit.aptitude || 'Non renseignée')}</strong></div>
+                    <div><span class="block text-slate-500">Médecin</span><span class="text-slate-200">${escapeHtml(visit.medecin || 'Non renseigné')}</span></div>
+                    <div><span class="block text-slate-500">Constantes / Observations</span><span class="text-slate-300">${escapeHtml(visit.details || 'Aucune')}</span></div>
+                </article>`).join('') : '<p class="text-slate-500 italic">Aucune visite enregistrée.</p>';
         }
 
         function checkPermission(actionType, targetRole = '') {
@@ -1585,45 +2039,134 @@
             return true;
         }
 
-        // Synchronisations Firebase
-        db.ref('.info/connected').on('value', (snap) => {
-            const statusEl = document.getElementById('connection-status');
-            if (snap.val() === true) { statusEl.textContent = "Connecté"; statusEl.className = "px-2.5 py-1 rounded-full bg-emerald-600 text-white font-medium text-[10px]"; }
-            else { statusEl.textContent = "Hors ligne"; statusEl.className = "px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]"; }
-        });
+        const accountSubscriptions = [];
 
-        db.ref('files').on('value', snap => { state.files = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFiles(); updateDashboard(); });
-        db.ref('notes').on('value', snap => { state.notes = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderNotes(); });
-        db.ref('effectifs').on('value', snap => { state.effectifs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderEffectifs(); renderFormateurs(); renderUnites(); updateFichesSelect(); updateDecorationsSelects(); updateTirsSelects(); updateDashboard(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
-        db.ref('formateurs').on('value', snap => { state.formateurs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderFormateurs(); updateInstructeursSelects(); updateDashboard(); });
-        db.ref('sessions').on('value', snap => { state.sessions = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderSessions(); });
-        db.ref('decorations').on('value', snap => { state.decorations = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderDecorations(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
-        db.ref('tirs').on('value', snap => { state.tirs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderTirs(); });
-        db.ref('inaptitudes').on('value', snap => { state.inaptitudes = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderInaptitudes(); updateDashboard(); if(state.selectedMilitaireId) loadFicheMilitaire(); });
-        db.ref('allowedUsers').on('value', snap => { state.allowedUsers = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; if(state.user) { state.role = getUserRole(state.user.email); document.getElementById('userRoleBadge').textContent = state.role; } renderAdminUsers(); });
-        db.ref('notifications').on('value', snap => { state.notifications = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderNotifications(); });
-        db.ref('logs').on('value', snap => { state.logs = snap.val() ? Object.entries(snap.val()).map(([k,v]) => ({...v, _fbKey:k})) : []; renderLogs(); });
+        function subscribeValue(path, callback, subscriptions = activeSubscriptions) {
+            const ref = db.ref(path);
+            ref.on('value', callback, showSyncError);
+            subscriptions.push({ ref, callback });
+        }
+
+        function clearSubscriptions(subscriptions) {
+            subscriptions.forEach(({ ref, callback }) => ref.off('value', callback));
+            subscriptions.length = 0;
+        }
+
+        function stopDataListeners() { clearSubscriptions(activeSubscriptions); }
+
+        function canReadAny(tabIds) {
+            return tabIds.some(tabId => hasTabAccess(tabId));
+        }
+
+        function refreshEffectifsViews() {
+            mergeMedicalData();
+            renderEffectifs();
+            renderFormateurs();
+            renderUnites();
+            updateFichesSelect();
+            updateDecorationsSelects();
+            updateTirsSelects();
+            updateDashboard();
+            filtrerDossiers();
+            if (state.selectedMilitaireId) loadFicheMilitaire();
+        }
+
+        function startDataListeners() {
+            stopDataListeners();
+            if (!state.user || !state.access || state.access.approved !== true) return;
+
+            const effectifsTabs = ['dashboard', 'creerdossier', 'ena', 'unites', 'tirs', 'fiches', 'planning', 'decorations', 'programmes'];
+            if ((state.medicalMigrationComplete && canReadAny(effectifsTabs)) || (!state.medicalMigrationComplete && isAccessAdmin())) {
+                subscribeValue('effectifs', snap => {
+                    state.effectifsBase = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : [];
+                    refreshEffectifsViews();
+                });
+            }
+            if (hasTabAccess('medical') || (!state.medicalMigrationComplete && isAccessAdmin())) {
+                subscribeValue('medicalRecords', snap => {
+                    state.medicalRecords = snap.val() || {};
+                    refreshEffectifsViews();
+                });
+                subscribeValue('visitesMedicales', snap => {
+                    state.visitesMedicales = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : [];
+                    renderMedicalHistory();
+                });
+                subscribeValue('inaptitudes', snap => {
+                    state.inaptitudes = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : [];
+                    renderInaptitudes();
+                    updateDashboard();
+                    if (state.selectedMilitaireId) loadFicheMilitaire();
+                });
+            }
+            if (hasTabAccess('docs')) subscribeValue('files', snap => { state.files = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderFiles(); updateDashboard(); });
+            if (hasTabAccess('notes')) subscribeValue('notes', snap => { state.notes = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderNotes(); });
+            if (canReadAny(['ena', 'planning', 'dashboard'])) subscribeValue('formateurs', snap => { state.formateurs = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderFormateurs(); updateInstructeursSelects(); updateDashboard(); });
+            if (canReadAny(['planning', 'ena'])) subscribeValue('sessions', snap => { state.sessions = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderSessions(); });
+            if (canReadAny(['decorations', 'fiches'])) subscribeValue('decorations', snap => { state.decorations = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderDecorations(); if (state.selectedMilitaireId) loadFicheMilitaire(); });
+            if (canReadAny(['tirs', 'dashboard'])) subscribeValue('tirs', snap => { state.tirs = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderTirs(); });
+            if (hasTabAccess('dashboard')) subscribeValue('notifications', snap => { state.notifications = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderNotifications(); });
+            if (hasTabAccess('logs')) subscribeValue('logs', snap => { state.logs = snap.val() ? Object.entries(snap.val()).map(([key, value]) => ({ ...value, _fbKey: key })) : []; renderLogs(); });
+
+            if (isAccessAdmin()) {
+                subscribeValue('userApplications', snap => {
+                    state.applications = snap.val() ? Object.entries(snap.val()).map(([uid, value]) => ({ ...value, _fbKey: uid })) : [];
+                    renderAdminUsers();
+                });
+                subscribeValue('userAccess', snap => {
+                    state.accessProfiles = snap.val() ? Object.entries(snap.val()).map(([uid, value]) => ({ ...value, _fbKey: uid })) : [];
+                    renderAdminUsers();
+                });
+            }
+        }
+
+        function showSyncError(error) {
+            const statusEl = document.getElementById('connection-status');
+            if (statusEl) {
+                statusEl.textContent = 'Erreur de synchronisation';
+                statusEl.className = 'px-2.5 py-1 rounded-full bg-red-700 text-white font-medium text-[10px]';
+                statusEl.title = error && error.message ? error.message : 'Firebase a refusé la synchronisation.';
+            }
+            console.error('Erreur Firebase :', error);
+            alert(`La synchronisation Firebase a échoué. Vérifiez la connexion et les règles d'accès.\n${error && error.message ? error.message : ''}`);
+        }
 
         function addLog(action, details) {
-            db.ref('logs').push({ id: Date.now().toString(), date: new Date().toLocaleString('fr-FR'), user: state.user ? state.user.email : 'Anonyme', action, details });
-            db.ref('notifications').push({ text: `${action} : ${details}`, date: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) });
+            const uid = state.user ? state.user.uid : '';
+            db.ref('logs').push().set({ id: Date.now().toString(), date: new Date().toLocaleString('fr-FR'), user: state.user ? state.user.email : 'Anonyme', uid, action, details }).catch(showSyncError);
+            db.ref('notifications').push().set({ text: `${action} : ${details}`, uid, date: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) }).catch(showSyncError);
         }
 
         // SUPPRESSION TOTALE ET DÉFINITIVE D'UN OPÉRATEUR
-        window.purgeOperatorCompletely = () => {
+        window.purgeOperatorCompletely = async () => {
             if (!state.selectedMilitaireId) return;
-            const nom = state.selectedMilitaireId;
+            const records = getMilitaryRecords(state.selectedMilitaireId);
+            if (!records.length) return;
+            const nom = records.length ? records[0].nom : '';
             if (!checkPermission('EXCLURE')) return;
+            if (!hasTabAccess('medical') || !hasTabAccess('tirs') || !hasTabAccess('decorations') ||
+                !['creerdossier', 'ena', 'fiches'].some(tabId => hasTabAccess(tabId))) {
+                return alert('Pour supprimer complètement ce dossier, il faut les accès Formation, Tirs, Décorations et Médical.');
+            }
 
-            if (confirm(`⚠️ ATTENTION ACTION IRRÉVERSIBLE !\n\nVoulez-vous SUPPRIMER COMPLÈTEMENT l'opérateur "${nom}" ?\n\nCela effacera définitivement :\n- Toutes ses fiches d'effectifs & formations\n- Ses scores de tirs enregistrés\n- Ses inaptitudes médicales\n- Ses décorations et médailles`)) {
+            if (confirm(`⚠️ ATTENTION ACTION IRRÉVERSIBLE !\n\nVoulez-vous SUPPRIMER COMPLÈTEMENT l'opérateur "${nom}" ?\n\nCela effacera définitivement :\n- Toutes ses fiches d'effectifs & formations\n- Ses scores de tirs enregistrés\n- Ses données et visites médicales\n- Ses inaptitudes médicales\n- Ses décorations et médailles`)) {
                 
-                state.effectifs.filter(e => e.nom === nom).forEach(e => { if (e._fbKey) db.ref('effectifs/' + e._fbKey).remove(); });
-                state.tirs.filter(t => t.nom === nom).forEach(t => { if (t._fbKey) db.ref('tirs/' + t._fbKey).remove(); });
-                state.inaptitudes.filter(i => i.nom === nom).forEach(i => { if (i._fbKey) db.ref('inaptitudes/' + i._fbKey).remove(); });
-                state.decorations.filter(d => d.nom === nom).forEach(d => { if (d._fbKey) db.ref('decorations/' + d._fbKey).remove(); });
+                const updates = {};
+                records.forEach(e => { if (e._fbKey) updates[`effectifs/${e._fbKey}`] = null; });
+                state.tirs.filter(t => t.nom === nom).forEach(t => { if (t._fbKey) updates[`tirs/${t._fbKey}`] = null; });
+                state.inaptitudes.filter(i => i.nom === nom).forEach(i => { if (i._fbKey) updates[`inaptitudes/${i._fbKey}`] = null; });
+                state.decorations.filter(d => d.nom === nom).forEach(d => { if (d._fbKey) updates[`decorations/${d._fbKey}`] = null; });
+                state.visitesMedicales.filter(v => (records[0].mat && v.matricule === records[0].mat) || (!records[0].mat && v.nom === nom)).forEach(v => { if (v._fbKey) updates[`visitesMedicales/${v._fbKey}`] = null; });
+                const medicalKey = medicalRecordKey(records[0]);
+                if (medicalKey) updates[`medicalRecords/${medicalKey}`] = null;
 
-                addLog('PURGE_OPERATEUR', `Purge complète et définitive de l'opérateur ${nom}`);
-                alert(`L'opérateur ${nom} et l'intégralité de son historique ont été supprimés avec succès.`);
+                try {
+                    await db.ref().update(updates);
+                    addLog('PURGE_OPERATEUR', `Purge complète et définitive de l'opérateur ${nom}`);
+                    alert(`L'opérateur ${nom} et l'intégralité de son historique ont été supprimés.`);
+                } catch (error) {
+                    showSyncError(error);
+                    return;
+                }
                 
                 document.getElementById('ficheContainer').classList.add('hidden');
                 document.getElementById('selectFicheMilitaire').value = '';
@@ -1651,7 +2194,7 @@
         }
 
         window.printDiplome = (candidateId) => {
-            const cand = state.effectifs.find(e => e.id === candidateId);
+            const cand = state.effectifs.find(e => e._fbKey === candidateId || e.id === candidateId);
             if (!cand || !cand.eval) return;
             document.getElementById('dipNomMilitaire').textContent = `${cand.grade} ${cand.nom}`;
             document.getElementById('dipMatricule').textContent = cand.mat;
@@ -1669,8 +2212,164 @@
             });
         };
 
+        function setAuthMessage(message, isError = false) {
+            const element = document.getElementById('authMessage');
+            element.textContent = message;
+            element.className = `text-xs rounded-lg p-2 ${isError ? 'bg-red-950/60 text-red-300' : 'bg-emerald-950/60 text-emerald-300'}`;
+        }
+
+        function firebaseErrorMessage(error) {
+            const messages = {
+                'auth/email-already-in-use': 'Cette adresse e-mail possède déjà un compte.',
+                'auth/invalid-email': 'Adresse e-mail invalide.',
+                'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+                'auth/user-not-found': 'Aucun compte ne correspond à cette adresse.',
+                'auth/wrong-password': 'E-mail ou mot de passe incorrect.',
+                'auth/weak-password': 'Le mot de passe doit contenir au moins 8 caractères.',
+                'auth/too-many-requests': 'Trop de tentatives. Réessaie plus tard.',
+                'auth/network-request-failed': 'Connexion réseau indisponible.',
+                'auth/operation-not-allowed': 'Active la connexion par e-mail/mot de passe dans Firebase Authentication.'
+            };
+            return messages[error && error.code] || (error && error.message) || 'Une erreur Firebase est survenue.';
+        }
+
+        function showLogin() {
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('authModal').classList.remove('hidden');
+            document.getElementById('accessStatusModal').classList.add('hidden');
+            document.getElementById('authEmail').value = state.user ? state.user.email || '' : '';
+            if (!state.user) document.getElementById('applicationForm').reset();
+        }
+
+        function showAccessStatus(message, options = {}) {
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('authModal').classList.add('hidden');
+            const modal = document.getElementById('accessStatusModal');
+            modal.classList.remove('hidden');
+            document.getElementById('accessStatusMessage').textContent = message;
+            document.getElementById('applicationFormContainer').classList.toggle('hidden', options.showApplication !== true);
+            document.getElementById('btnResendVerification').classList.toggle('hidden', options.showResend !== true);
+            document.getElementById('btnRefreshVerification').classList.toggle('hidden', options.showRefresh !== true);
+            if (options.showApplication === true && state.user) {
+                document.getElementById('applicationName').value = state.user.displayName || '';
+            }
+        }
+
+        function updateTabVisibility() {
+            document.querySelectorAll('.tab-btn[data-tab]').forEach(button => {
+                button.classList.toggle('hidden', !canOpenTab(button.dataset.tab));
+            });
+            document.getElementById('navAdminBtn').classList.toggle('hidden', !canOpenTab('admin'));
+            document.querySelectorAll('[data-medical-field]').forEach(element => element.classList.toggle('hidden', !hasTabAccess('medical')));
+            document.getElementById('ficheMedicalSection')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('ficheMedicalHistorySection')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('ficheInaptitudesSection')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('tab-tirs-medical')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('tab-fiche-inaptitudes')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('dashMedicalRenewalCard')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('dashMedicalExpiredCard')?.classList.toggle('hidden', !hasTabAccess('medical'));
+            document.getElementById('btnSaveGlobal').classList.toggle('hidden', !isAccessAdmin());
+        }
+
+        function activateFirstAvailableTab() {
+            const currentButton = document.querySelector('.tab-btn.active');
+            if (currentButton && canOpenTab(currentButton.dataset.tab)) return;
+            const firstButton = Array.from(document.querySelectorAll('.tab-btn[data-tab]')).find(button => canOpenTab(button.dataset.tab));
+            if (firstButton) firstButton.click();
+        }
+
+        async function handleAuthStateChange(user) {
+            clearSubscriptions(accountSubscriptions);
+            stopDataListeners();
+            migrationStatusWatched = false;
+            state.medicalMigrationComplete = false;
+            state.access = null;
+            state.application = null;
+            state.accessProfiles = [];
+            state.applications = [];
+            if (!user) {
+                state.user = null;
+                state.role = 'En attente';
+                showLogin();
+                return;
+            }
+
+            state.user = user;
+            try {
+                await user.reload();
+                state.user = auth.currentUser;
+                if (!state.user.emailVerified) {
+                    showAccessStatus('Vérifie ton adresse e-mail avant de demander l’accès au portail.', { showResend: true, showRefresh: true });
+                    return;
+                }
+
+                const uid = state.user.uid;
+                const [accessSnapshot, applicationSnapshot] = await Promise.all([
+                    db.ref(`userAccess/${uid}`).once('value'),
+                    db.ref(`userApplications/${uid}`).once('value')
+                ]);
+                state.access = accessSnapshot.val();
+                state.application = applicationSnapshot.val();
+                state.role = getUserRole();
+
+                if (state.access && state.access.approved === true) {
+                    const migrationSnapshot = await db.ref('security/medicalMigrationComplete').once('value');
+                    state.medicalMigrationComplete = migrationSnapshot.val() === true;
+                    showApp();
+                    startDataListeners();
+                    watchMigrationStatus();
+                } else {
+                    const rejected = state.application && state.application.status === 'rejected';
+                    showAccessStatus(
+                        rejected
+                            ? 'Ta demande a été refusée. Tu peux envoyer une nouvelle demande avec des informations complémentaires.'
+                            : state.application
+                                ? 'Ta demande a été envoyée et attend la validation d’un administrateur.'
+                                : 'Ton adresse est vérifiée. Envoie une demande pour obtenir l’accès au portail.',
+                        { showApplication: !state.application || rejected }
+                    );
+                }
+
+                subscribeValue(`userAccess/${uid}`, snapshot => {
+                    state.access = snapshot.val();
+                    state.role = getUserRole();
+                    if (!state.access || state.access.approved !== true) {
+                        stopDataListeners();
+                        showAccessStatus('Ton accès au portail a été suspendu ou révoqué.');
+                        return;
+                    }
+                    showApp();
+                    startDataListeners();
+                    watchMigrationStatus();
+                }, accountSubscriptions);
+                subscribeValue(`userApplications/${uid}`, snapshot => {
+                    state.application = snapshot.val();
+                    if ((!state.access || state.access.approved !== true) && state.application) {
+                        showAccessStatus(state.application.status === 'rejected'
+                            ? 'Ta demande a été refusée. Tu peux envoyer une nouvelle demande.'
+                            : 'Ta demande attend la validation d’un administrateur.',
+                        { showApplication: state.application.status === 'rejected' });
+                    }
+                }, accountSubscriptions);
+            } catch (error) {
+                showSyncError(error);
+                showAccessStatus(`Impossible de vérifier les autorisations du compte : ${firebaseErrorMessage(error)}`);
+            }
+        }
+
+        function watchMigrationStatus() {
+            if (migrationStatusWatched || !state.access || state.access.approved !== true) return;
+            migrationStatusWatched = true;
+            subscribeValue('security/medicalMigrationComplete', snapshot => {
+                const complete = snapshot.val() === true;
+                if (complete === state.medicalMigrationComplete) return;
+                state.medicalMigrationComplete = complete;
+                startDataListeners();
+                renderAdminUsers();
+            }, accountSubscriptions);
+        }
+
         function init() {
-            if (state.user) { showApp(); } else { document.getElementById('authModal').classList.remove('hidden'); }
             const dtInput = document.getElementById('pDateTime');
             if (dtInput) {
                 const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -1679,95 +2378,276 @@
             const todayStr = new Date().toISOString().slice(0, 10);
             if(document.getElementById('medDateVMA')) document.getElementById('medDateVMA').value = todayStr;
             setupListeners();
+            db.ref('.info/connected').on('value', snap => {
+                const statusEl = document.getElementById('connection-status');
+                if (!statusEl) return;
+                if (snap.val() === true) { statusEl.textContent = 'Connecté'; statusEl.className = 'px-2.5 py-1 rounded-full bg-emerald-600 text-white font-medium text-[10px]'; }
+                else { statusEl.textContent = 'Hors ligne'; statusEl.className = 'px-2.5 py-1 rounded-full bg-amber-600 text-white font-medium text-[10px]'; }
+            });
+            if (!firebaseAuthConfigured) {
+                showLogin();
+                document.getElementById('btnAuthSubmit').disabled = true;
+                document.getElementById('btnAuthMode').disabled = true;
+                document.getElementById('btnForgotPassword').disabled = true;
+                setAuthMessage('Configuration Firebase Authentication manquante : renseigne apiKey, authDomain, projectId et appId dans firebaseConfig.', true);
+                return;
+            }
+            auth.onAuthStateChanged(handleAuthStateChange, showSyncError);
         }
 
         function showApp() {
-            state.role = getUserRole(state.user.email);
+            state.role = getUserRole();
             document.getElementById('userRoleBadge').textContent = state.role;
             document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('accessStatusModal').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
             document.getElementById('app').classList.add('flex');
             document.getElementById('userInfo').textContent = state.user.email;
-
-            if (['Fondateur', 'Co-Fondateur', 'Administrateur'].includes(state.role) || state.user.email.toLowerCase() === 'gabinpompier811@gmail.com') {
-                document.getElementById('navAdminBtn').classList.remove('hidden');
-            } else {
-                document.getElementById('navAdminBtn').classList.add('hidden');
-            }
+            updateTabVisibility();
+            activateFirstAvailableTab();
         }
 
         function setupListeners() {
-            document.getElementById('authForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                state.user = { email: document.getElementById('authEmail').value.trim() };
-                localStorage.setItem('ena_user', JSON.stringify(state.user));
-                addLog('CONNEXION', `Connexion de ${state.user.email}`);
-                showApp();
+            let authMode = 'login';
+            const updateAuthMode = () => {
+                const signup = authMode === 'signup';
+                document.getElementById('authNameField').classList.toggle('hidden', !signup);
+                document.getElementById('authName').required = signup;
+                document.getElementById('authPassword').autocomplete = signup ? 'new-password' : 'current-password';
+                document.getElementById('btnAuthSubmit').textContent = signup ? 'Créer mon compte' : 'Se connecter';
+                document.getElementById('authModeLabel').textContent = signup ? 'Déjà inscrit ?' : 'Pas encore de compte ?';
+                document.getElementById('btnAuthMode').textContent = signup ? 'Se connecter' : 'Créer un compte';
+                document.getElementById('authIntro').textContent = signup ? 'Inscription sécurisée — accès soumis à validation' : 'Connexion sécurisée par Firebase';
+            };
+            document.getElementById('btnAuthMode').addEventListener('click', () => {
+                authMode = authMode === 'login' ? 'signup' : 'login';
+                updateAuthMode();
             });
+            document.getElementById('authForm').addEventListener('submit', async event => {
+                event.preventDefault();
+                if (!auth) return setAuthMessage('Configuration Firebase Authentication manquante.', true);
+                const email = document.getElementById('authEmail').value.trim();
+                const password = document.getElementById('authPassword').value;
+                try {
+                    if (authMode === 'signup') {
+                        const name = document.getElementById('authName').value.trim();
+                        const credential = await auth.createUserWithEmailAndPassword(email, password);
+                        await credential.user.updateProfile({ displayName: name });
+                        await credential.user.sendEmailVerification();
+                        setAuthMessage('Compte créé. Consulte tes e-mails et vérifie ton adresse, puis reconnecte-toi.');
+                    } else {
+                        await auth.signInWithEmailAndPassword(email, password);
+                    }
+                } catch (error) {
+                    setAuthMessage(firebaseErrorMessage(error), true);
+                }
+            });
+            document.getElementById('btnForgotPassword').addEventListener('click', async () => {
+                if (!auth) return setAuthMessage('Configuration Firebase Authentication manquante.', true);
+                const email = document.getElementById('authEmail').value.trim();
+                if (!email) return setAuthMessage('Saisis ton adresse e-mail pour recevoir un lien de réinitialisation.', true);
+                try {
+                    await auth.sendPasswordResetEmail(email);
+                    setAuthMessage('Si un compte existe pour cette adresse, un e-mail de réinitialisation a été envoyé.');
+                } catch (error) {
+                    setAuthMessage(firebaseErrorMessage(error), true);
+                }
+            });
+            document.getElementById('btnResendVerification').addEventListener('click', async () => {
+                try {
+                    await auth.currentUser.sendEmailVerification();
+                    showAccessStatus('Nouveau mail de vérification envoyé. Vérifie également tes courriers indésirables.', { showResend: true, showRefresh: true });
+                } catch (error) {
+                    showAccessStatus(firebaseErrorMessage(error), { showResend: true, showRefresh: true });
+                }
+            });
+            document.getElementById('btnRefreshVerification').addEventListener('click', async () => {
+                try {
+                    await auth.currentUser.reload();
+                    await handleAuthStateChange(auth.currentUser);
+                } catch (error) {
+                    showAccessStatus(firebaseErrorMessage(error), { showResend: true, showRefresh: true });
+                }
+            });
+            document.getElementById('btnPendingLogout').addEventListener('click', () => auth && auth.signOut());
+            document.getElementById('btnLogout').addEventListener('click', () => auth && auth.signOut());
 
-            document.getElementById('btnLogout').addEventListener('click', () => { localStorage.removeItem('ena_user'); location.reload(); });
+            document.getElementById('applicationForm').addEventListener('submit', async event => {
+                event.preventDefault();
+                if (!auth || !auth.currentUser || !auth.currentUser.emailVerified) {
+                    return showAccessStatus('Vérifie ton adresse e-mail avant d’envoyer une demande.', { showResend: true, showRefresh: true });
+                }
+                const uid = auth.currentUser.uid;
+                try {
+                    await db.ref(`userApplications/${uid}`).set({
+                        uid, email: auth.currentUser.email, name: document.getElementById('applicationName').value.trim(),
+                        reason: document.getElementById('applicationReason').value.trim(), status: 'pending', createdAt: new Date().toISOString()
+                    });
+                    document.getElementById('applicationForm').reset();
+                    showAccessStatus('Ta demande a été envoyée et attend la validation d’un administrateur.');
+                } catch (error) {
+                    showSyncError(error);
+                }
+            });
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
+                    if (!canOpenTab(btn.dataset.tab)) return;
                     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
                     btn.classList.add('active');
                     document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
                 });
             });
+            document.addEventListener('click', event => {
+                const approve = event.target.closest('button[data-approve-application]');
+                const reject = event.target.closest('button[data-reject-application]');
+                const saveMember = event.target.closest('button[data-save-member]');
+                const revokeMember = event.target.closest('button[data-revoke-member]');
+                if (approve) window.approveApplication(approve.dataset.approveApplication);
+                else if (reject) window.rejectApplication(reject.dataset.rejectApplication);
+                else if (saveMember) window.saveMemberAccess(saveMember.dataset.saveMember);
+                else if (revokeMember) window.deleteAllowedUser(revokeMember.dataset.revokeMember);
+                else if (event.target.closest('#btnMigrateMedicalData')) window.migrateMedicalData();
+            });
+            document.getElementById('adminApplicationsList').addEventListener('change', event => {
+                const roleSelect = event.target.closest('select[data-application-role]');
+                if (!roleSelect) return;
+                const defaults = new Set(DEFAULT_TABS_BY_ROLE[roleSelect.value] || []);
+                document.querySelectorAll(`input[data-application-uid="${roleSelect.dataset.applicationRole}"]`).forEach(input => {
+                    input.checked = defaults.has(input.dataset.tabId);
+                });
+            });
+
+            document.getElementById('tableDossiersBody').addEventListener('click', event => {
+                const button = event.target.closest('button[data-edit-dossier], button[data-open-dossier]');
+                if (!button) return;
+                const identity = decodeURIComponent(button.dataset.editDossier || button.dataset.openDossier);
+                if (button.hasAttribute('data-edit-dossier')) window.editDossier(identity);
+                else window.selectMilitaireAndOpenFiche(identity);
+            });
+            document.addEventListener('click', event => {
+                const button = event.target.closest('button[data-open-identity]');
+                if (button) window.selectMilitaireAndOpenFiche(decodeURIComponent(button.dataset.openIdentity));
+            });
+            document.getElementById('effectifsTable').addEventListener('click', event => {
+                const toggle = event.target.closest('button[data-toggle-formation-group]');
+                if (toggle) {
+                    const identity = decodeURIComponent(toggle.dataset.toggleFormationGroup);
+                    if (expandedFormationGroups.has(identity)) expandedFormationGroups.delete(identity);
+                    else expandedFormationGroups.add(identity);
+                    renderEffectifs();
+                    return;
+                }
+                const evaluate = event.target.closest('button[data-eval-key]');
+                if (evaluate) {
+                    window.openEvalModal(decodeURIComponent(evaluate.dataset.evalKey));
+                    return;
+                }
+                const diploma = event.target.closest('button[data-diploma-key]');
+                if (diploma) {
+                    window.printDiplome(decodeURIComponent(diploma.dataset.diplomaKey));
+                    return;
+                }
+                const remove = event.target.closest('button[data-delete-key]');
+                if (remove) window.deleteEffectif(decodeURIComponent(remove.dataset.deleteKey), remove.dataset.deleteName);
+            });
 
             // CRÉATION DE DOSSIER RÉTROACTIF
-            document.getElementById('formFullDossier').addEventListener('submit', (e) => {
+            document.getElementById('formFullDossier').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const nom = document.getElementById('fullNom').value.trim();
                 const grade = document.getElementById('fullGrade').value.trim();
                 const mat = document.getElementById('fullMat').value.trim();
                 const aff = document.getElementById('fullUnite').value;
                 const sang = document.getElementById('fullSang').value;
-                const dateVMA = document.getElementById('fullDateVMA').value || new Date().toISOString().slice(0,10);
+                const dateVMA = document.getElementById('fullDateVMA').value;
                 const aptitude = document.getElementById('fullAptitude').value;
                 const notes = document.getElementById('fullNotes').value;
-
                 const selectedForms = Array.from(document.querySelectorAll('.full-form-check:checked')).map(cb => cb.value);
-
-                if (selectedForms.length === 0) {
+                const editIdentity = document.getElementById('editIndex').value;
+                const identity = editIdentity !== '-1' ? editIdentity : militaryIdentity({ mat, nom });
+                const existingRecords = getMilitaryRecords(identity);
+                const newMedicalKey = medicalRecordKey({ mat, nom });
+                const previousMedicalKey = existingRecords.length ? medicalRecordKey(existingRecords[0]) : '';
+                if (existingRecords.length && previousMedicalKey !== newMedicalKey && !hasTabAccess('medical')) {
+                    return alert('Seul un utilisateur autorisé aux données médicales peut modifier le matricule ou l’identité de ce dossier.');
+                }
+                if (selectedForms.length === 0 && existingRecords.length === 0) {
                     if(!confirm("Aucune formation sélectionnée. Créer quand même la fiche militaire ?")) return;
                 }
-
                 const today = new Date().toLocaleDateString('fr-FR');
-
-                if (selectedForms.length > 0) {
-                    selectedForms.forEach(formName => {
-                        db.ref('effectifs').push({
-                            id: Date.now().toString() + Math.floor(Math.random()*1000),
-                            nom, grade, mat, aff, form: formName,
-                            dateDemande: today,
-                            sang, dateVMA, aptitudeVMA: aptitude, notesPerso: notes,
+                const commonFields = { nom, grade, mat, aff, notesPerso: notes };
+                const fieldsForRecord = () => commonFields;
+                const updates = {};
+                selectedForms.forEach(formName => {
+                    const match = existingRecords.find(record => record.form === formName);
+                    if (match && match._fbKey) {
+                        Object.entries(fieldsForRecord()).forEach(([field, value]) => { updates[`effectifs/${match._fbKey}/${field}`] = value; });
+                    } else {
+                        const newRef = db.ref('effectifs').push();
+                        updates[`effectifs/${newRef.key}`] = {
+                            id: newRef.key, ...fieldsForRecord(), form: formName, dateDemande: today,
                             eval: { evaluee: true, resultat: 'Admis', note: '20', mention: 'Validation Rétroactive', dateEval: today, formateur: 'Commandement' }
-                        });
-                    });
-                } else {
-                    db.ref('effectifs').push({
-                        id: Date.now().toString(),
-                        nom, grade, mat, aff, form: '[FGI] Formation Général Initiale',
-                        dateDemande: today, sang, dateVMA, aptitudeVMA: aptitude, notesPerso: notes,
-                        eval: { evaluee: false }
+                        };
+                    }
+                });
+                existingRecords.forEach(record => {
+                    if (!record._fbKey) return;
+                    Object.entries(fieldsForRecord()).forEach(([field, value]) => { updates[`effectifs/${record._fbKey}/${field}`] = value; });
+                });
+                if (hasTabAccess('medical')) {
+                    const medicalValues = {
+                        ...(state.medicalRecords[newMedicalKey] || {}),
+                        sang,
+                        dateVMA,
+                        aptitudeVMA: aptitude
+                    };
+                    updates[`medicalRecords/${newMedicalKey}`] = medicalValues;
+                    if (previousMedicalKey && previousMedicalKey !== newMedicalKey) {
+                        updates[`medicalRecords/${previousMedicalKey}`] = null;
+                    }
+                }
+                if (existingRecords.length && existingRecords[0].mat !== mat && hasTabAccess('medical')) {
+                    state.visitesMedicales.forEach(visit => {
+                        const belongsToDossier = existingRecords[0].mat
+                            ? visit.matricule === existingRecords[0].mat
+                            : visit.nom === existingRecords[0].nom;
+                        if (!belongsToDossier || !visit._fbKey) return;
+                        updates[`visitesMedicales/${visit._fbKey}/matricule`] = mat;
+                        updates[`visitesMedicales/${visit._fbKey}/nom`] = nom;
                     });
                 }
-
-                alert(`Dossier militaire de ${grade} ${nom} créé / mis à jour avec succès !`);
-                e.target.reset();
-                document.querySelector('[data-tab="fiches"]').click();
-                document.getElementById('selectFicheMilitaire').value = nom;
-                loadFicheMilitaire();
+                if (!existingRecords.length && !selectedForms.length) {
+                    const newRef = db.ref('effectifs').push();
+                    updates[`effectifs/${newRef.key}`] = {
+                        id: newRef.key, ...commonFields, form: '', dateDemande: today, eval: { evaluee: false }
+                    };
+                }
+                try {
+                    await db.ref().update(updates);
+                    addLog(editIdentity !== '-1' ? 'DOSSIER_MODIFIE' : 'DOSSIER_CREE', `${grade} ${nom} (${mat})`);
+                    alert(`Dossier militaire de ${grade} ${nom} enregistré et synchronisé.`);
+                    e.target.reset();
+                    resetFormulaire();
+                    document.querySelector('[data-tab="fiches"]').click();
+                    const savedIdentity = militaryIdentity({ mat, nom });
+                    state.selectedMilitaireId = savedIdentity;
+                    updateFichesSelect();
+                    document.getElementById('selectFicheMilitaire').value = savedIdentity;
+                    loadFicheMilitaire();
+                } catch (error) {
+                    showSyncError(error);
+                }
             });
 
             // FICHE VISITE MEDICALE
-            document.getElementById('formFullVisiteMedicale').addEventListener('submit', (e) => {
+            document.getElementById('formFullVisiteMedicale').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const nom = document.getElementById('medMilitaire').value;
-                if (!nom) return alert("Sélectionnez un militaire.");
-
+                const identity = document.getElementById('medMilitaire').value;
+                const records = getMilitaryRecords(identity);
+                if (!records.length) return alert("Sélectionnez un militaire.");
+                if (!checkPermission('MOD')) return;
                 const dateVMA = document.getElementById('medDateVMA').value;
                 const tension = document.getElementById('medTension').value;
                 const taille = document.getElementById('medTaille').value;
@@ -1777,22 +2657,33 @@
                 const aptitude = document.getElementById('medAptitudeFinal').value;
                 const medecin = document.getElementById('medMedecin').value;
                 const remarques = document.getElementById('medRemarques').value;
-
                 const detailsText = `TA: ${tension || 'N/A'}, T/P: ${taille || '?'}cm/${poids || '?'}kg, Vision: ${vision || 'N/A'}, Audition: ${audition}. Obs: ${remarques || 'RAS'}`;
-
-                state.effectifs.filter(m => m.nom === nom).forEach(m => {
-                    if(m._fbKey) {
-                        db.ref(`effectifs/${m._fbKey}`).update({
-                            aptitudeVMA: aptitude,
-                            dateVMA: dateVMA,
-                            detailsMedicalExam: detailsText,
-                            medecinExaminateur: medecin
-                        });
+                const militaire = records[0];
+                const visitRef = db.ref('visitesMedicales').push();
+                const visit = {
+                    id: visitRef.key, matricule: militaire.mat || '', nom: militaire.nom, dateVMA,
+                    tension, taille, poids, vision, audition, aptitude, medecin, details: detailsText,
+                    createdAt: new Date().toISOString(), createdBy: state.user ? state.user.email : 'Anonyme'
+                };
+                if (!hasTabAccess('medical')) return alert('Accès aux données médicales requis.');
+                const profileKey = medicalRecordKey(militaire);
+                const updates = {
+                    [`visitesMedicales/${visitRef.key}`]: visit,
+                    [`medicalRecords/${profileKey}`]: {
+                        ...(state.medicalRecords[profileKey] || {}),
+                        aptitudeVMA: aptitude, dateVMA, detailsMedicalExam: detailsText,
+                        medecinExaminateur: medecin, updatedAt: new Date().toISOString()
                     }
-                });
-
-                alert(`Visite médicale enregistrée pour ${nom} !`);
-                e.target.reset();
+                };
+                try {
+                    await db.ref().update(updates);
+                    addLog('VISITE_MEDICALE', `Visite VMA enregistrée pour ${militaire.nom} le ${dateVMA}`);
+                    alert(`Visite médicale enregistrée et synchronisée pour ${militaire.nom}.`);
+                    e.target.reset();
+                    document.getElementById('medDateVMA').value = new Date().toISOString().slice(0, 10);
+                } catch (error) {
+                    showSyncError(error);
+                }
             });
 
             // SCORE DE TIR AVEC BARÈME
@@ -1811,13 +2702,6 @@
                 e.target.reset();
             });
 
-            document.getElementById('formAddAllowedUser')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (!checkPermission('ADMIN')) return;
-                db.ref('allowedUsers').push({ email: document.getElementById('adminUserEmail').value.trim(), nom: document.getElementById('adminUserNom').value, role: document.getElementById('adminUserRole').value });
-                e.target.reset();
-            });
-
             document.getElementById('formAddPersonnel').addEventListener('submit', (e) => {
                 e.preventDefault();
                 if (!checkPermission('MOD')) return;
@@ -1830,7 +2714,6 @@
                     mat: document.getElementById('pMat').value,
                     aff: document.getElementById('pUnite').value || 'N/A',
                     form: document.getElementById('pForm').value,
-                    dateVMA: document.getElementById('pDateVMA').value, // <--- Ajoute cette ligne ici
                     dateDemande: `${dateObj.toLocaleDateString('fr-FR')} à ${dateObj.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}`,
                     eval: { evaluee: false }
                 });
@@ -1871,7 +2754,7 @@
             document.getElementById('evalForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const candidateId = document.getElementById('evalCandidateId').value;
-                const candidate = state.effectifs.find(item => item.id === candidateId);
+                const candidate = state.effectifs.find(item => item._fbKey === candidateId || item.id === candidateId);
                 if (candidate && candidate._fbKey) {
                     db.ref(`effectifs/${candidate._fbKey}/eval`).set({
                         evaluee: true,
@@ -1912,8 +2795,19 @@
             document.getElementById('noteContent').addEventListener('input', saveCurrentNote);
 
             document.getElementById('btnSaveGlobal').addEventListener('click', () => {
+                if (!isAccessAdmin()) return alert('Accès administrateur requis.');
+                const backupState = {
+                    ...state,
+                    user: state.user ? {
+                        uid: state.user.uid,
+                        email: state.user.email,
+                        displayName: state.user.displayName,
+                        emailVerified: state.user.emailVerified
+                    } : null,
+                    exportedAt: new Date().toISOString()
+                };
                 const a = document.createElement('a');
-                a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+                a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupState));
                 a.download = `ENA_Backup_${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
             });
@@ -1947,10 +2841,9 @@
         
             // Extraction des militaires uniques
             const uniqueMilitairesMap = new Map();
-            filteredEff.forEach(e => { 
-                if (e.nom && !uniqueMilitairesMap.has(e.nom)) {
-                    uniqueMilitairesMap.set(e.nom, e); 
-                }
+            filteredEff.forEach(e => {
+                const identity = militaryIdentity(e);
+                if (identity && !uniqueMilitairesMap.has(identity)) uniqueMilitairesMap.set(identity, e);
             });
             const uniqueMilitaires = Array.from(uniqueMilitairesMap.values());
         
@@ -1972,13 +2865,14 @@
         
             // 2. Calculs du statut médical VMA (Total - Ceux qui ont une VMA)
             const totalMilitaires = uniqueMilitaires.length;
-            const avecVMA = uniqueMilitaires.filter(m => m.dateVMA && m.dateVMA.trim() !== "").length;
-            const countVMAPerimee = totalMilitaires - avecVMA;
+            const statutsVMA = uniqueMilitaires.map(m => getStatutMedicalVMA(m.dateVMA).status);
+            const countVMAPerimee = statutsVMA.filter(status => status === 'PERIME').length;
+            const countVMARenouveler = statutsVMA.filter(status => status === 'ALERTE').length;
         
             const elVMAPerimee = document.getElementById('dashTotalVMAPerimee');
             const elVMARenouveler = document.getElementById('dashTotalVMARenouveler');
             if (elVMAPerimee) elVMAPerimee.textContent = countVMAPerimee;
-            if (elVMARenouveler) elVMARenouveler.textContent = 0; // Remis à 0 pour éviter les conflits
+            if (elVMARenouveler) elVMARenouveler.textContent = countVMARenouveler;
         
             // 3. Calculs des évaluations et taux de réussite
             const evals = filteredEff.filter(e => e.eval && (e.eval.evaluee === true || e.eval.evaluee === 'true' || e.eval.evaluee === 1));
@@ -2022,8 +2916,7 @@
             const selectedFilter = document.getElementById('uniteFilterSelect')?.value || 'TOUTES';
             ["N/A", "CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"].forEach(u => {
                 if (selectedFilter !== 'TOUTES' && selectedFilter !== u) return;
-                const membres = [];
-                state.effectifs.filter(e => (e.aff || 'N/A') === u).forEach(m => { if(!membres.some(x => x.nom === m.nom)) membres.push(m); });
+                const membres = getUniqueMilitaires().filter(m => (m.aff || 'N/A') === u);
                 container.innerHTML += `
                     <div class="bg-card border p-4 rounded-xl space-y-3">
                         <div class="flex justify-between items-center border-b border-slate-700/60 pb-2"><h3 class="font-bold text-white text-sm"><i class="fa-solid fa-shield text-blue-400"></i> ${u === 'N/A' ? 'N/A (Sans affectation)' : u}</h3><span class="text-xs px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded font-bold">${membres.length}</span></div>
@@ -2039,7 +2932,7 @@
                                         </p>
                                         <p class="text-[10px] text-slate-400">${m.mat}</p>
                                     </div>
-                                    <button onclick="selectMilitaireAndOpenFiche('${m.nom}')" class="text-blue-400 text-[10px] px-2 py-1 bg-slate-800 rounded">Fiche</button>
+                                    <button type="button" data-open-identity="${encodeURIComponent(militaryIdentity(m))}" class="text-blue-400 text-[10px] px-2 py-1 bg-slate-800 rounded">Fiche</button>
                                 </div>
                             `}).join('')}
                         </div>
@@ -2048,42 +2941,208 @@
             });
         }
 
-        window.selectMilitaireAndOpenFiche = (nom) => { document.querySelector('[data-tab="fiches"]').click(); document.getElementById('selectFicheMilitaire').value = nom; loadFicheMilitaire(); };
+        window.selectMilitaireAndOpenFiche = (identity) => {
+            const selectedIdentity = getMilitaryRecords(identity).length ? identity : militaryIdentity(state.effectifs.find(m => m.nom === identity) || {});
+            document.querySelector('[data-tab="fiches"]').click();
+            document.getElementById('selectFicheMilitaire').value = selectedIdentity;
+            loadFicheMilitaire();
+        };
+
+        window.migrateMedicalData = async () => {
+            if (!isAccessAdmin() || state.access.role !== 'Fondateur' || state.medicalMigrationComplete) return;
+            const phrase = prompt('Confirme la sauvegarde préalable, puis saisis exactement : MIGRER LES DONNÉES MÉDICALES');
+            if (phrase !== 'MIGRER LES DONNÉES MÉDICALES') return;
+            const medicalFields = ['sang', 'dateVMA', 'aptitudeVMA', 'detailsMedicalExam', 'medecinExaminateur'];
+            try {
+                const snapshot = await db.ref('effectifs').once('value');
+                const records = snapshot.val() || {};
+                const updates = {};
+                const profiles = {};
+                Object.entries(records).forEach(([effectifKey, record]) => {
+                    if (!record) return;
+                    const key = medicalRecordKey(record) || `orphan-${encodeURIComponent(effectifKey)}`;
+                    const values = {};
+                    medicalFields.forEach(field => {
+                        if (record[field] !== undefined && record[field] !== null && record[field] !== '') {
+                            values[field] = record[field];
+                            updates[`effectifs/${effectifKey}/${field}`] = null;
+                        }
+                    });
+                    if (!Object.keys(values).length) return;
+                    const existing = profiles[key] || state.medicalRecords[key] || {};
+                    profiles[key] = {
+                        ...existing,
+                        ...values,
+                        migrationSources: {
+                            ...(existing.migrationSources || {}),
+                            [effectifKey]: values
+                        },
+                        updatedAt: new Date().toISOString()
+                    };
+                });
+                Object.entries(profiles).forEach(([key, profile]) => { updates[`medicalRecords/${key}`] = profile; });
+                updates['security/medicalMigrationComplete'] = true;
+                await db.ref().update(updates);
+                state.medicalMigrationComplete = true;
+                addLog('MIGRATION_MEDICALE', 'Données médicales séparées des dossiers de formation');
+                alert('Migration terminée : les données médicales sont désormais stockées séparément.');
+                renderAdminUsers();
+                startDataListeners();
+            } catch (error) {
+                showSyncError(error);
+            }
+        };
 
         function renderAdminUsers() {
-            const container = document.getElementById('adminUsersList');
-            if(!container) return;
-            container.innerHTML = `
-                <div class="bg-amber-950/40 border border-amber-500/60 p-3 rounded-lg flex justify-between items-center">
-                    <div><p class="font-bold text-amber-300">gabinpompier811@gmail.com (Gabin)</p><p class="text-[10px] text-slate-400">Fondateur Principal</p></div>
-                    <span class="px-2.5 py-1 bg-amber-500 text-black rounded text-[10px] font-extrabold uppercase">👑 Fondateur</span>
-                </div>
-            `;
-            state.allowedUsers.forEach(u => {
-                let badgeColor = "bg-blue-600 text-white";
-                if(u.role === "Co-Fondateur") badgeColor = "bg-purple-600 text-white";
-                if(u.role === "Administrateur") badgeColor = "bg-red-600 text-white";
-                if(u.role === "Modérateur") badgeColor = "bg-emerald-600 text-white";
-                if(u.role === "Personnel ENA") badgeColor = "bg-cyan-600 text-white";
-                if(u.role === "Personnel Opérateur") badgeColor = "bg-slate-700 text-slate-200";
+            const applicationsContainer = document.getElementById('adminApplicationsList');
+            const membersContainer = document.getElementById('adminUsersList');
+            if (!applicationsContainer || !membersContainer || !isAccessAdmin()) return;
 
-                container.innerHTML += `
-                    <div class="bg-input border p-2.5 rounded-lg flex justify-between items-center">
-                        <div><p class="font-bold text-white">${u.nom} <span class="text-slate-400">(${u.email})</span></p><p class="text-[10px] text-slate-400">Rôle : ${u.role}</p></div>
+            const assignableRoles = state.access.role === 'Fondateur'
+                ? ['Fondateur', 'Co-Fondateur', 'Administrateur', 'Modérateur', 'Personnel ENA', 'Personnel Opérateur']
+                : state.access.role === 'Co-Fondateur'
+                    ? ['Administrateur', 'Modérateur', 'Personnel ENA', 'Personnel Opérateur']
+                    : ['Modérateur', 'Personnel ENA', 'Personnel Opérateur'];
+            const rolesHtml = selected => assignableRoles.map(role =>
+                `<option value="${escapeHtml(role)}" ${selected === role ? 'selected' : ''}>${escapeHtml(role)}</option>`
+            ).join('');
+            const permissionHtml = (uid, selectedTabs, prefix) => ACCESS_TABS.map(tab => `
+                <label class="inline-flex items-center gap-1.5 bg-slate-900/70 border border-slate-700 rounded px-2 py-1">
+                    <input type="checkbox" data-${prefix}-uid="${escapeHtml(uid)}" data-tab-id="${escapeHtml(tab.id)}" ${selectedTabs && selectedTabs[tab.id] === true ? 'checked' : ''}>
+                    <span>${escapeHtml(tab.label)}</span>
+                </label>`).join('');
+
+            const pending = state.applications.filter(application => application.status === 'pending');
+            applicationsContainer.innerHTML = pending.length ? pending.map(application => {
+                const defaultRole = 'Personnel Opérateur';
+                const selectedTabs = Object.fromEntries((DEFAULT_TABS_BY_ROLE[defaultRole] || []).map(tabId => [tabId, true]));
+                return `<article class="bg-input border border-amber-500/20 p-3 rounded-xl space-y-3">
+                    <div><p class="font-bold text-white">${escapeHtml(application.name || 'Nom non renseigné')} <span class="font-normal text-slate-400">(${escapeHtml(application.email || '')})</span></p>
+                    <p class="mt-1 text-slate-300">${escapeHtml(application.reason || 'Aucun motif fourni')}</p>
+                    <p class="text-[10px] text-slate-500">${escapeHtml(application.createdAt || '')}</p></div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <label class="text-slate-400">Rôle <select data-application-role="${escapeHtml(application._fbKey)}" class="bg-slate-900 border border-slate-700 rounded p-1.5">${rolesHtml(defaultRole)}</select></label>
+                        <button type="button" data-approve-application="${escapeHtml(application._fbKey)}" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded">Valider</button>
+                        <button type="button" data-reject-application="${escapeHtml(application._fbKey)}" class="bg-red-900/60 hover:bg-red-800 text-red-200 px-3 py-1.5 rounded">Refuser</button>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">${permissionHtml(application._fbKey, selectedTabs, 'application')}</div>
+                </article>`;
+            }).join('') : '<p class="text-slate-500 italic">Aucune demande en attente.</p>';
+
+            membersContainer.innerHTML = state.accessProfiles.length ? state.accessProfiles.map(profile => {
+                const protectedRole = ['Fondateur', 'Co-Fondateur'].includes(profile.role);
+                const editable = (!protectedRole || state.access.role === 'Fondateur') &&
+                    !(profile.role === 'Administrateur' && state.access.role === 'Administrateur');
+                const memberRoles = editable ? Array.from(new Set([...assignableRoles, profile.role])) : [profile.role];
+                const memberRoleOptions = memberRoles.map(role =>
+                    `<option value="${escapeHtml(role)}" ${profile.role === role ? 'selected' : ''}>${escapeHtml(role)}</option>`
+                ).join('');
+                return `<article class="bg-input border p-3 rounded-xl space-y-3">
+                    <div class="flex flex-wrap justify-between items-center gap-2">
+                        <div><p class="font-bold text-white">${escapeHtml(profile.name || 'Membre')} <span class="font-normal text-slate-400">(${escapeHtml(profile.email || '')})</span></p><p class="text-[10px] text-slate-500">UID : ${escapeHtml(profile._fbKey)}</p></div>
                         <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${u.role}</span>
-                            <button onclick="deleteAllowedUser('${u._fbKey}', '${u.role}', '${u.email}')" class="text-red-400 text-xs p-1"><i class="fa-solid fa-user-xmark"></i> Révoquer</button>
+                            <select data-member-role="${escapeHtml(profile._fbKey)}" ${editable ? '' : 'disabled'} class="bg-slate-900 border border-slate-700 rounded p-1.5">${memberRoleOptions}</select>
+                            <button type="button" data-save-member="${escapeHtml(profile._fbKey)}" ${editable ? '' : 'disabled'} class="bg-blue-700 hover:bg-blue-600 disabled:opacity-40 text-white px-3 py-1.5 rounded">Enregistrer</button>
+                            ${profile._fbKey !== state.user.uid ? `<button type="button" data-revoke-member="${escapeHtml(profile._fbKey)}" class="bg-red-900/60 text-red-200 px-3 py-1.5 rounded">Révoquer</button>` : ''}
                         </div>
                     </div>
-                `;
-            });
+                    <div class="flex flex-wrap gap-1.5">${permissionHtml(profile._fbKey, profile.tabs || {}, 'member')}</div>
+                </article>`;
+            }).join('') : '<p class="text-slate-500 italic">Aucun membre autorisé.</p>';
+
+            if (!state.medicalMigrationComplete && state.access.role === 'Fondateur') {
+                membersContainer.insertAdjacentHTML('beforeend', `<div class="mt-3 border border-rose-500/40 bg-rose-950/20 p-3 rounded-xl space-y-2">
+                    <p class="font-bold text-rose-300">Migration des données médicales requise</p>
+                    <p class="text-slate-300">Les champs médicaux historiques sont encore dans les dossiers de formation. Sauvegarde d’abord la base, puis déplace-les vers l’espace médical protégé.</p>
+                    <button id="btnMigrateMedicalData" type="button" class="bg-rose-700 hover:bg-rose-600 text-white px-3 py-2 rounded">Lancer la migration protégée</button>
+                </div>`);
+            }
         }
 
-        window.deleteAllowedUser = (fbKey, targetRole, targetEmail) => {
-            if (!checkPermission('EXCLURE', targetRole)) return;
-            if (confirm(`Révoquer les accès de ${targetEmail} ?`)) {
-                db.ref('allowedUsers/' + fbKey).remove();
-                addLog('ADMIN_REVOCATION', `Accès révoqués pour ${targetEmail}`);
+        function selectedTabsFor(prefix, uid) {
+            const tabs = {};
+            document.querySelectorAll(`input[data-${prefix}-uid="${uid}"]`).forEach(input => {
+                if (input.checked) tabs[input.dataset.tabId] = true;
+            });
+            return tabs;
+        }
+
+        function canAssignRole(role, targetRole = '') {
+            if (!isAccessAdmin()) return false;
+            if (['Fondateur', 'Co-Fondateur'].includes(role) && state.access.role !== 'Fondateur') return false;
+            if (['Fondateur', 'Co-Fondateur'].includes(targetRole) && state.access.role !== 'Fondateur') return false;
+            if (role === 'Administrateur' && state.access.role === 'Administrateur') return false;
+            if (targetRole === 'Administrateur' && state.access.role === 'Administrateur') return false;
+            return true;
+        }
+
+        window.approveApplication = async uid => {
+            const application = state.applications.find(item => item._fbKey === uid);
+            const roleInput = document.querySelector(`[data-application-role="${uid}"]`);
+            if (!application || !roleInput || !canAssignRole(roleInput.value)) return;
+            const role = roleInput.value;
+            const tabs = selectedTabsFor('application', uid);
+            if (!ADMIN_ROLES.includes(role)) delete tabs.admin;
+            if (!Object.keys(tabs).length) return alert('Accorde au moins un onglet.');
+            try {
+                const updates = {};
+                updates[`userAccess/${uid}`] = { uid, email: application.email, name: application.name, role, approved: true, tabs, updatedAt: new Date().toISOString(), approvedBy: state.user.uid };
+                updates[`userApplications/${uid}/status`] = 'approved';
+                updates[`userApplications/${uid}/updatedAt`] = new Date().toISOString();
+                await db.ref().update(updates);
+                addLog('ACCES_APPROUVE', `Accès accordé à ${application.email} (${role})`);
+            } catch (error) {
+                showSyncError(error);
+            }
+        };
+
+        window.rejectApplication = async uid => {
+            const application = state.applications.find(item => item._fbKey === uid);
+            if (!application || !isAccessAdmin()) return;
+            if (!confirm(`Refuser la demande de ${application.email} ?`)) return;
+            try {
+                await db.ref(`userApplications/${uid}`).update({ status: 'rejected', updatedAt: new Date().toISOString(), reviewedBy: state.user.uid });
+                addLog('ACCES_REFUSE', `Demande refusée pour ${application.email}`);
+            } catch (error) {
+                showSyncError(error);
+            }
+        };
+
+        window.saveMemberAccess = async uid => {
+            const profile = state.accessProfiles.find(item => item._fbKey === uid);
+            const roleInput = document.querySelector(`[data-member-role="${uid}"]`);
+            if (!profile || !roleInput || !canAssignRole(roleInput.value, profile.role)) return;
+            const role = roleInput.value;
+            const tabs = selectedTabsFor('member', uid);
+            if (!ADMIN_ROLES.includes(role)) delete tabs.admin;
+            if (uid === state.user.uid && ADMIN_ROLES.includes(profile.role) && !ADMIN_ROLES.includes(role)) {
+                return alert('Ne rétrograde pas le dernier compte administrateur depuis sa propre session.');
+            }
+            if (uid === state.user.uid && ADMIN_ROLES.includes(role) && !tabs.admin) {
+                return alert('Conserve l’accès Administration sur ton propre compte pour éviter de perdre la gestion du portail.');
+            }
+            if (!Object.keys(tabs).length) return alert('Accorde au moins un onglet.');
+            try {
+                await db.ref(`userAccess/${uid}`).update({ role, tabs, updatedAt: new Date().toISOString(), updatedBy: state.user.uid });
+                addLog('ACCES_MODIFIE', `Permissions modifiées pour ${profile.email}`);
+            } catch (error) {
+                showSyncError(error);
+            }
+        };
+
+        window.deleteAllowedUser = async uid => {
+            const profile = state.accessProfiles.find(item => item._fbKey === uid);
+            if (!profile || !canAssignRole('Personnel Opérateur', profile.role)) return;
+            if (!confirm(`Révoquer les accès de ${profile.email} ?`)) return;
+            try {
+                const updates = {};
+                updates[`userAccess/${uid}`] = null;
+                updates[`userApplications/${uid}/status`] = 'rejected';
+                updates[`userApplications/${uid}/updatedAt`] = new Date().toISOString();
+                await db.ref().update(updates);
+                addLog('ADMIN_REVOCATION', `Accès révoqués pour ${profile.email}`);
+            } catch (error) {
+                showSyncError(error);
             }
         };
 
@@ -2126,15 +3185,16 @@
         }
         function updateDecorationsSelects() {
             const select = document.getElementById('decoMilitaire'); if(!select) return;
-            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
+            const unique = getUniqueMilitaires();
             select.innerHTML = unique.map(m => `<option value="${m.nom}">${m.grade} ${m.nom}</option>`).join('');
         }
         function updateTirsSelects() {
             const s1 = document.getElementById('tirMilitaire'), s2 = document.getElementById('inapteMilitaire'), s3 = document.getElementById('medMilitaire');
             if(!s1 || !s2 || !s3) return;
-            const unique = []; state.effectifs.forEach(e => { if(!unique.some(m => m.nom === e.nom)) unique.push(e); });
-            const html = unique.map(m => `<option value="${m.nom}">${m.grade} ${m.nom}</option>`).join('');
-            s1.innerHTML = html; s2.innerHTML = html; s3.innerHTML = html;
+            const unique = getUniqueMilitaires();
+            const nameOptions = unique.map(m => `<option value="${escapeHtml(m.nom)}">${escapeHtml(m.grade)} ${escapeHtml(m.nom)}</option>`).join('');
+            s1.innerHTML = nameOptions; s2.innerHTML = nameOptions;
+            s3.innerHTML = unique.map(m => `<option value="${escapeHtml(militaryIdentity(m))}">${escapeHtml(m.grade)} ${escapeHtml(m.nom)}${m.mat ? ` — ${escapeHtml(m.mat)}` : ''}</option>`).join('');
         }
 
         window.openImageViewer = (src, title) => { document.getElementById('viewerImage').src = src; document.getElementById('viewerTitle').textContent = title; document.getElementById('imageViewerModal').classList.remove('hidden'); };
@@ -2157,62 +3217,49 @@
             }
         };
 
-        function saveFicheComplete() {
-        // 1. Récupérer l'identifiant (le nom actuel stocké dans state.selectedMilitaireId)
-            const ancienNom = state.selectedMilitaireId;
-            if (!ancienNom) {
+        async function saveFicheComplete() {
+            const identity = state.selectedMilitaireId;
+            const records = getMilitaryRecords(identity);
+            if (!records.length) {
                 alert("Aucun militaire sélectionné.");
                 return;
             }
-        
-            // 2. Trouver tous les enregistrements de ce militaire dans state.effectifs
-            let dossiersMilitaire = state.effectifs.filter(e => e.nom === ancienNom);
-            if (dossiersMilitaire.length === 0) return;
-        
-            // 3. Récupérer les nouvelles valeurs modifiées dans les inputs de la fiche
-            const nouveauNom = document.getElementById('fNomEdit').value.trim();
-            const nouveauGrade = document.getElementById('fGradeEdit').value.trim();
-            const nouveauSang = document.getElementById('fSang').value;
-            const nouvelleAptitude = document.getElementById('fAptitudeVMA').value;
-            const nouvelleDateVMA = document.getElementById('fDateVMA').value;
-            const nouvellesNotes = document.getElementById('fNotesPerso').value;
-        
-            // 4. Mettre à jour chaque entrée correspondante dans state.effectifs
-            state.effectifs.forEach(e => {
-                if (e.nom === ancienNom) {
-                    e.nom = nouveauNom;
-                    e.grade = nouveauGrade;
-                    e.sang = nouveauSang;
-                    e.aptitudeVMA = nouvelleAptitude;
-                    e.dateVMA = nouvelleDateVMA;
-                    e.notesPerso = nouvellesNotes;
-                }
+            if (!checkPermission('MOD')) return;
+            const fields = {
+                nom: document.getElementById('fNomEdit').value.trim(),
+                grade: document.getElementById('fGradeEdit').value.trim(),
+                notesPerso: document.getElementById('fNotesPerso').value
+            };
+            if (!fields.nom || !fields.grade) return alert('Le nom et le grade sont obligatoires.');
+            const oldKey = medicalRecordKey(records[0]);
+            const newKey = medicalRecordKey({ ...records[0], ...fields });
+            if (oldKey !== newKey && !hasTabAccess('medical')) return alert('Accès médical requis pour modifier l’identité du dossier.');
+            const updates = {};
+            records.forEach(record => {
+                if (!record._fbKey) return;
+                Object.entries(fields).forEach(([field, value]) => { updates[`effectifs/${record._fbKey}/${field}`] = value; });
             });
-        
-            // 5. Mettre à jour l'ID sélectionné en mémoire
-            state.selectedMilitaireId = nouveauNom;
-        
-            // 6. Sauvegarder dans le localStorage (si tu l'utilises pour la persistance)
-            if (typeof saveStateToFirebase === 'function') {
-                saveStateToFirebase(); // ou ta fonction de sauvegarde locale/cloud
-            } else {
-                localStorage.setItem('stateEffectifs', JSON.stringify(state.effectifs));
+            if (hasTabAccess('medical')) {
+                updates[`medicalRecords/${newKey}`] = {
+                    ...(state.medicalRecords[oldKey] || {}),
+                    sang: document.getElementById('fSang').value,
+                    aptitudeVMA: document.getElementById('fAptitudeVMA').value,
+                    dateVMA: document.getElementById('fDateVMA').value,
+                    updatedAt: new Date().toISOString()
+                };
+                if (oldKey !== newKey) updates[`medicalRecords/${oldKey}`] = null;
             }
-        
-            // 7. RAFRAÎCHIR TOUT LE SITE INSTANTANÉMENT
-            if (typeof updateFichesSelect === 'function') updateFichesSelect();
-            if (typeof filtrerDossiers === 'function') filtrerDossiers();
-            if (typeof renderEffectifs === 'function') renderEffectifs();
-            if (typeof renderUnites === 'function') renderUnites();
-        
-            // Re-sélectionner automatiquement le militaire mis à jour dans le menu déroulant
-            const select = document.getElementById('selectFicheMilitaire');
-            if (select) {
-                select.value = nouveauNom;
+            try {
+                await db.ref().update(updates);
+                state.selectedMilitaireId = militaryIdentity({ ...records[0], ...fields });
+                addLog('DOSSIER_MODIFIE', `${fields.grade} ${fields.nom}`);
+                updateFichesSelect();
+                document.getElementById('selectFicheMilitaire').value = state.selectedMilitaireId;
                 loadFicheMilitaire();
+                alert('Dossier mis à jour et synchronisé.');
+            } catch (error) {
+                showSyncError(error);
             }
-        
-            alert("Dossier mis à jour et synchronisé avec succès dans tout le système !");
         }
         
         function renderAutomaticQualifications(dossiersMilitaire) {
@@ -2248,29 +3295,43 @@
             });
         }
 
-        window.saveMedicalData = () => {
-            if(!state.selectedMilitaireId) return;
-            const sang = document.getElementById('fSang').value;
-            const dateVMA = document.getElementById('fDateVMA').value;
-            const aptitude = document.getElementById('fAptitudeVMA').value;
-
-            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
-                if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({
-                    sang: sang,
-                    dateVMA: dateVMA,
-                    aptitudeVMA: aptitude
-                });
-            });
-            alert('Fiche médicale enregistrée !');
+        window.saveMedicalData = async () => {
+            const records = getMilitaryRecords(state.selectedMilitaireId);
+            if (!records.length) return alert('Aucun militaire sélectionné.');
+            if (!checkPermission('MOD')) return;
+            if (!hasTabAccess('medical')) return alert('Accès aux données médicales requis.');
+            const fields = {
+                sang: document.getElementById('fSang').value,
+                dateVMA: document.getElementById('fDateVMA').value,
+                aptitudeVMA: document.getElementById('fAptitudeVMA').value
+            };
+            const key = medicalRecordKey(records[0]);
+            const updates = { [`medicalRecords/${key}`]: { ...(state.medicalRecords[key] || {}), ...fields, updatedAt: new Date().toISOString() } };
+            try {
+                await db.ref().update(updates);
+                addLog('FICHE_MEDICALE_MODIFIEE', `Fiche médicale mise à jour pour ${records[0].nom}`);
+                alert('Fiche médicale mise à jour et synchronisée.');
+            } catch (error) {
+                showSyncError(error);
+            }
         };
 
-        window.saveFicheNotes = () => {
-            if(!state.selectedMilitaireId) return;
+        window.saveFicheNotes = async () => {
+            const records = getMilitaryRecords(state.selectedMilitaireId);
+            if (!records.length) return alert('Aucun militaire sélectionné.');
+            if (!checkPermission('NOTE')) return;
             const notes = document.getElementById('fNotesPerso').value;
-            state.effectifs.filter(e => e.nom === state.selectedMilitaireId).forEach(d => {
-                if(d._fbKey) db.ref(`effectifs/${d._fbKey}`).update({ notesPerso: notes });
+            const updates = {};
+            records.forEach(record => {
+                if (record._fbKey) updates[`effectifs/${record._fbKey}/notesPerso`] = notes;
             });
-            alert('Notes enregistrées !');
+            try {
+                await db.ref().update(updates);
+                addLog('NOTE_MODIFIEE', `Note mise à jour pour ${records[0].nom}`);
+                alert('Note enregistrée et synchronisée.');
+            } catch (error) {
+                showSyncError(error);
+            }
         };
 
         function renderDecorations() {
@@ -2335,33 +3396,104 @@
             renderNotes();
         };
 
+        function getFormationStatus(item) {
+            const evaluation = item.eval || {};
+            const isEvaluated = evaluation.evaluee === true || evaluation.evaluee === 'true' || evaluation.evaluee === 1;
+            if (!isEvaluated) return 'pending';
+            return String(evaluation.resultat || '').trim().toLocaleLowerCase('fr-FR') === 'admis' ? 'passed' : 'retake';
+        }
+
+        function renderFormationRow(item, isInFolder) {
+            const status = getFormationStatus(item);
+            const statusLabel = status === 'passed'
+                ? `Validée${item.eval.note !== undefined && item.eval.note !== '' ? ` · ${escapeHtml(item.eval.note)}/20` : ''}`
+                : status === 'retake'
+                    ? `${escapeHtml(item.eval.resultat || 'À repasser')}${item.eval.note !== undefined && item.eval.note !== '' ? ` · ${escapeHtml(item.eval.note)}/20` : ''}`
+                    : 'En attente';
+            const statusStyle = status === 'passed'
+                ? 'bg-green-900/50 text-green-300'
+                : status === 'retake' ? 'bg-red-900/40 text-red-300' : 'bg-amber-900/40 text-amber-300';
+            const vmaStatus = getStatutMedicalVMA(item.dateVMA);
+            const firebaseKey = encodeURIComponent(item._fbKey || item.id || '');
+            return `<tr class="${status === 'passed' ? 'row-valide' : 'hover:bg-slate-800/40'} transition">
+                <td class="p-2.5 font-bold text-white">
+                    ${isInFolder ? '<span class="text-slate-500 mr-1">↳</span>' : `<span>${escapeHtml(item.nom || 'Sans nom')}</span>`}
+                    ${!isInFolder && hasTabAccess('medical') ? `<span title="${escapeHtml(vmaStatus.label)}" class="ml-1 text-[9px] px-1.5 py-0.5 rounded border ${vmaStatus.class}">${vmaStatus.status === 'VALIDE' ? '🟢' : vmaStatus.status === 'ALERTE' ? '🟡' : '🔴'}</span>` : ''}
+                </td>
+                <td class="p-2.5">${escapeHtml(item.grade || '')}</td>
+                <td class="p-2.5 font-mono text-xs text-blue-400">${escapeHtml(item.mat || '')}</td>
+                <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] font-bold ${item.aff === 'N/A' || !item.aff ? 'text-slate-400' : 'text-blue-300'}">${escapeHtml(item.aff || 'N/A')}</span></td>
+                <td class="p-2.5">${escapeHtml(item.form || 'Formation non précisée')}</td>
+                <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${statusStyle}">${statusLabel}</span></td>
+                <td class="p-2.5 text-right whitespace-nowrap space-x-1">
+                    <button type="button" data-eval-key="${firebaseKey}" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px]">${status === 'pending' ? 'Évaluer' : 'Modifier'}</button>
+                    ${status === 'passed' ? `<button type="button" data-diploma-key="${firebaseKey}" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
+                    <button type="button" data-delete-key="${firebaseKey}" data-delete-name="${escapeHtml(item.nom || '')}" class="px-2 py-1 bg-red-900/40 text-red-300 rounded text-[10px]" aria-label="Supprimer cette formation"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>`;
+        }
+
         function renderEffectifs() {
-            const tbody = document.getElementById('effectifsTable'); if(!tbody) return;
-            const search = (document.getElementById('searchTable')?.value || '').toLowerCase();
-            const filtered = state.effectifs.filter(e => (e.nom || '').toLowerCase().includes(search) || (e.grade || '').toLowerCase().includes(search) || (e.mat || '').toLowerCase().includes(search));
-            
-            tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-500">Aucun résultat.</td></tr>' : filtered.map(item => {
-                const isValide = item.eval && item.eval.evaluee;
-                const vmaStatus = getStatutMedicalVMA(item.dateVMA);
-                return `
-                    <tr class="${isValide ? 'row-valide' : 'hover:bg-slate-800/40'} transition">
-                        <td class="p-2.5 font-bold text-white flex items-center gap-1.5">
-                            <span>${item.nom}</span>
-                            <span title="${vmaStatus.label}" class="text-[9px] px-1.5 py-0.2 rounded border ${vmaStatus.class}">${vmaStatus.status === 'VALIDE' ? '🟢' : vmaStatus.status === 'ALERTE' ? '🟡' : '🔴'}</span>
-                        </td>
-                        <td class="p-2.5">${item.grade}</td>
-                        <td class="p-2.5 font-mono text-xs text-blue-400">${item.mat}</td>
-                        <td class="p-2.5"><span class="px-2 py-0.5 bg-input border rounded text-[10px] font-bold ${item.aff === 'N/A' || !item.aff ? 'text-slate-400' : 'text-blue-300'}">${item.aff || 'N/A'}</span></td>
-                        <td class="p-2.5">${item.form}</td>
-                        <td class="p-2.5">${isValide ? `<span class="px-2 py-0.5 rounded text-[10px] bg-green-900/50 text-green-300 font-bold">${item.eval.resultat} (${item.eval.note}/20)</span>` : '<span class="px-2 py-0.5 bg-amber-900/40 text-amber-300 rounded text-[10px]">En attente</span>'}</td>
-                        <td class="p-2.5 text-right space-x-1">
-                            <button onclick="openEvalModal('${item.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px]">Évaluer</button>
-                            ${isValide && item.eval.resultat === 'Admis' ? `<button onclick="printDiplome('${item.id}')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px]">Diplôme</button>` : ''}
-                            <button onclick="deleteEffectif('${item._fbKey}', '${item.nom}')" class="px-2 py-1 bg-red-900/40 text-red-300 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+            const tbody = document.getElementById('effectifsTable');
+            if (!tbody) return;
+            const search = (document.getElementById('searchTable')?.value || '').trim().toLocaleLowerCase('fr-FR');
+            const statusFilter = document.getElementById('filterFormationStatus')?.value || 'all';
+            const filtered = state.effectifs.filter(item => {
+                const searchMatches = [item.nom, item.grade, item.mat, item.aff, item.form]
+                    .some(value => String(value || '').toLocaleLowerCase('fr-FR').includes(search));
+                return searchMatches && (statusFilter === 'all' || getFormationStatus(item) === statusFilter);
+            });
+            if (!filtered.length) {
+                const message = state.effectifs.length ? 'Aucune formation ne correspond à ces filtres.' : 'Aucune formation inscrite.';
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">${message}</td></tr>`;
+                return;
+            }
+
+            const groups = new Map();
+            filtered.forEach(item => {
+                const identity = militaryIdentity(item);
+                if (!groups.has(identity)) groups.set(identity, []);
+                groups.get(identity).push(item);
+            });
+            const sortedGroups = Array.from(groups.entries()).sort(([, a], [, b]) =>
+                String(a[0].nom || '').localeCompare(String(b[0].nom || ''), 'fr', { sensitivity: 'base' })
+            );
+            const statusOrder = { passed: 0, pending: 1, retake: 2 };
+            const rows = [];
+            sortedGroups.forEach(([identity, items]) => {
+                items.sort((a, b) => statusOrder[getFormationStatus(a)] - statusOrder[getFormationStatus(b)] ||
+                    String(a.form || '').localeCompare(String(b.form || ''), 'fr', { sensitivity: 'base' }));
+                const totalRecords = state.effectifs.filter(item => militaryIdentity(item) === identity).length;
+                if (totalRecords < 2) {
+                    rows.push(renderFormationRow(items[0], false));
+                    return;
+                }
+
+                const isExpanded = expandedFormationGroups.has(identity);
+                const counts = { passed: 0, pending: 0, retake: 0 };
+                items.forEach(item => counts[getFormationStatus(item)]++);
+                const summary = [
+                    counts.passed && `${counts.passed} validée${counts.passed > 1 ? 's' : ''}`,
+                    counts.pending && `${counts.pending} en attente`,
+                    counts.retake && `${counts.retake} à repasser`
+                ].filter(Boolean).join(' · ');
+                rows.push(`<tr class="bg-blue-950/30 border-y border-blue-500/20">
+                    <td class="p-3" colspan="4">
+                        <button type="button" data-toggle-formation-group="${encodeURIComponent(identity)}" aria-expanded="${isExpanded}" class="flex items-center gap-2 text-left text-white font-bold">
+                            <i class="fa-solid ${isExpanded ? 'fa-folder-open text-amber-300' : 'fa-folder text-amber-400'}"></i>
+                            <span>${escapeHtml(items[0].nom || 'Sans nom')}</span>
+                            <span class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300">${items.length} formation${items.length > 1 ? 's' : ''}</span>
+                            <i class="fa-solid fa-chevron-${isExpanded ? 'up' : 'down'} text-[10px] text-slate-500"></i>
+                        </button>
+                        <span class="block pl-6 mt-1 text-[10px] text-slate-400">${escapeHtml(items[0].grade || '')} · ${escapeHtml(items[0].mat || 'Sans matricule')}</span>
+                    </td>
+                    <td class="p-2.5 text-slate-300">${escapeHtml(summary || 'Aucune formation')}</td>
+                    <td class="p-2.5 text-slate-400 text-[10px]">${items.length} résultat${items.length > 1 ? 's' : ''}</td>
+                    <td class="p-2.5 text-right"><span class="text-[10px] text-blue-300">Ouvrir le dossier</span></td>
+                </tr>`);
+                if (isExpanded) items.forEach(item => rows.push(renderFormationRow(item, true)));
+            });
+            tbody.innerHTML = rows.join('');
         }
 
         function renderFormateurs() {
@@ -2382,12 +3514,17 @@
         }
 
         window.openEvalModal = (candidateId) => {
-            const candidate = state.effectifs.find(item => item.id === candidateId); if(!candidate) return;
-            document.getElementById('evalCandidateId').value = candidate.id;
+            const candidate = state.effectifs.find(item => item._fbKey === candidateId || item.id === candidateId); if(!candidate) return;
+            document.getElementById('evalCandidateId').value = candidate._fbKey || candidate.id;
             document.getElementById('evalCandidateName').value = `${candidate.grade} ${candidate.nom}`;
             document.getElementById('evalFormName').value = candidate.form;
             const selectFmt = document.getElementById('evalFormateur');
             selectFmt.innerHTML = state.formateurs.map(f => `<option value="${f.nom}">${f.nom} (${f.role})</option>`).join('');
+            document.getElementById('evalResultat').value = 'Admis';
+            document.getElementById('evalNote').value = '';
+            document.getElementById('evalMention').value = 'Pas de mention';
+            document.getElementById('evalComments').value = '';
+            if (selectFmt.options.length) selectFmt.selectedIndex = 0;
             if (candidate.eval && candidate.eval.evaluee) {
                 document.getElementById('evalResultat').value = candidate.eval.resultat || 'Admis';
                 document.getElementById('evalNote').value = candidate.eval.note || '';
