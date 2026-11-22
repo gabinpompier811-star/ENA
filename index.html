@@ -1717,13 +1717,77 @@
             <section id="tab-programmes" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card p-4 rounded-xl border">
                     <h2 class="text-sm font-bold text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-book-open-reader text-blue-500"></i> Référentiel ENA (Cursus & Grades)</h2>
-                    <p class="text-xs text-slate-400">Programmes officiels et correspondances des grades</p>
+                    <p class="text-xs text-slate-400">Manuels officiels, grilles d’évaluation et correspondances des grades</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-blue-900/45 text-blue-300 rounded font-bold">[FGI] Base</span><h4 class="font-bold text-white pt-1">Formation Général Initiale</h4><p class="text-slate-400">Grade : Soldat de 1er Classe</p></div>
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-emerald-900/45 text-emerald-300 rounded font-bold">[CAT1] Gradés</span><h4 class="font-bold text-white pt-1">Brevet Caporal / Chef</h4><p class="text-slate-400">Grades : Caporal & Caporal-Chef</p></div>
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-amber-900/45 text-amber-300 rounded font-bold">[FG1/BS1] Sous-Off</span><h4 class="font-bold text-white pt-1">Brevet de Sergent</h4><p class="text-slate-400">Grade : Sergent & Sergent-Chef</p></div>
-                    <div class="bg-card border p-4 rounded-xl space-y-2"><span class="px-2 py-0.5 bg-purple-900/45 text-purple-300 rounded font-bold">[CDU/DEM] Officiers</span><h4 class="font-bold text-white pt-1">État-Major & Capitaine</h4><p class="text-slate-400">Grades : Lieutenant, Capitaine, Commandant</p></div>
+                <div class="bg-card border p-3 rounded-xl flex flex-wrap gap-2 items-center">
+                    <label class="relative flex-1 min-w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-xs"></i>
+                        <input id="referentielSearch" type="search" placeholder="Rechercher un brevet, diplôme ou grade..." class="w-full bg-input border border-slate-700 rounded-lg py-2.5 pl-9 pr-3 text-xs">
+                    </label>
+                    <select id="referentielFilter" class="bg-input border border-slate-700 rounded-lg py-2.5 px-3 text-xs">
+                        <option value="">Toutes les catégories</option>
+                        <option value="militaire-du-rang">Militaires du rang</option>
+                        <option value="sous-officiers">Sous-officiers</option>
+                        <option value="officiers">Officiers</option>
+                    </select>
+                    <span id="referentielCount" class="text-[10px] text-slate-400 px-2">11 référentiels</span>
+                </div>
+                <div id="referentielGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <article data-referentiel data-category="militaire-du-rang" data-search="[fgi] formation generale initiale recrue soldat" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-blue-950/50 text-blue-300 border border-blue-500/20 rounded font-bold">[FGI] Base</span><i class="fa-solid fa-person-military-rifle text-blue-400"></i></div>
+                        <h4 class="font-bold text-white">Formation Générale Initiale</h4><p class="text-slate-400">Militaires du rang · Recrues et soldats</p>
+                        <a href="referentiels/FGI.pdf" target="_blank" class="inline-flex items-center gap-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="militaire-du-rang" data-search="[cat1] brevet caporal grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-emerald-950/50 text-emerald-300 border border-emerald-500/20 rounded font-bold">[CAT1]</span><i class="fa-solid fa-chevron-right text-emerald-400"></i></div>
+                        <h4 class="font-bold text-white">Brevet de Caporal</h4><p class="text-slate-400">Accès au grade de Caporal</p>
+                        <a href="referentiels/CAT1.pdf" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="militaire-du-rang" data-search="[cme] brevet caporal-chef grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-emerald-950/50 text-emerald-300 border border-emerald-500/20 rounded font-bold">[CME]</span><i class="fa-solid fa-angles-right text-emerald-400"></i></div>
+                        <h4 class="font-bold text-white">Brevet Caporal-Chef</h4><p class="text-slate-400">Grade : Caporal-Chef</p>
+                        <a href="referentiels/CME.pdf" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="militaire-du-rang" data-search="[cc1] caporal-chef premiere classe grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-emerald-950/50 text-emerald-300 border border-emerald-500/20 rounded font-bold">[CC1]</span><i class="fa-solid fa-star text-emerald-400"></i></div>
+                        <h4 class="font-bold text-white">Caporal-Chef de 1ère classe</h4><p class="text-slate-400">Grade : Caporal-Chef de 1ère classe</p>
+                        <a href="referentiels/CC1.pdf" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="sous-officiers" data-search="[fg1 bs1] brevet sergent sous-officier grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-amber-950/50 text-amber-300 border border-amber-500/20 rounded font-bold">[FG1 / BS1]</span><i class="fa-solid fa-shield text-amber-400"></i></div>
+                        <h4 class="font-bold text-white">Brevet de Sergent</h4><p class="text-slate-400">Grade : Sergent · passage dans le corps des sous-officiers</p>
+                        <a href="referentiels/FG1-BS1.pdf" target="_blank" class="inline-flex items-center gap-2 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="sous-officiers" data-search="[fg2 bstat] adjoint specialiste adjudant grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-amber-950/50 text-amber-300 border border-amber-500/20 rounded font-bold">[FG2 / BSTAT]</span><i class="fa-solid fa-user-shield text-amber-400"></i></div>
+                        <h4 class="font-bold text-white">Brevet d’Adjoint & Spécialiste</h4><p class="text-slate-400">Grade : Adjudant · adjoint de chef de section</p>
+                        <a href="referentiels/FG2-BSTAT.pdf" target="_blank" class="inline-flex items-center gap-2 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="sous-officiers" data-search="[bm2] brevet militaire niveau 2 sergent-chef adjudant grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-purple-950/50 text-purple-300 border border-purple-500/20 rounded font-bold">[BM2]</span><i class="fa-solid fa-award text-purple-400"></i></div>
+                        <h4 class="font-bold text-white">Brevet Militaire de Niveau 2</h4><p class="text-slate-400">Sergent-Chef · Adjudant d’unité</p>
+                        <a href="referentiels/BM2.pdf" target="_blank" class="inline-flex items-center gap-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="sous-officiers" data-search="[fg3] brevet major sous-officier superieur grade" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-purple-950/50 text-purple-300 border border-purple-500/20 rounded font-bold">[FG3]</span><i class="fa-solid fa-crown text-purple-400"></i></div>
+                        <h4 class="font-bold text-white">Brevet de Major</h4><p class="text-slate-400">Sommet de la catégorie des sous-officiers supérieurs</p>
+                        <a href="referentiels/FG3.pdf" target="_blank" class="inline-flex items-center gap-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="officiers" data-search="[fae] formation application lieutenant specialite officier" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-red-950/50 text-red-300 border border-red-500/20 rounded font-bold">[FAE]</span><i class="fa-solid fa-crosshairs text-red-400"></i></div>
+                        <h4 class="font-bold text-white">Formation d’Application</h4><p class="text-slate-400">Lieutenants · prise de commandement d’arme</p>
+                        <a href="referentiels/FAE.pdf" target="_blank" class="inline-flex items-center gap-2 bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="officiers" data-search="[cdu] cursus chef unite capitaine commandement compagnie" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-red-950/50 text-red-300 border border-red-500/20 rounded font-bold">[CDU]</span><i class="fa-solid fa-compass text-red-400"></i></div>
+                        <h4 class="font-bold text-white">Cursus de Chef d’Unité</h4><p class="text-slate-400">Grade visé : Capitaine · commandement d’unité</p>
+                        <a href="referentiels/CDU.pdf" target="_blank" class="inline-flex items-center gap-2 bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
+                    <article data-referentiel data-category="officiers" data-search="[dem] diplome etat-major officier superieur ems1" class="bg-card border p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-start gap-2"><span class="px-2 py-1 bg-indigo-950/50 text-indigo-300 border border-indigo-500/20 rounded font-bold">[DEM]</span><i class="fa-solid fa-landmark text-indigo-400"></i></div>
+                        <h4 class="font-bold text-white">Diplôme d’État-Major</h4><p class="text-slate-400">EMS1 · planification et conduite d’état-major</p>
+                        <a href="referentiels/DEM.pdf" target="_blank" class="inline-flex items-center gap-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-3 py-2 rounded-lg"><i class="fa-solid fa-book-open"></i> Consulter le PDF</a>
+                    </article>
                 </div>
             </section>
 
@@ -3279,6 +3343,21 @@
                     document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
                 });
             });
+            const filterReferentiels = () => {
+                const query = (document.getElementById('referentielSearch')?.value || '').trim().toLocaleLowerCase('fr');
+                const category = document.getElementById('referentielFilter')?.value || '';
+                let visible = 0;
+                document.querySelectorAll('[data-referentiel]').forEach(card => {
+                    const matchesQuery = !query || (card.dataset.search || '').toLocaleLowerCase('fr').includes(query);
+                    const matchesCategory = !category || card.dataset.category === category;
+                    card.classList.toggle('hidden', !(matchesQuery && matchesCategory));
+                    if (matchesQuery && matchesCategory) visible++;
+                });
+                const count = document.getElementById('referentielCount');
+                if (count) count.textContent = `${visible} référentiel${visible > 1 ? 's' : ''}`;
+            };
+            document.getElementById('referentielSearch')?.addEventListener('input', filterReferentiels);
+            document.getElementById('referentielFilter')?.addEventListener('change', filterReferentiels);
             document.querySelectorAll('[data-chat-panel]').forEach(button => {
                 button.addEventListener('click', () => {
                     document.querySelectorAll('[data-chat-panel]').forEach(item => item.classList.remove('active'));
