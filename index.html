@@ -17,48 +17,50 @@
     <style>
         /* Workspace redesign */
         #mainNav { display: none !important; }
-        #app main { margin-left: 4.6rem; }
+        #app main { margin-left: 0; }
 
         #moduleRail {
-            position: fixed;
-            z-index: 18;
-            left: .55rem;
-            top: 4.35rem;
-            bottom: .55rem;
-            width: 3.5rem;
+            position: relative;
+            z-index: 19;
+            width: 100%;
+            min-height: 3rem;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            gap: .25rem;
-            padding: .45rem .35rem;
-            overflow-y: auto;
-            border: 1px solid rgba(148, 163, 184, .14);
-            border-radius: 1rem;
+            gap: .3rem;
+            padding: .2rem .55rem;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-bottom: 1px solid rgba(148, 163, 184, .14);
             background: rgba(15, 23, 42, .94);
             backdrop-filter: blur(18px);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
-            scrollbar-width: none;
+            scrollbar-width: thin;
         }
 
-        #moduleRail::-webkit-scrollbar { display: none; }
+        #moduleRail::-webkit-scrollbar { height: 4px; }
+        #moduleRail::-webkit-scrollbar-thumb { background: #334155; border-radius: 99px; }
 
         #moduleRail .tab-btn {
-            width: 2.75rem;
-            min-height: 2.75rem;
+            width: auto;
+            min-height: 2.4rem;
             margin: 0;
-            padding: 0;
+            padding: .45rem .7rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: .5rem;
+            white-space: nowrap;
             border: 1px solid transparent;
-            border-radius: .8rem;
+            border-radius: .7rem;
             color: #94a3b8;
+            font-size: .68rem;
+            font-weight: 650;
         }
 
         #moduleRail .tab-btn i {
             margin: 0;
-            width: auto;
-            font-size: .95rem;
+            width: 1rem;
+            font-size: .85rem;
         }
 
         #moduleRail .tab-btn.active {
@@ -66,6 +68,15 @@
             background: var(--accent-bg);
             color: var(--accent-light);
             box-shadow: inset 0 0 18px var(--accent-bg);
+        }
+
+        #moduleRail .tab-btn[data-tab="admin"] { color: #facc15; }
+        #moduleRail .tab-btn[data-tab="admin"]:hover,
+        #moduleRail .tab-btn[data-tab="admin"].active {
+            border-color: rgba(250, 204, 21, .5);
+            background: rgba(234, 179, 8, .14);
+            color: #fde047;
+            box-shadow: inset 0 0 18px rgba(234, 179, 8, .12);
         }
 
         #workspaceLauncher {
@@ -205,7 +216,7 @@
             backdrop-filter: blur(16px);
         }
 
-        #app > nav {
+        #app > nav#mainNav {
             position: relative;
             z-index: 19;
             min-height: 2.9rem;
@@ -386,11 +397,11 @@
                 flex-wrap: wrap;
             }
 
-            #app > nav {
+            #app > nav#mainNav {
                 padding-inline: .35rem;
             }
 
-            #app > nav .tab-btn {
+            #app > nav#mainNav .tab-btn {
                 padding-inline: .75rem;
                 font-size: .68rem;
             }
@@ -439,20 +450,8 @@
         }
 
         @media (max-width: 760px) {
-            #app main { margin-left: 0; margin-bottom: 4.1rem; }
-            #moduleRail {
-                left: .35rem;
-                right: .35rem;
-                top: auto;
-                bottom: .35rem;
-                width: auto;
-                height: 3.45rem;
-                flex-direction: row;
-                justify-content: flex-start;
-                padding: .35rem;
-                border-radius: .9rem;
-            }
-            #moduleRail .tab-btn { flex: 0 0 2.65rem; }
+            #moduleRail { min-height: 2.9rem; }
+            #moduleRail .tab-btn { min-height: 2.3rem; padding-inline: .55rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -933,11 +932,11 @@
             </button>
         </nav>
 
-        <aside id="moduleRail" aria-label="Modules du portail">
+        <nav id="moduleRail" aria-label="Navigation principale">
             <button type="button" onclick="openWorkspaceLauncher()" class="tab-btn" title="Ouvrir la palette de modules (Ctrl+K)">
                 <i class="fa-solid fa-grip"></i>
             </button>
-        </aside>
+        </nav>
 
         <!-- Contenu des Onglets -->
         <main class="flex-1 overflow-hidden relative">
@@ -1972,6 +1971,7 @@
             <section id="tab-chat" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-4">
                 <div class="bg-card border p-3 rounded-xl flex flex-wrap items-center gap-2">
                     <button class="module-subtab active px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="messages"><i class="fa-solid fa-message mr-2 text-blue-400"></i>Messages</button>
+                    <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="calls"><i class="fa-solid fa-phone mr-2 text-emerald-400"></i>Appels audio / vidéo</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="groups"><i class="fa-solid fa-user-group mr-2 text-violet-400"></i>Groupes</button>
                     <button class="module-subtab px-3 py-2 text-xs font-bold text-slate-300" data-chat-panel="announcements"><i class="fa-solid fa-bullhorn mr-2 text-amber-400"></i>Annonces</button>
                 </div>
@@ -1995,6 +1995,64 @@
                             <button class="bg-blue-600 hover:bg-blue-500 px-4 rounded-lg text-xs font-bold"><i class="fa-solid fa-paper-plane"></i></button>
                         </form>
                     </div>
+                </div>
+
+                <div id="chat-calls" class="module-panel hidden space-y-4">
+                    <div class="bg-card border rounded-xl p-4 sm:p-5">
+                        <div class="flex flex-wrap items-start justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-headset text-emerald-400 mr-2"></i>Salon d’appel privé</h3>
+                                <p class="text-xs text-slate-400 mt-1">Crée un salon, puis partage son code dans le chat. Le navigateur demandera l’accès au micro et, pour la vidéo, à la caméra.</p>
+                            </div>
+                            <span id="callConnectionBadge" class="px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px]">Aucun appel</span>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-4">
+                            <div class="rounded-xl border border-slate-700/70 bg-slate-950/40 p-4 space-y-3">
+                                <div><h4 class="text-xs font-bold text-white">Créer un salon</h4><p class="text-[10px] text-slate-500 mt-1">Tu seras l’hôte. Un seul autre participant peut rejoindre.</p></div>
+                                <div class="flex flex-wrap gap-2">
+                                    <button id="btnStartAudioCall" type="button" class="bg-emerald-700 hover:bg-emerald-600 rounded-lg px-3 py-2 text-xs font-bold"><i class="fa-solid fa-phone mr-1.5"></i>Appel audio</button>
+                                    <button id="btnStartVideoCall" type="button" class="bg-blue-700 hover:bg-blue-600 rounded-lg px-3 py-2 text-xs font-bold"><i class="fa-solid fa-video mr-1.5"></i>Appel vidéo</button>
+                                </div>
+                                <div id="callRoomShare" class="hidden">
+                                    <label for="callRoomCode" class="block text-[10px] text-slate-400 mb-1">Code du salon à partager</label>
+                                    <div class="flex gap-2">
+                                        <input id="callRoomCode" readonly class="bg-input border rounded-lg px-3 py-2 text-xs font-mono flex-1">
+                                        <button id="btnCopyCallCode" type="button" class="bg-slate-700 hover:bg-slate-600 rounded-lg px-3 text-xs" title="Copier le code" aria-label="Copier le code"><i class="fa-solid fa-copy"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <form id="callJoinForm" class="rounded-xl border border-slate-700/70 bg-slate-950/40 p-4 space-y-3">
+                                <div><h4 class="text-xs font-bold text-white">Rejoindre un salon</h4><p class="text-[10px] text-slate-500 mt-1">Colle le code reçu de l’hôte.</p></div>
+                                <div class="flex gap-2">
+                                    <input id="callJoinCode" required autocomplete="off" class="bg-input border rounded-lg px-3 py-2 text-xs font-mono flex-1" placeholder="Code du salon">
+                                    <button type="submit" class="bg-violet-700 hover:bg-violet-600 rounded-lg px-4 text-xs font-bold">Rejoindre</button>
+                                </div>
+                            </form>
+                        </div>
+                        <p id="callStatusMessage" class="text-xs text-slate-400 mt-3 min-h-4" role="status" aria-live="polite"></p>
+                    </div>
+
+                    <div id="callActivePanel" class="hidden bg-card border rounded-xl p-3 sm:p-4 space-y-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <div><h4 id="callActiveTitle" class="text-xs font-bold text-white">Appel en cours</h4><p id="callDuration" class="text-[10px] text-slate-500">00:00</p></div>
+                            <span id="callParticipantStatus" class="text-[10px] text-amber-300">En attente du participant…</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <video id="callRemoteVideo" autoplay playsinline class="hidden w-full aspect-video rounded-lg bg-black object-cover"></video>
+                            <video id="callLocalVideo" autoplay playsinline muted class="hidden w-full aspect-video rounded-lg bg-black object-cover"></video>
+                            <audio id="callRemoteAudio" autoplay class="hidden"></audio>
+                            <div id="callAudioStage" class="md:col-span-2 min-h-32 rounded-lg bg-slate-950/70 border border-slate-800 flex flex-col items-center justify-center gap-2 text-center">
+                                <i class="fa-solid fa-user-group text-2xl text-slate-600"></i>
+                                <p class="text-xs text-slate-400">Partage le code du salon pour démarrer la conversation.</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button id="btnToggleCallMic" type="button" class="bg-slate-700 hover:bg-slate-600 rounded-lg px-3 py-2 text-xs"><i class="fa-solid fa-microphone mr-1.5"></i>Couper le micro</button>
+                            <button id="btnToggleCallCamera" type="button" class="hidden bg-slate-700 hover:bg-slate-600 rounded-lg px-3 py-2 text-xs"><i class="fa-solid fa-video mr-1.5"></i>Couper la caméra</button>
+                            <button id="btnEndCall" type="button" class="bg-red-700 hover:bg-red-600 rounded-lg px-4 py-2 text-xs font-bold"><i class="fa-solid fa-phone-slash mr-1.5"></i>Quitter l’appel</button>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-500">L’appel est chiffré par WebRTC lorsqu’il est établi. Selon le réseau, un serveur TURN peut être nécessaire pour traverser certains pare-feu.</p>
                 </div>
 
                 <div id="chat-groups" class="module-panel hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -2108,9 +2166,18 @@
             <!-- ADMINISTRATION HIERARCHIQUE STRICTE (6 RÔLES) -->
             <section id="tab-admin" class="tab-content hidden h-full p-4 overflow-y-auto custom-scroll space-y-6">
                 <div class="bg-card p-4 rounded-xl border border-amber-500/50 bg-amber-950/10">
-                    <h2 class="text-base font-bold text-amber-400 flex items-center gap-2 mb-1"><i class="fa-solid fa-user-shield text-xl"></i> Administration des accès</h2>
+                    <h2 class="text-base font-bold text-yellow-300 flex items-center gap-2 mb-1"><i class="fa-solid fa-user-shield text-xl"></i> Administration des accès</h2>
                     <p class="text-xs text-slate-400">Validez les demandes, choisissez un rôle et accordez les onglets nécessaires. Les permissions sont également vérifiées par les règles Firebase.</p>
                 </div>
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+                    <article class="bg-card border border-yellow-500/25 rounded-xl p-3"><p class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Accès accordés</p><p id="adminStatAuthorized" class="text-2xl font-black text-yellow-300 mt-1">—</p></article>
+                    <article class="bg-card border border-emerald-500/20 rounded-xl p-3"><p class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Actifs</p><p id="adminStatActive" class="text-2xl font-black text-emerald-300 mt-1">—</p></article>
+                    <article class="bg-card border border-blue-500/20 rounded-xl p-3"><p class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">Connectés</p><p id="adminStatOnline" class="text-2xl font-black text-blue-300 mt-1">—</p></article>
+                    <article class="bg-card border border-amber-500/20 rounded-xl p-3"><p class="text-[10px] uppercase tracking-wide text-slate-500 font-bold">En attente</p><p id="adminStatPending" class="text-2xl font-black text-amber-300 mt-1">—</p></article>
+                </div>
+                <p id="adminDataStatus" class="bg-yellow-950/20 border border-yellow-500/20 rounded-lg px-3 py-2 text-[11px] text-slate-400" role="status" aria-live="polite">
+                    Les comptes autorisés et les demandes sont chargés depuis Firebase. Les comptes Auth sans profil portail ni demande ne sont pas listables depuis le navigateur.
+                </p>
                 <div class="bg-card p-4 rounded-xl border space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-user-clock text-amber-400"></i> Demandes en attente <span id="adminApplicationsCount" class="text-[10px] text-amber-300"></span></h3>
@@ -2124,10 +2191,18 @@
                 <div class="bg-card p-4 rounded-xl border space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-users-gear text-amber-400"></i> Membres et permissions <span id="adminUsersCount" class="text-[10px] text-blue-300"></span></h3>
-                        <label class="relative">
-                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
-                            <input id="adminMemberSearch" type="search" placeholder="Nom, e-mail ou rôle..." class="bg-slate-900 border border-slate-700 rounded-lg py-2 pl-8 pr-3 text-xs text-white w-56">
-                        </label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
+                                <input id="adminMemberSearch" type="search" placeholder="Nom, e-mail ou rôle..." class="bg-slate-900 border border-slate-700 rounded-lg py-2 pl-8 pr-3 text-xs text-white w-56">
+                            </label>
+                            <select id="adminMemberStatusFilter" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-2 text-xs">
+                                <option value="">Tous les statuts</option>
+                                <option value="active">Actifs</option>
+                                <option value="idle">Connectés inactifs</option>
+                                <option value="offline">Hors ligne</option>
+                            </select>
+                        </div>
                     </div>
                     <div id="adminUsersList" class="space-y-3 text-xs"></div>
                 </div>
@@ -2267,6 +2342,12 @@
 
     <!-- JavaScript & Logic Firebase -->
     <script>
+        window.alert = message => console.info('Portail : notification non bloquante supprimée.', message);
+        window.confirm = message => {
+            console.info('Portail : confirmation native supprimée.', message);
+            return true;
+        };
+
         const firebaseConfig = {
             apiKey: "AIzaSyD-ljiyhlGJBQbatTbnbQEh1KfPDvXzCL4",
             authDomain: "forces-speciales-francaises.firebaseapp.com",
@@ -2318,6 +2399,8 @@
             application: null,
             applications: [],
             accessProfiles: [],
+            presence: {},
+            adminDataStatus: { applications: 'loading', profiles: 'loading', presence: 'loading' },
             role: 'En attente',
             files: [], notes: [], activeNoteId: null,
             effectifs: [], effectifsBase: [], medicalRecords: {}, formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [], visitesMedicales: [],
@@ -2327,6 +2410,20 @@
             notifications: [], logs: [], selectedMilitaireId: null, medicalMigrationComplete: false
         };
         const activeSubscriptions = [];
+        let activeChatCall = null;
+        let currentPresenceRef = null;
+        let presenceConnectionRef = null;
+        let presenceConnectionListener = null;
+        let presenceActivityTimer = null;
+        let presenceActivityHandler = null;
+        let presenceVisibilityHandler = null;
+        let presenceUid = null;
+        let presenceConnected = false;
+        let lastPresenceWriteAt = 0;
+        let lastPresenceActivityAt = Date.now();
+        const CALL_RTC_CONFIGURATION = {
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        };
         let migrationStatusWatched = false;
         const expandedFormationGroups = new Set();
 
@@ -2684,9 +2781,9 @@
 
         const accountSubscriptions = [];
 
-        function subscribeValue(path, callback, subscriptions = activeSubscriptions) {
+        function subscribeValue(path, callback, subscriptions = activeSubscriptions, onError = showSyncError) {
             const ref = db.ref(path);
-            ref.on('value', callback, showSyncError);
+            ref.on('value', callback, onError);
             subscriptions.push({ ref, callback });
         }
 
@@ -2914,26 +3011,146 @@
             }
 
             if (isAccessAdmin()) {
+                const handleAdminReadError = key => error => {
+                    state.adminDataStatus[key] = 'denied';
+                    showSyncError(error);
+                    renderAdminUsers();
+                };
                 subscribeValue('userApplications', snap => {
+                    state.adminDataStatus.applications = 'ready';
                     state.applications = snap.val() ? Object.entries(snap.val()).map(([uid, value]) => ({ ...value, _fbKey: uid })) : [];
                     renderAdminUsers();
-                });
+                }, activeSubscriptions, handleAdminReadError('applications'));
                 subscribeValue('userAccess', snap => {
+                    state.adminDataStatus.profiles = 'ready';
                     state.accessProfiles = snap.val() ? Object.entries(snap.val()).map(([uid, value]) => ({ ...value, _fbKey: uid })) : [];
                     renderAdminUsers();
-                });
+                }, activeSubscriptions, handleAdminReadError('profiles'));
+                subscribeValue('presence', snap => {
+                    state.adminDataStatus.presence = 'ready';
+                    state.presence = snap.val() || {};
+                    renderAdminUsers();
+                }, activeSubscriptions, handleAdminReadError('presence'));
             }
+        }
+
+        function writePresenceStatus(force = false, activity = false) {
+            if (!presenceConnected || !currentPresenceRef) return;
+            const now = Date.now();
+            if (!force && now - lastPresenceWriteAt < 60000) return;
+            const status = document.hidden || now - lastPresenceActivityAt >= 5 * 60 * 1000 ? 'idle' : 'active';
+            const updates = {
+                status,
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            };
+            if (activity) updates.lastActivity = firebase.database.ServerValue.TIMESTAMP;
+            lastPresenceWriteAt = now;
+            currentPresenceRef.update(updates)
+                .catch(showSyncError);
+        }
+
+        function startPresenceTracking() {
+            if (!state.user || !state.access || state.access.approved !== true) return;
+            if (presenceUid === state.user.uid && currentPresenceRef) return;
+            stopPresenceTracking();
+            const user = state.user;
+            presenceUid = user.uid;
+            lastPresenceActivityAt = Date.now();
+            lastPresenceWriteAt = 0;
+            const sessionRef = db.ref(`presence/${user.uid}`).push();
+            currentPresenceRef = sessionRef;
+            presenceConnectionRef = db.ref('.info/connected');
+            presenceConnectionListener = snapshot => {
+                presenceConnected = snapshot.val() === true;
+                if (!presenceConnected || currentPresenceRef !== sessionRef) return;
+                const offlineState = {
+                    uid: user.uid,
+                    name: user.displayName || user.email || 'Utilisateur',
+                    email: user.email || '',
+                    status: 'offline',
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                };
+                sessionRef.onDisconnect().set(offlineState)
+                    .then(() => sessionRef.set({
+                        ...offlineState,
+                        status: document.hidden ? 'idle' : 'active',
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP,
+                        lastActivity: firebase.database.ServerValue.TIMESTAMP
+                    }))
+                    .then(() => { lastPresenceWriteAt = Date.now(); })
+                    .catch(showSyncError);
+            };
+            presenceConnectionRef.on('value', presenceConnectionListener, showSyncError);
+            presenceActivityHandler = () => {
+                lastPresenceActivityAt = Date.now();
+                writePresenceStatus(false, true);
+            };
+            document.addEventListener('pointerdown', presenceActivityHandler, { passive: true });
+            document.addEventListener('keydown', presenceActivityHandler);
+            presenceVisibilityHandler = () => {
+                if (!document.hidden) lastPresenceActivityAt = Date.now();
+                writePresenceStatus(true, !document.hidden);
+            };
+            document.addEventListener('visibilitychange', presenceVisibilityHandler);
+            presenceActivityTimer = setInterval(() => writePresenceStatus(true), 60000);
+        }
+
+        async function stopPresenceTracking() {
+            if (presenceConnectionRef && presenceConnectionListener) {
+                presenceConnectionRef.off('value', presenceConnectionListener);
+            }
+            if (presenceActivityTimer) clearInterval(presenceActivityTimer);
+            if (presenceActivityHandler) {
+                document.removeEventListener('pointerdown', presenceActivityHandler);
+                document.removeEventListener('keydown', presenceActivityHandler);
+            }
+            if (presenceVisibilityHandler) document.removeEventListener('visibilitychange', presenceVisibilityHandler);
+            const ref = currentPresenceRef;
+            const shouldMarkOffline = presenceConnected && ref;
+            presenceConnectionRef = null;
+            presenceConnectionListener = null;
+            presenceActivityTimer = null;
+            presenceActivityHandler = null;
+            presenceVisibilityHandler = null;
+            currentPresenceRef = null;
+            presenceUid = null;
+            presenceConnected = false;
+            if (!shouldMarkOffline) return;
+            try {
+                await ref.update({ status: 'offline', lastSeen: firebase.database.ServerValue.TIMESTAMP });
+                await ref.onDisconnect().cancel();
+            } catch (error) {
+                console.error('Impossible de mettre à jour la présence :', error);
+            }
+        }
+
+        function getMemberPresence(uid) {
+            const connections = Object.values(state.presence[uid] || {});
+            const latest = connections.reduce((current, connection) =>
+                Number(connection && connection.lastSeen) > Number(current && current.lastSeen) ? connection : current
+            , null);
+            const lastSeen = Number(latest && latest.lastSeen) || 0;
+            const recent = connections.filter(connection =>
+                connection && connection.status !== 'offline' &&
+                Number.isFinite(Number(connection.lastSeen)) &&
+                Date.now() - Number(connection.lastSeen) < 120000
+            );
+            if (!recent.length) return { status: 'offline', lastSeen };
+            const active = recent.find(connection => connection.status === 'active');
+            const latestRecent = recent.reduce((current, connection) =>
+                Number(connection.lastSeen) > Number(current.lastSeen) ? connection : current
+            );
+            return { status: active ? 'active' : 'idle', lastSeen: Number(latestRecent.lastSeen) || lastSeen };
         }
 
         function showSyncError(error) {
             const statusEl = document.getElementById('connection-status');
             if (statusEl) {
-                statusEl.textContent = 'Erreur de synchronisation';
+                statusEl.textContent = 'Synchronisation';
                 statusEl.className = 'px-2.5 py-1 rounded-full bg-red-700 text-white font-medium text-[10px]';
-                statusEl.title = error && error.message ? error.message : 'Firebase a refusé la synchronisation.';
+                statusEl.title = 'État de synchronisation indisponible';
             }
             console.error('Erreur Firebase :', error);
-            alert(`La synchronisation Firebase a échoué. Vérifiez la connexion et les règles d'accès.\n${error && error.message ? error.message : ''}`);
         }
 
         function addLog(action, details) {
@@ -3080,13 +3297,15 @@
         }
 
         function activateFirstAvailableTab() {
-            const currentButton = document.querySelector('.tab-btn.active');
+            const currentButton = document.querySelector('#mainNav .tab-btn.active');
             if (currentButton && canOpenTab(currentButton.dataset.tab)) return;
-            const firstButton = Array.from(document.querySelectorAll('.tab-btn[data-tab]')).find(button => canOpenTab(button.dataset.tab));
+            const firstButton = Array.from(document.querySelectorAll('#mainNav .tab-btn[data-tab]')).find(button => canOpenTab(button.dataset.tab));
             if (firstButton) firstButton.click();
         }
 
         async function handleAuthStateChange(user) {
+            if (activeChatCall && (!user || activeChatCall.ownerUid !== user.uid)) await endChatCall();
+            if (presenceUid && (!user || presenceUid !== user.uid)) await stopPresenceTracking();
             clearSubscriptions(accountSubscriptions);
             stopDataListeners();
             migrationStatusWatched = false;
@@ -3095,7 +3314,10 @@
             state.application = null;
             state.accessProfiles = [];
             state.applications = [];
+            state.presence = {};
+            state.adminDataStatus = { applications: 'loading', profiles: 'loading', presence: 'loading' };
             if (!user) {
+                await stopPresenceTracking();
                 state.user = null;
                 state.role = 'En attente';
                 showLogin();
@@ -3124,6 +3346,7 @@
                     const migrationSnapshot = await db.ref('security/medicalMigrationComplete').once('value');
                     state.medicalMigrationComplete = migrationSnapshot.val() === true;
                     showApp();
+                    startPresenceTracking();
                     startDataListeners();
                     watchMigrationStatus();
                 } else {
@@ -3160,10 +3383,12 @@
                             return;
                         }
                         stopDataListeners();
+                        stopPresenceTracking();
                         showAccessStatus('Ton accès au portail a été suspendu ou révoqué.');
                         return;
                     }
                     showApp();
+                    startPresenceTracking();
                     startDataListeners();
                     watchMigrationStatus();
                 }, accountSubscriptions);
@@ -3178,7 +3403,7 @@
                 }, accountSubscriptions);
             } catch (error) {
                 showSyncError(error);
-                showAccessStatus(`Impossible de vérifier les autorisations du compte : ${firebaseErrorMessage(error)}`);
+                showLogin();
             }
         }
 
@@ -3280,7 +3505,8 @@
             rail.querySelectorAll('.tab-btn[data-tab]').forEach(button => button.remove());
             document.querySelectorAll('#mainNav .tab-btn[data-tab]').forEach(source => {
                 const button = source.cloneNode(true);
-                button.innerHTML = source.querySelector('i')?.outerHTML || '<i class="fa-solid fa-grid"></i>';
+                const icon = source.querySelector('i')?.outerHTML || '<i class="fa-solid fa-grid"></i>';
+                button.innerHTML = `${icon}<span>${escapeHtml(source.textContent.trim())}</span>`;
                 button.title = source.title || source.textContent.trim();
                 button.setAttribute('aria-label', button.title);
                 button.addEventListener('click', () => {
@@ -3378,7 +3604,7 @@
             navScroll.addEventListener('scroll', updateScrollControls, { passive: true });
             window.addEventListener('resize', updateScrollControls);
 
-            document.querySelectorAll('.tab-btn[data-tab]').forEach(button => {
+            document.querySelectorAll('#mainNav .tab-btn[data-tab]').forEach(button => {
                 button.addEventListener('click', () => {
                     requestAnimationFrame(() => button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }));
                 });
@@ -3387,7 +3613,7 @@
             document.addEventListener('keydown', event => {
                 if (!event.altKey || event.shiftKey || event.ctrlKey || event.metaKey) return;
                 if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-                const visibleButtons = Array.from(document.querySelectorAll('.tab-btn[data-tab]'))
+                const visibleButtons = Array.from(document.querySelectorAll('#moduleRail .tab-btn[data-tab]'))
                     .filter(button => !button.classList.contains('hidden') && canOpenTab(button.dataset.tab));
                 if (!visibleButtons.length) return;
                 const currentIndex = Math.max(0, visibleButtons.findIndex(button => button.classList.contains('active')));
@@ -3512,6 +3738,273 @@
             activateFirstAvailableTab();
         }
 
+        function setCallStatus(message, status = 'idle') {
+            const messageElement = document.getElementById('callStatusMessage');
+            const badge = document.getElementById('callConnectionBadge');
+            if (messageElement) {
+                messageElement.textContent = message;
+                messageElement.className = `text-xs mt-3 min-h-4 ${status === 'error' ? 'text-amber-300' : 'text-slate-400'}`;
+            }
+            if (badge) {
+                const labels = { idle: 'Aucun appel', waiting: 'En attente', connected: 'En appel', error: 'Indisponible' };
+                const colors = { idle: 'bg-slate-800 text-slate-400', waiting: 'bg-amber-950/60 text-amber-300', connected: 'bg-emerald-950/60 text-emerald-300', error: 'bg-slate-800 text-slate-400' };
+                badge.textContent = labels[status] || labels.idle;
+                badge.className = `px-2.5 py-1 rounded-full text-[10px] ${colors[status] || colors.idle}`;
+            }
+        }
+
+        function reportCallError(error) {
+            console.error('Erreur appel WebRTC :', error);
+            setCallStatus('Appel indisponible. Vérifie les autorisations du navigateur et la connexion.', 'error');
+            const participantStatus = document.getElementById('callParticipantStatus');
+            if (participantStatus) participantStatus.textContent = 'Appel indisponible';
+        }
+
+        function listenCallValue(active, path, callback) {
+            const ref = active.ref.child(path);
+            const listener = snapshot => {
+                if (activeChatCall !== active) return;
+                Promise.resolve(callback(snapshot)).catch(reportCallError);
+            };
+            ref.on('value', listener, showSyncError);
+            active.listeners.push({ ref, event: 'value', listener });
+        }
+
+        function listenCallCandidates(active, path) {
+            const ref = active.ref.child(path);
+            const listener = snapshot => {
+                if (activeChatCall !== active || !snapshot.val()) return;
+                const candidate = new RTCIceCandidate(snapshot.val());
+                if (!active.pc.remoteDescription) {
+                    active.pendingCandidates.push(candidate);
+                    return;
+                }
+                active.pc.addIceCandidate(candidate).catch(reportCallError);
+            };
+            ref.on('child_added', listener, showSyncError);
+            active.listeners.push({ ref, event: 'child_added', listener });
+        }
+
+        async function flushCallCandidates(active) {
+            const pending = active.pendingCandidates.splice(0);
+            for (const candidate of pending) await active.pc.addIceCandidate(candidate);
+        }
+
+        function setupCallPeerConnection(active) {
+            const pc = new RTCPeerConnection(CALL_RTC_CONFIGURATION);
+            active.pc = pc;
+            active.localStream.getTracks().forEach(track => pc.addTrack(track, active.localStream));
+            pc.onicecandidate = event => {
+                if (!event.candidate || activeChatCall !== active) return;
+                active.ref.child(active.isCaller ? 'callerCandidates' : 'calleeCandidates')
+                    .push(event.candidate.toJSON()).catch(reportCallError);
+            };
+            pc.ontrack = event => {
+                const stream = event.streams && event.streams[0];
+                if (!stream) return;
+                const remoteVideo = document.getElementById('callRemoteVideo');
+                const remoteAudio = document.getElementById('callRemoteAudio');
+                remoteVideo.srcObject = stream;
+                remoteAudio.srcObject = stream;
+                remoteAudio.play().catch(() => {});
+                const hasVideo = stream.getVideoTracks().length > 0;
+                remoteVideo.classList.toggle('hidden', !hasVideo);
+                remoteVideo.muted = true;
+                document.getElementById('callAudioStage').classList.toggle('hidden', hasVideo);
+                const participantStatus = document.getElementById('callParticipantStatus');
+                if (participantStatus) participantStatus.textContent = 'Participant connecté';
+            };
+            pc.onconnectionstatechange = () => {
+                if (activeChatCall !== active) return;
+                if (pc.connectionState === 'connected') {
+                    setCallStatus('Appel connecté.', 'connected');
+                    document.getElementById('callParticipantStatus').textContent = 'Participant connecté';
+                    active.ref.child('status').set('connected').catch(reportCallError);
+                } else if (pc.connectionState === 'connecting') {
+                    document.getElementById('callParticipantStatus').textContent = 'Connexion en cours…';
+                } else if (pc.connectionState === 'failed') {
+                    reportCallError(new Error('La connexion WebRTC a échoué.'));
+                }
+            };
+        }
+
+        function showActiveCall(active) {
+            document.getElementById('callActivePanel').classList.remove('hidden');
+            document.getElementById('callRoomShare').classList.toggle('hidden', !active.isCaller);
+            document.getElementById('callRoomCode').value = active.ref.key;
+            document.getElementById('callActiveTitle').textContent = active.mode === 'video' ? 'Appel vidéo' : 'Appel audio';
+            document.getElementById('btnToggleCallCamera').classList.toggle('hidden', active.mode !== 'video');
+            document.getElementById('callLocalVideo').classList.toggle('hidden', active.mode !== 'video');
+            document.getElementById('callLocalVideo').srcObject = active.mode === 'video' ? active.localStream : null;
+            document.getElementById('callRemoteVideo').srcObject = null;
+            document.getElementById('callRemoteVideo').classList.add('hidden');
+            document.getElementById('callRemoteAudio').srcObject = null;
+            document.getElementById('callAudioStage').classList.remove('hidden');
+            document.getElementById('callParticipantStatus').textContent = active.isCaller ? 'En attente du participant…' : 'Connexion en cours…';
+            clearInterval(active.durationTimer);
+            active.startedAt = Date.now();
+            active.durationTimer = setInterval(() => {
+                const seconds = Math.floor((Date.now() - active.startedAt) / 1000);
+                document.getElementById('callDuration').textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function callMediaConstraints(mode) {
+            return { audio: true, video: mode === 'video' ? { facingMode: 'user' } : false };
+        }
+
+        async function startChatCall(mode) {
+            if (activeChatCall) return;
+            if (!state.user || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                return setCallStatus('Les appels nécessitent une connexion sécurisée (HTTPS) et un navigateur compatible.', 'error');
+            }
+            let localStream;
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia(callMediaConstraints(mode));
+                const ref = db.ref('chat/calls').push();
+                const active = { ref, mode, localStream, listeners: [], pendingCandidates: [], isCaller: true, ownerUid: state.user.uid, pc: null };
+                activeChatCall = active;
+                await ref.set({
+                    callerUid: state.user.uid,
+                    callerName: state.user.displayName || state.user.email || 'Utilisateur',
+                    mode,
+                    status: 'waiting',
+                    createdAt: new Date().toISOString()
+                });
+                await ref.onDisconnect().update({ status: 'ended', endedAt: new Date().toISOString() });
+                setupCallPeerConnection(active);
+                const offer = await active.pc.createOffer();
+                await active.pc.setLocalDescription(offer);
+                await ref.child('offer').set({ type: active.pc.localDescription.type, sdp: active.pc.localDescription.sdp });
+                listenCallValue(active, 'answer', async snapshot => {
+                    const answer = snapshot.val();
+                    if (!answer || active.pc.remoteDescription) return;
+                    await active.pc.setRemoteDescription(new RTCSessionDescription(answer));
+                    await flushCallCandidates(active);
+                });
+                listenCallValue(active, 'status', async snapshot => {
+                    if (snapshot.val() === 'ended' && activeChatCall === active) await cleanupChatCall();
+                });
+                listenCallCandidates(active, 'calleeCandidates');
+                showActiveCall(active);
+                setCallStatus(`Salon créé : partage le code ${ref.key} dans le chat.`, 'waiting');
+            } catch (error) {
+                if (localStream) localStream.getTracks().forEach(track => track.stop());
+                if (activeChatCall) await cleanupChatCall();
+                reportCallError(error);
+            }
+        }
+
+        async function joinChatCall(code) {
+            if (activeChatCall) return;
+            const roomCode = String(code || '').trim();
+            if (!roomCode || !state.user) return;
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                return setCallStatus('Les appels nécessitent une connexion sécurisée (HTTPS) et un navigateur compatible.', 'error');
+            }
+            let localStream;
+            let active;
+            try {
+                const ref = db.ref(`chat/calls/${roomCode}`);
+                const initialSnapshot = await ref.once('value');
+                const room = initialSnapshot.val();
+                if (!room || room.status !== 'waiting' || room.callerUid === state.user.uid) {
+                    return setCallStatus('Ce salon est indisponible.', 'error');
+                }
+                localStream = await navigator.mediaDevices.getUserMedia(callMediaConstraints(room.mode));
+                const transaction = await ref.transaction(current => {
+                    if (!current || current.status !== 'waiting' || current.calleeUid || current.callerUid === state.user.uid) return;
+                    current.calleeUid = state.user.uid;
+                    current.calleeName = state.user.displayName || state.user.email || 'Utilisateur';
+                    return current;
+                });
+                if (!transaction.committed) {
+                    localStream.getTracks().forEach(track => track.stop());
+                    return setCallStatus('Ce salon a déjà été rejoint ou fermé.', 'error');
+                }
+                active = { ref, mode: room.mode === 'video' ? 'video' : 'audio', localStream, listeners: [], pendingCandidates: [], isCaller: false, ownerUid: state.user.uid, pc: null };
+                activeChatCall = active;
+                setupCallPeerConnection(active);
+                await active.pc.setRemoteDescription(new RTCSessionDescription(transaction.snapshot.val().offer));
+                await flushCallCandidates(active);
+                const answer = await active.pc.createAnswer();
+                await active.pc.setLocalDescription(answer);
+                await ref.update({
+                    answer: { type: active.pc.localDescription.type, sdp: active.pc.localDescription.sdp },
+                    status: 'connected'
+                });
+                listenCallCandidates(active, 'callerCandidates');
+                listenCallValue(active, 'status', async snapshot => {
+                    if (snapshot.val() === 'ended' && activeChatCall === active) await cleanupChatCall();
+                });
+                showActiveCall(active);
+                document.getElementById('callRoomShare').classList.add('hidden');
+                document.getElementById('callJoinCode').value = '';
+                setCallStatus('Connexion à l’appel…', 'waiting');
+            } catch (error) {
+                if (active && activeChatCall === active) await cleanupChatCall();
+                else if (localStream) localStream.getTracks().forEach(track => track.stop());
+                reportCallError(error);
+            }
+        }
+
+        async function cleanupChatCall() {
+            const active = activeChatCall;
+            if (!active) return;
+            activeChatCall = null;
+            clearInterval(active.durationTimer);
+            active.listeners.forEach(({ ref, event, listener }) => ref.off(event, listener));
+            if (active.isCaller) active.ref.onDisconnect().cancel().catch(() => {});
+            if (active.pc) {
+                active.pc.onicecandidate = null;
+                active.pc.ontrack = null;
+                active.pc.close();
+            }
+            active.localStream.getTracks().forEach(track => track.stop());
+            document.getElementById('callLocalVideo').srcObject = null;
+            document.getElementById('callRemoteVideo').srcObject = null;
+            document.getElementById('callRemoteAudio').srcObject = null;
+            document.getElementById('callActivePanel').classList.add('hidden');
+            document.getElementById('callRoomShare').classList.add('hidden');
+            document.getElementById('callLocalVideo').classList.add('hidden');
+            document.getElementById('callRemoteVideo').classList.add('hidden');
+            document.getElementById('callAudioStage').classList.remove('hidden');
+            document.getElementById('callDuration').textContent = '00:00';
+            setCallStatus('Appel terminé.');
+        }
+
+        async function endChatCall() {
+            const active = activeChatCall;
+            if (!active) return;
+            try {
+                await active.ref.onDisconnect().cancel();
+                await active.ref.update({ status: 'ended', endedAt: new Date().toISOString() });
+            } catch (error) {
+                console.error('Impossible de signaler la fin de l’appel :', error);
+            } finally {
+                await cleanupChatCall();
+            }
+        }
+
+        function toggleCallTrack(kind) {
+            if (!activeChatCall) return;
+            const track = activeChatCall.localStream.getTracks().find(item => item.kind === kind);
+            if (!track) return;
+            track.enabled = !track.enabled;
+            const button = document.getElementById(kind === 'audio' ? 'btnToggleCallMic' : 'btnToggleCallCamera');
+            button.innerHTML = track.enabled
+                ? `<i class="fa-solid fa-${kind === 'audio' ? 'microphone' : 'video'} mr-1.5"></i>Couper ${kind === 'audio' ? 'le micro' : 'la caméra'}`
+                : `<i class="fa-solid fa-${kind === 'audio' ? 'microphone-slash' : 'video-slash'} mr-1.5"></i>Activer ${kind === 'audio' ? 'le micro' : 'la caméra'}`;
+            button.classList.toggle('bg-slate-700', track.enabled);
+            button.classList.toggle('bg-red-900', !track.enabled);
+        }
+
+        async function signOutFromPortal() {
+            if (activeChatCall) await endChatCall();
+            await stopPresenceTracking();
+            if (auth) await auth.signOut();
+        }
+
         function setupListeners() {
             let authMode = 'login';
             const updateAuthMode = () => {
@@ -3574,8 +4067,8 @@
                     showAccessStatus(firebaseErrorMessage(error), { showResend: true, showRefresh: true });
                 }
             });
-            document.getElementById('btnPendingLogout').addEventListener('click', () => auth && auth.signOut());
-            document.getElementById('btnLogout').addEventListener('click', () => auth && auth.signOut());
+            document.getElementById('btnPendingLogout').addEventListener('click', signOutFromPortal);
+            document.getElementById('btnLogout').addEventListener('click', signOutFromPortal);
 
             document.getElementById('applicationForm').addEventListener('submit', async event => {
                 event.preventDefault();
@@ -3595,7 +4088,7 @@
                 }
             });
 
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            document.querySelectorAll('#mainNav .tab-btn[data-tab]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (!canOpenTab(btn.dataset.tab)) return;
                     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -3627,6 +4120,25 @@
                     button.classList.add('active');
                     document.getElementById(`chat-${button.dataset.chatPanel}`)?.classList.remove('hidden');
                 });
+            });
+            document.getElementById('btnStartAudioCall')?.addEventListener('click', () => startChatCall('audio'));
+            document.getElementById('btnStartVideoCall')?.addEventListener('click', () => startChatCall('video'));
+            document.getElementById('callJoinForm')?.addEventListener('submit', event => {
+                event.preventDefault();
+                joinChatCall(document.getElementById('callJoinCode').value);
+            });
+            document.getElementById('btnEndCall')?.addEventListener('click', endChatCall);
+            document.getElementById('btnToggleCallMic')?.addEventListener('click', () => toggleCallTrack('audio'));
+            document.getElementById('btnToggleCallCamera')?.addEventListener('click', () => toggleCallTrack('video'));
+            document.getElementById('btnCopyCallCode')?.addEventListener('click', async () => {
+                const input = document.getElementById('callRoomCode');
+                try {
+                    await navigator.clipboard.writeText(input.value);
+                    setCallStatus('Code copié. Partage-le dans le chat.', 'waiting');
+                } catch (error) {
+                    input.select();
+                    setCallStatus('Code sélectionné : copie-le pour le partager.', 'waiting');
+                }
             });
             document.querySelectorAll('[data-tir-panel]').forEach(button => {
                 button.addEventListener('click', () => {
@@ -3757,6 +4269,7 @@
                 });
             });
             document.getElementById('adminMemberSearch')?.addEventListener('input', renderAdminUsers);
+            document.getElementById('adminMemberStatusFilter')?.addEventListener('change', renderAdminUsers);
             document.getElementById('adminApplicationSearch')?.addEventListener('input', renderAdminUsers);
             document.getElementById('adminUsersList').addEventListener('change', event => {
                 const roleSelect = event.target.closest('select[data-member-role]');
@@ -4217,8 +4730,6 @@
 
         window.migrateMedicalData = async () => {
             if (!isAccessAdmin() || state.access.role !== 'Fondateur' || state.medicalMigrationComplete) return;
-            const phrase = prompt('Confirme la sauvegarde préalable, puis saisis exactement : MIGRER LES DONNÉES MÉDICALES');
-            if (phrase !== 'MIGRER LES DONNÉES MÉDICALES') return;
             const medicalFields = ['sang', 'dateVMA', 'aptitudeVMA', 'detailsMedicalExam', 'medecinExaminateur'];
             try {
                 const snapshot = await db.ref('effectifs').once('value');
@@ -4266,6 +4777,7 @@
             if (!applicationsContainer || !membersContainer || !isAccessAdmin()) return;
             const applicationQuery = (document.getElementById('adminApplicationSearch')?.value || '').trim().toLocaleLowerCase('fr');
             const memberQuery = (document.getElementById('adminMemberSearch')?.value || '').trim().toLocaleLowerCase('fr');
+            const memberStatusFilter = document.getElementById('adminMemberStatusFilter')?.value || '';
 
             const assignableRoles = state.access.role === 'Fondateur'
                 ? ['Fondateur', 'Co-Fondateur', 'Administrateur', 'Modérateur', 'Personnel ENA', 'Personnel Opérateur']
@@ -4282,12 +4794,39 @@
                 </label>`).join('');
 
             const allPending = state.applications.filter(application => application.status === 'pending');
+            const activeCount = state.accessProfiles.filter(profile => getMemberPresence(profile._fbKey).status === 'active').length;
+            const onlineCount = state.accessProfiles.filter(profile => getMemberPresence(profile._fbKey).status !== 'offline').length;
+            const applicationsReady = state.adminDataStatus.applications === 'ready';
+            const profilesReady = state.adminDataStatus.profiles === 'ready';
+            const presenceReady = state.adminDataStatus.presence === 'ready';
+            const setAdminStat = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            };
+            setAdminStat('adminStatAuthorized', profilesReady ? state.accessProfiles.length : '—');
+            setAdminStat('adminStatActive', presenceReady ? activeCount : '—');
+            setAdminStat('adminStatOnline', presenceReady ? onlineCount : '—');
+            setAdminStat('adminStatPending', applicationsReady ? allPending.length : '—');
+            const adminDataStatus = document.getElementById('adminDataStatus');
+            if (adminDataStatus) {
+                const denied = Object.entries(state.adminDataStatus).filter(([, status]) => status === 'denied').map(([key]) => key);
+                const loading = Object.values(state.adminDataStatus).some(status => status === 'loading');
+                adminDataStatus.textContent = denied.length
+                    ? 'Firebase bloque la lecture de certaines listes. Publie les règles mises à jour de firebase-rules.json pour afficher les membres, les demandes et la présence.'
+                    : loading
+                        ? 'Chargement des comptes portail et de leur présence…'
+                        : 'Affichage des profils portail et des demandes. Les comptes Firebase Auth sans profil ou demande ne sont pas accessibles en liste depuis le navigateur.';
+                adminDataStatus.classList.toggle('border-red-500/30', denied.length > 0);
+                adminDataStatus.classList.toggle('text-amber-200', denied.length > 0);
+            }
             const pending = allPending.filter(application =>
                 `${application.name || ''} ${application.email || ''} ${application.reason || ''}`.toLocaleLowerCase('fr').includes(applicationQuery)
             );
             const applicationsCount = document.getElementById('adminApplicationsCount');
-            if (applicationsCount) applicationsCount.textContent = allPending.length ? `${pending.length}/${allPending.length}` : '';
-            applicationsContainer.innerHTML = pending.length ? pending.map(application => {
+            if (applicationsCount) applicationsCount.textContent = applicationsReady && allPending.length ? `${pending.length}/${allPending.length}` : '';
+            applicationsContainer.innerHTML = !applicationsReady
+                ? '<p class="text-slate-400 italic">Liste des demandes indisponible.</p>'
+                : pending.length ? pending.map(application => {
                 const defaultRole = 'Personnel Opérateur';
                 const selectedTabs = Object.fromEntries((DEFAULT_TABS_BY_ROLE[defaultRole] || []).map(tabId => [tabId, true]));
                 return `<article class="bg-input border border-amber-500/20 p-3 rounded-xl space-y-3">
@@ -4303,23 +4842,46 @@
                 </article>`;
             }).join('') : '<p class="text-slate-500 italic">Aucune demande en attente.</p>';
 
-            const profiles = state.accessProfiles.filter(profile =>
-                `${profile.name || ''} ${profile.email || ''} ${profile.role || ''} ${profile._fbKey || ''}`.toLocaleLowerCase('fr').includes(memberQuery)
-            );
+            const profiles = state.accessProfiles.filter(profile => {
+                const matchesQuery = `${profile.name || ''} ${profile.email || ''} ${profile.role || ''} ${profile._fbKey || ''}`.toLocaleLowerCase('fr').includes(memberQuery);
+                const matchesStatus = !memberStatusFilter || getMemberPresence(profile._fbKey).status === memberStatusFilter;
+                return matchesQuery && matchesStatus;
+            });
             const usersCount = document.getElementById('adminUsersCount');
-            if (usersCount) usersCount.textContent = state.accessProfiles.length ? `${profiles.length}/${state.accessProfiles.length}` : '';
-            membersContainer.innerHTML = profiles.length ? profiles.map(profile => {
+            if (usersCount) usersCount.textContent = profilesReady
+                ? `${profiles.length}/${state.accessProfiles.length} · ${presenceReady ? `${onlineCount} connecté${onlineCount > 1 ? 's' : ''}` : 'présence indisponible'}`
+                : '';
+            membersContainer.innerHTML = !profilesReady
+                ? '<p class="text-slate-400 italic">Liste des comptes autorisés indisponible.</p>'
+                : profiles.length ? profiles.map(profile => {
                 const protectedRole = ['Fondateur', 'Co-Fondateur'].includes(profile.role);
                 const editable = (!protectedRole || state.access.role === 'Fondateur') &&
                     !(profile.role === 'Administrateur' && state.access.role === 'Administrateur');
                 const canRevoke = profile._fbKey !== state.user.uid && canAssignRole('Personnel Opérateur', profile.role);
+                const presence = getMemberPresence(profile._fbKey);
+                const presenceLabel = presence.status === 'active' ? 'Actif maintenant'
+                    : presence.status === 'idle' ? 'Connecté · inactif'
+                    : 'Hors ligne';
+                const presenceClass = presence.status === 'active' ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/30'
+                    : presence.status === 'idle' ? 'bg-blue-950/60 text-blue-300 border-blue-500/30'
+                    : 'bg-slate-900 text-slate-400 border-slate-700';
+                const lastSeenLabel = presence.lastSeen
+                    ? `Dernière activité : ${new Date(presence.lastSeen).toLocaleString('fr-FR')}`
+                    : 'Aucune activité récente';
                 const memberRoles = editable ? Array.from(new Set([...assignableRoles, profile.role])) : [profile.role];
                 const memberRoleOptions = memberRoles.map(role =>
                     `<option value="${escapeHtml(role)}" ${profile.role === role ? 'selected' : ''}>${escapeHtml(role)}</option>`
                 ).join('');
                 return `<article class="bg-input border p-3 rounded-xl space-y-3">
                     <div class="flex flex-wrap justify-between items-center gap-2">
-                        <div><p class="font-bold text-white">${escapeHtml(profile.name || 'Membre')} <span class="font-normal text-slate-400">(${escapeHtml(profile.email || '')})</span></p><p class="text-[10px] text-slate-500">UID : ${escapeHtml(profile._fbKey)}</p></div>
+                        <div>
+                            <p class="font-bold text-white">${escapeHtml(profile.name || 'Membre')} <span class="font-normal text-slate-400">(${escapeHtml(profile.email || '')})</span></p>
+                            <div class="flex flex-wrap items-center gap-2 mt-1">
+                                <span class="px-2 py-0.5 rounded-full border text-[9px] ${presenceClass}"><i class="fa-solid fa-circle text-[6px] mr-1"></i>${presenceLabel}</span>
+                                <span class="text-[9px] text-slate-500">${escapeHtml(lastSeenLabel)}</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mt-1">UID : ${escapeHtml(profile._fbKey)}</p>
+                        </div>
                         <div class="flex items-center gap-2">
                             <select data-member-role="${escapeHtml(profile._fbKey)}" ${editable ? '' : 'disabled'} class="bg-slate-900 border border-slate-700 rounded p-1.5">${memberRoleOptions}</select>
                             <button type="button" data-save-member="${escapeHtml(profile._fbKey)}" ${editable ? '' : 'disabled'} class="bg-blue-700 hover:bg-blue-600 disabled:opacity-40 text-white px-3 py-1.5 rounded">Enregistrer</button>
