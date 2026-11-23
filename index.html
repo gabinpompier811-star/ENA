@@ -15,6 +15,113 @@
     <!-- Librairie Export PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        /* Workspace redesign */
+        #mainNav { display: none !important; }
+        #app main { margin-left: 4.6rem; }
+
+        #moduleRail {
+            position: fixed;
+            z-index: 18;
+            left: .55rem;
+            top: 4.35rem;
+            bottom: .55rem;
+            width: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .25rem;
+            padding: .45rem .35rem;
+            overflow-y: auto;
+            border: 1px solid rgba(148, 163, 184, .14);
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, .94);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
+            scrollbar-width: none;
+        }
+
+        #moduleRail::-webkit-scrollbar { display: none; }
+
+        #moduleRail .tab-btn {
+            width: 2.75rem;
+            min-height: 2.75rem;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            border-radius: .8rem;
+            color: #94a3b8;
+        }
+
+        #moduleRail .tab-btn i {
+            margin: 0;
+            width: auto;
+            font-size: .95rem;
+        }
+
+        #moduleRail .tab-btn.active {
+            border-color: color-mix(in srgb, var(--accent-color) 55%, transparent);
+            background: var(--accent-bg);
+            color: var(--accent-light);
+            box-shadow: inset 0 0 18px var(--accent-bg);
+        }
+
+        #workspaceLauncher {
+            background:
+                radial-gradient(circle at 50% 0, var(--accent-bg), transparent 38%),
+                rgba(2, 6, 23, .82);
+            backdrop-filter: blur(16px);
+        }
+
+        #workspaceLauncherPanel {
+            width: min(58rem, 94vw);
+            max-height: 78vh;
+            border-radius: 1.15rem;
+            border-color: rgba(96, 165, 250, .24);
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .58);
+        }
+
+        .launcher-card {
+            min-height: 7rem;
+            border: 1px solid rgba(148, 163, 184, .14);
+            border-radius: .9rem;
+            background: rgba(15, 23, 42, .72);
+            transition: .16s ease;
+            text-align: left;
+        }
+
+        .launcher-card:hover,
+        .launcher-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: var(--accent-light);
+            background: var(--accent-bg);
+            outline: none;
+        }
+
+        .launcher-category {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .35rem .55rem;
+            border: 1px solid rgba(148, 163, 184, .14);
+            border-radius: 999px;
+            color: #94a3b8;
+            font-size: .68rem;
+        }
+
+        .launcher-category.active {
+            border-color: var(--accent-color);
+            background: var(--accent-bg);
+            color: var(--accent-light);
+        }
+
+        #commandSearch:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
+
         /* Couleurs d'accentuation dynamique */
         html[data-accent="blue"] { --accent-color: #3b82f6; --accent-light: #60a5fa; --accent-bg: rgba(59, 130, 246, 0.2); }
         html[data-accent="emerald"] { --accent-color: #10b981; --accent-light: #34d399; --accent-bg: rgba(16, 185, 129, 0.2); }
@@ -329,6 +436,23 @@
             .tab-content {
                 padding-inline: .75rem;
             }
+        }
+
+        @media (max-width: 760px) {
+            #app main { margin-left: 0; margin-bottom: 4.1rem; }
+            #moduleRail {
+                left: .35rem;
+                right: .35rem;
+                top: auto;
+                bottom: .35rem;
+                width: auto;
+                height: 3.45rem;
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: .35rem;
+                border-radius: .9rem;
+            }
+            #moduleRail .tab-btn { flex: 0 0 2.65rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -664,6 +788,27 @@
         </div>
     </div>
     
+    <div id="workspaceLauncher" class="fixed inset-0 z-[60] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="workspaceLauncherTitle">
+        <div id="workspaceLauncherPanel" class="bg-card border p-4 sm:p-5 flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.18em] text-slate-500 font-bold">Navigation rapide</p>
+                    <h2 id="workspaceLauncherTitle" class="text-lg font-black text-white mt-0.5">Palette du portail</h2>
+                </div>
+                <button type="button" onclick="closeWorkspaceLauncher()" class="w-9 h-9 rounded-lg bg-input border text-slate-400 hover:text-white" aria-label="Fermer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <label class="relative block mb-3">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-sm"></i>
+                <input id="commandSearch" type="search" autocomplete="off" placeholder="Rechercher un module..." class="w-full bg-input border rounded-xl py-2.5 pl-9 pr-12 text-sm text-white">
+                <span class="absolute right-3 top-2.5 text-[10px] text-slate-500 border border-slate-700 rounded px-1.5 py-0.5">ESC</span>
+            </label>
+            <div id="launcherCategories" class="flex flex-wrap gap-2 mb-3"></div>
+            <div id="launcherGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 overflow-y-auto custom-scroll"></div>
+        </div>
+    </div>
+
     <!-- Application Principale -->
     <div id="app" class="hidden flex-col h-screen">
         <!-- Navbar Top -->
@@ -675,6 +820,11 @@
             </div>
             
             <div class="flex items-center space-x-3">
+                <button type="button" onclick="openWorkspaceLauncher()" class="hidden md:flex p-1.5 bg-input border rounded-lg hover:opacity-80 text-xs items-center gap-1.5 text-slate-300" title="Palette des modules (Ctrl+K)">
+                    <i class="fa-solid fa-magnifying-glass text-blue-400"></i>
+                    <span>Modules</span>
+                    <kbd class="text-[9px] text-slate-500 border border-slate-700 rounded px-1">Ctrl K</kbd>
+                </button>
                 <button onclick="openSettingsModal()" class="p-1.5 bg-input border rounded-lg hover:opacity-80 text-xs flex items-center gap-1.5 text-slate-200">
                     <i class="fa-solid fa-gear text-blue-400"></i> <span class="hidden sm:inline">Paramètres</span>
                 </button>
@@ -782,6 +932,12 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
         </nav>
+
+        <aside id="moduleRail" aria-label="Modules du portail">
+            <button type="button" onclick="openWorkspaceLauncher()" class="tab-btn" title="Ouvrir la palette de modules (Ctrl+K)">
+                <i class="fa-solid fa-grip"></i>
+            </button>
+        </aside>
 
         <!-- Contenu des Onglets -->
         <main class="flex-1 overflow-hidden relative">
@@ -2909,6 +3065,8 @@
             document.querySelectorAll('.tab-btn[data-tab]').forEach(button => {
                 button.classList.toggle('hidden', !canOpenTab(button.dataset.tab));
             });
+            buildModuleRail();
+            requestAnimationFrame(syncRailActiveTab);
             document.getElementById('navAdminBtn').classList.toggle('hidden', !canOpenTab('admin'));
             document.querySelectorAll('[data-medical-field]').forEach(element => element.classList.toggle('hidden', !hasTabAccess('medical')));
             document.getElementById('ficheMedicalSection')?.classList.toggle('hidden', !hasTabAccess('medical'));
@@ -3065,6 +3223,7 @@
 
         function init() {
             loadPreferences();
+            setupWorkspaceLauncher();
             const dtInput = document.getElementById('pDateTime');
             if (dtInput) {
                 const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -3090,6 +3249,108 @@
                 return;
             }
             auth.onAuthStateChanged(handleAuthStateChange, showSyncError);
+        }
+
+        function setupWorkspaceLauncher() {
+            const modal = document.getElementById('workspaceLauncher');
+            const search = document.getElementById('commandSearch');
+            if (!modal || !search) return;
+            buildModuleRail();
+            modal.addEventListener('click', event => {
+                if (event.target === modal) closeWorkspaceLauncher();
+            });
+            search.addEventListener('input', renderWorkspaceLauncher);
+            document.addEventListener('keydown', event => {
+                if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+                    event.preventDefault();
+                    openWorkspaceLauncher();
+                }
+                if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeWorkspaceLauncher();
+                }
+            });
+            renderWorkspaceLauncher();
+        }
+
+        let launcherCategory = 'Tous';
+
+        function buildModuleRail() {
+            const rail = document.getElementById('moduleRail');
+            if (!rail) return;
+            rail.querySelectorAll('.tab-btn[data-tab]').forEach(button => button.remove());
+            document.querySelectorAll('#mainNav .tab-btn[data-tab]').forEach(source => {
+                const button = source.cloneNode(true);
+                button.innerHTML = source.querySelector('i')?.outerHTML || '<i class="fa-solid fa-grid"></i>';
+                button.title = source.title || source.textContent.trim();
+                button.setAttribute('aria-label', button.title);
+                button.addEventListener('click', () => {
+                    if (canOpenTab(button.dataset.tab)) source.click();
+                });
+                rail.appendChild(button);
+            });
+            syncRailActiveTab();
+        }
+
+        function syncRailActiveTab() {
+            document.querySelectorAll('#moduleRail .tab-btn[data-tab]').forEach(button => {
+                const source = document.querySelector(`#mainNav .tab-btn[data-tab="${button.dataset.tab}"]`);
+                button.classList.toggle('active', Boolean(source?.classList.contains('active')));
+                button.classList.toggle('hidden', Boolean(source?.classList.contains('hidden')));
+            });
+        }
+
+        function openWorkspaceLauncher() {
+            const modal = document.getElementById('workspaceLauncher');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.getElementById('commandSearch').value = '';
+            renderWorkspaceLauncher();
+            requestAnimationFrame(() => document.getElementById('commandSearch')?.focus());
+        }
+
+        function closeWorkspaceLauncher() {
+            const modal = document.getElementById('workspaceLauncher');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderWorkspaceLauncher() {
+            const grid = document.getElementById('launcherGrid');
+            const categories = document.getElementById('launcherCategories');
+            const search = (document.getElementById('commandSearch')?.value || '').trim().toLocaleLowerCase('fr');
+            if (!grid || !categories) return;
+
+            const groups = [
+                ['Tous', ['dashboard','creerdossier','fiches','ena','planning','unites','tirs','docs','decorations','programmes','notes','chat','logistique','operations','cartography','intelligence','admin','logs','changelog']],
+                ['Pilotage', ['dashboard','operations','planning','logistique']],
+                ['Personnel', ['creerdossier','fiches','unites','tirs','decorations','medical']],
+                ['Formation', ['ena','programmes','docs','notes','changelog']],
+                ['Communication', ['chat','cartography','intelligence','logs']],
+                ['Administration', ['admin']]
+            ];
+            categories.innerHTML = groups.map(([name]) => `<button type="button" class="launcher-category ${launcherCategory === name ? 'active' : ''}" data-launcher-category="${escapeHtml(name)}">${escapeHtml(name)}</button>`).join('');
+            categories.querySelectorAll('[data-launcher-category]').forEach(button => button.addEventListener('click', () => {
+                launcherCategory = button.dataset.launcherCategory;
+                renderWorkspaceLauncher();
+            }));
+
+            const allowedIds = groups.find(([name]) => name === launcherCategory)?.[1] || groups[0][1];
+            grid.innerHTML = '';
+            document.querySelectorAll('#mainNav .tab-btn[data-tab]').forEach(source => {
+                const id = source.dataset.tab;
+                if (!allowedIds.includes(id) || source.classList.contains('hidden') || !canOpenTab(id)) return;
+                if (search && !`${source.title || ''} ${source.textContent}`.toLocaleLowerCase('fr').includes(search)) return;
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'launcher-card p-3';
+                card.innerHTML = `<div class="flex items-center gap-2 mb-3">${source.querySelector('i')?.outerHTML || '<i class="fa-solid fa-grid"></i>'}<span class="text-sm font-bold text-white">${escapeHtml(source.title || source.textContent.trim())}</span></div><span class="text-[10px] text-slate-500">Ouvrir le module</span>`;
+                card.addEventListener('click', () => {
+                    closeWorkspaceLauncher();
+                    source.click();
+                });
+                grid.appendChild(card);
+            });
+            if (!grid.children.length) grid.innerHTML = '<p class="col-span-full text-center text-xs text-slate-500 py-10">Aucun module accessible.</p>';
         }
 
         function setupNavigationEnhancements() {
@@ -3341,6 +3602,7 @@
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
                     btn.classList.add('active');
                     document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+                    syncRailActiveTab();
                 });
             });
             const filterReferentiels = () => {
