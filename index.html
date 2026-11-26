@@ -1612,6 +1612,53 @@
                         </div>
                     </div>
 
+                    <div id="ficheIdentitySection" class="hidden bg-card p-4 rounded-xl border border-emerald-500/20 space-y-3">
+                        <div class="border-b border-slate-700/60 pb-2">
+                            <h4 class="text-xs font-bold text-emerald-300 flex items-center gap-2">
+                                <i class="fa-solid fa-id-card"></i> Carte d’identité RP
+                            </h4>
+                            <p class="text-[10px] text-slate-400 mt-1">Données réservées au personnel ENA. Les modifications sont synchronisées avec Firebase.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Nom</span>
+                                <input id="fCardNom" type="text" maxlength="80" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Prénom(s)</span>
+                                <input id="fCardPrenoms" type="text" maxlength="100" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Date de naissance (JJ/MM/AAAA)</span>
+                                <input id="fCardDateNaissance" type="text" maxlength="10" placeholder="01/03/2004" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Lieu de naissance</span>
+                                <input id="fCardLieuNaissance" type="text" maxlength="100" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Nationalité</span>
+                                <input id="fCardNationalite" type="text" maxlength="60" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Sexe</span>
+                                <input id="fCardSexe" type="text" maxlength="20" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1">
+                                <span class="text-slate-400">Date d’engagement (JJ/MM/AAAA)</span>
+                                <input id="fCardDateEngagement" type="text" maxlength="10" placeholder="20/11/2026" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white">
+                            </label>
+                            <label class="space-y-1 md:col-span-2">
+                                <span class="text-slate-400">Adresse (donnée RP uniquement)</span>
+                                <textarea id="fCardAdresse" maxlength="250" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white resize-y"></textarea>
+                            </label>
+                            <label class="space-y-1 md:col-span-3">
+                                <span class="text-slate-400">Devise personnelle</span>
+                                <textarea id="fCardDevise" maxlength="180" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white resize-y"></textarea>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- QUALIFICATIONS AUTOMATIQUES -->
                     <div class="bg-card p-4 rounded-xl border space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
@@ -2494,7 +2541,7 @@
             adminDataStatus: { applications: 'loading', profiles: 'loading', presence: 'loading' },
             role: 'En attente',
             files: [], notes: [], activeNoteId: null,
-            effectifs: [], effectifsBase: [], medicalRecords: {}, formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [], visitesMedicales: [],
+            effectifs: [], effectifsBase: [], cartesIdentite: {}, medicalRecords: {}, formateurs: [], sessions: [], decorations: [], tirs: [], inaptitudes: [], visitesMedicales: [],
             chatMessages: [], chatAnnouncements: [], chatGroups: [], chatGroupMessages: [], activeChatGroupId: null,
             stocks: [], vehicles: [], logisticsRequests: [],
             operations: [], cartography: [], cartographyMap: null, cartographyAnnotations: [], intelligence: [],
@@ -2807,6 +2854,16 @@
             container.classList.remove('hidden');
             document.getElementById('fNomEdit').value = militaire.nom || '';
             document.getElementById('fGradeEdit').value = militaire.grade || '';
+            const identityCard = state.cartesIdentite[militaire.carteIdentiteKey || militaire._fbKey] || {};
+            document.getElementById('fCardNom').value = identityCard.nom || '';
+            document.getElementById('fCardPrenoms').value = identityCard.prenoms || '';
+            document.getElementById('fCardDateNaissance').value = identityCard.dateNaissance || '';
+            document.getElementById('fCardLieuNaissance').value = identityCard.lieuNaissance || '';
+            document.getElementById('fCardNationalite').value = identityCard.nationalite || '';
+            document.getElementById('fCardSexe').value = identityCard.sexe || '';
+            document.getElementById('fCardAdresse').value = identityCard.adresse || '';
+            document.getElementById('fCardDateEngagement').value = identityCard.dateEngagement || '';
+            document.getElementById('fCardDevise').value = identityCard.devisePersonnelle || '';
             document.getElementById('fMat').textContent = militaire.mat || 'Non renseigné';
             document.getElementById('fAff').textContent = militaire.aff || 'N/A';
             document.getElementById('fCountValide').textContent = records.filter(record => record.eval && record.eval.evaluee && record.eval.resultat === 'Admis').length;
@@ -2892,6 +2949,7 @@
         function stopDataListeners() {
             clearSubscriptions(activeSubscriptions);
             stopChatGroupSubscription();
+            state.cartesIdentite = {};
             state.chatGroups = [];
             state.chatAnnouncements = [];
             state.chatMessages = [];
@@ -3347,6 +3405,15 @@
                     refreshEffectifsViews();
                 });
             }
+            if (hasTabAccess('ena')) {
+                subscribeValue('cartesIdentite', snap => {
+                    state.cartesIdentite = snap.val() || {};
+                    if (state.selectedMilitaireId) loadFicheMilitaire();
+                }, activeSubscriptions, error => {
+                    state.cartesIdentite = {};
+                    showSyncError(error);
+                });
+            }
             if (hasTabAccess('medical') || (!state.medicalMigrationComplete && isAccessAdmin())) {
                 subscribeValue('medicalRecords', snap => {
                     state.medicalRecords = snap.val() || {};
@@ -3574,10 +3641,15 @@
                 return alert('Pour supprimer complètement ce dossier, il faut les accès Formation, Tirs, Décorations et Médical.');
             }
 
-            if (confirm(`⚠️ ATTENTION ACTION IRRÉVERSIBLE !\n\nVoulez-vous SUPPRIMER COMPLÈTEMENT l'opérateur "${nom}" ?\n\nCela effacera définitivement :\n- Toutes ses fiches d'effectifs & formations\n- Ses scores de tirs enregistrés\n- Ses données et visites médicales\n- Ses inaptitudes médicales\n- Ses décorations et médailles`)) {
+            if (confirm(`⚠️ ATTENTION ACTION IRRÉVERSIBLE !\n\nVoulez-vous SUPPRIMER COMPLÈTEMENT l'opérateur "${nom}" ?\n\nCela effacera définitivement :\n- Toutes ses fiches d'effectifs & formations\n- Sa carte d’identité RP\n- Ses scores de tirs enregistrés\n- Ses données et visites médicales\n- Ses inaptitudes médicales\n- Ses décorations et médailles`)) {
                 
                 const updates = {};
                 records.forEach(e => { if (e._fbKey) updates[`effectifs/${e._fbKey}`] = null; });
+                const identityCardKeys = new Set(records.map(record => record.carteIdentiteKey).filter(Boolean));
+                if (identityCardKeys.size && !hasTabAccess('ena')) {
+                    return alert('Accès ENA requis pour supprimer aussi la carte d’identité liée à ce dossier.');
+                }
+                identityCardKeys.forEach(key => { updates[`cartesIdentite/${key}`] = null; });
                 state.tirs.filter(t => t.nom === nom).forEach(t => { if (t._fbKey) updates[`tirs/${t._fbKey}`] = null; });
                 state.inaptitudes.filter(i => i.nom === nom).forEach(i => { if (i._fbKey) updates[`inaptitudes/${i._fbKey}`] = null; });
                 state.decorations.filter(d => d.nom === nom).forEach(d => { if (d._fbKey) updates[`decorations/${d._fbKey}`] = null; });
@@ -3689,6 +3761,7 @@
             requestAnimationFrame(syncRailActiveTab);
             document.getElementById('navAdminBtn').classList.toggle('hidden', !canOpenTab('admin'));
             document.querySelectorAll('[data-medical-field]').forEach(element => element.classList.toggle('hidden', !hasTabAccess('medical')));
+            document.getElementById('ficheIdentitySection')?.classList.toggle('hidden', !hasTabAccess('ena'));
             document.getElementById('ficheMedicalSection')?.classList.toggle('hidden', !hasTabAccess('medical'));
             document.getElementById('ficheMedicalHistorySection')?.classList.toggle('hidden', !hasTabAccess('medical'));
             document.getElementById('ficheInaptitudesSection')?.classList.toggle('hidden', !hasTabAccess('medical'));
@@ -5850,7 +5923,25 @@
         window.deleteSession = (k) => { if(confirm("Supprimer cette session ?")) db.ref('sessions/' + k).remove(); };
         window.deleteDecoration = (k) => { if(confirm("Supprimer cette décoration ?")) db.ref('decorations/' + k).remove(); };
         window.deleteFormateur = (k, name) => { if(confirm(`Supprimer ${name} ?`)) db.ref('formateurs/' + k).remove(); };
-        window.deleteEffectif = (k, name) => { if(!checkPermission('EXCLURE')) return; if(confirm(`Supprimer ${name} ?`)) db.ref('effectifs/' + k).remove(); };
+        window.deleteEffectif = async (k, name) => {
+            if (!checkPermission('EXCLURE')) return;
+            if (!confirm(`Supprimer ${name} ?`)) return;
+            const record = state.effectifsBase.find(item => item._fbKey === k);
+            const identityCardKey = record?.carteIdentiteKey;
+            const hasOtherLinkedRecords = identityCardKey && state.effectifsBase.some(item =>
+                item._fbKey !== k && item.carteIdentiteKey === identityCardKey
+            );
+            if (identityCardKey && !hasOtherLinkedRecords && !hasTabAccess('ena')) {
+                return alert('Accès ENA requis pour supprimer aussi la carte d’identité liée à ce dossier.');
+            }
+            const updates = { [`effectifs/${k}`]: null };
+            if (identityCardKey && !hasOtherLinkedRecords) updates[`cartesIdentite/${identityCardKey}`] = null;
+            try {
+                await db.ref().update(updates);
+            } catch (error) {
+                showSyncError(error);
+            }
+        };
 
         window.deleteNote = (k, title) => {
             if (confirm(`Supprimer la note "${title}" ?`)) {
@@ -5886,6 +5977,49 @@
                 if (!record._fbKey) return;
                 Object.entries(fields).forEach(([field, value]) => { updates[`effectifs/${record._fbKey}/${field}`] = value; });
             });
+            const identityCardFields = {
+                nom: document.getElementById('fCardNom').value.trim(),
+                prenoms: document.getElementById('fCardPrenoms').value.trim(),
+                dateNaissance: document.getElementById('fCardDateNaissance').value.trim(),
+                lieuNaissance: document.getElementById('fCardLieuNaissance').value.trim(),
+                nationalite: document.getElementById('fCardNationalite').value.trim(),
+                sexe: document.getElementById('fCardSexe').value.trim(),
+                adresse: document.getElementById('fCardAdresse').value.trim(),
+                dateEngagement: document.getElementById('fCardDateEngagement').value.trim(),
+                devisePersonnelle: document.getElementById('fCardDevise').value.trim()
+            };
+            const hasIdentityCardData = Object.values(identityCardFields).some(value => value);
+            let identityCardRecord = null;
+            let identityCardKey = null;
+            if (hasIdentityCardData) {
+                if (!hasTabAccess('ena')) return alert('Accès ENA requis pour modifier la carte d’identité.');
+                const missingIdentityField = Object.entries(identityCardFields).find(([, value]) => !value);
+                if (missingIdentityField) return alert('Complète tous les champs de la carte d’identité avant de l’enregistrer.');
+                const isValidCardDate = value => {
+                    const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value);
+                    if (!match) return false;
+                    const day = Number(match[1]);
+                    const month = Number(match[2]);
+                    const year = Number(match[3]);
+                    const date = new Date(year, month - 1, day);
+                    return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+                };
+                if (!isValidCardDate(identityCardFields.dateNaissance)
+                    || !isValidCardDate(identityCardFields.dateEngagement)) {
+                    return alert('Les dates de naissance et d’engagement doivent être au format JJ/MM/AAAA.');
+                }
+                identityCardKey = records.find(record => record.carteIdentiteKey)?.carteIdentiteKey || records[0]._fbKey;
+                if (!identityCardKey) return alert('Impossible de relier cette carte au dossier Firebase sélectionné.');
+                identityCardRecord = {
+                    ...identityCardFields,
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: state.user.uid
+                };
+                updates[`cartesIdentite/${identityCardKey}`] = identityCardRecord;
+                records.forEach(record => {
+                    if (record._fbKey) updates[`effectifs/${record._fbKey}/carteIdentiteKey`] = identityCardKey;
+                });
+            }
             if (hasTabAccess('medical')) {
                 updates[`medicalRecords/${newKey}`] = {
                     ...(state.medicalRecords[oldKey] || {}),
@@ -5898,6 +6032,7 @@
             }
             try {
                 await db.ref().update(updates);
+                if (identityCardKey && identityCardRecord) state.cartesIdentite[identityCardKey] = identityCardRecord;
                 state.selectedMilitaireId = militaryIdentity({ ...records[0], ...fields });
                 addLog('DOSSIER_MODIFIE', `${fields.grade} ${fields.nom}`);
                 updateFichesSelect();
