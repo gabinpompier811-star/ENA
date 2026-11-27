@@ -951,11 +951,18 @@
                     <select id="dashUniteFilter" onchange="updateDashboard()" class="bg-input border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition">
                         <option value="TOUTES">Toutes les Unités</option>
                         <option value="N/A">N/A (Sans affectation)</option>
-                        <option value="CPA 10">CPA 10</option>
-                        <option value="4e RHFS">4e RHFS</option>
-                        <option value="13e RDP">13e RDP</option>
-                        <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                        <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
+                        <optgroup label="La Marine nationale">
+                            <option value="Commando Jaubert">Commando Jaubert</option>
+                            <option value="Commando Montfort">Commando Montfort</option>
+                            <option value="Commando Ponchardier">Commando Ponchardier</option>
+                        </optgroup>
+                        <optgroup label="Armée de terre">
+                            <option value="13e RDP">13e RDP</option>
+                            <option value="4e RHFS">4e RHFS</option>
+                        </optgroup>
+                        <optgroup label="Armée de l'air et de l'espace">
+                            <option value="CPA 10">CPA 10</option>
+                        </optgroup>
                     </select>
                 </div>
             
@@ -1094,11 +1101,18 @@
                                 <div class="relative">
                                     <select id="fullUnite" class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl p-2.5 font-bold text-blue-300 outline-none transition appearance-none">
                                         <option value="N/A">N/A (Sans affectation)</option>
-                                        <option value="CPA 10">CPA 10</option>
-                                        <option value="4e RHFS">4e RHFS</option>
-                                        <option value="13e RDP">13e RDP</option>
-                                        <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                                        <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
+                                        <optgroup label="La Marine nationale">
+                                            <option value="Commando Jaubert">Commando Jaubert</option>
+                                            <option value="Commando Montfort">Commando Montfort</option>
+                                            <option value="Commando Ponchardier">Commando Ponchardier</option>
+                                        </optgroup>
+                                        <optgroup label="Armée de terre">
+                                            <option value="13e RDP">13e RDP</option>
+                                            <option value="4e RHFS">4e RHFS</option>
+                                        </optgroup>
+                                        <optgroup label="Armée de l'air et de l'espace">
+                                            <option value="CPA 10">CPA 10</option>
+                                        </optgroup>
                                     </select>
                                     <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
                                 </div>
@@ -1248,12 +1262,19 @@
                             <div class="relative">
                                 <select id="filterUnite" onchange="filtrerDossiers()" class="bg-slate-950 border border-slate-700/85 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2 text-xs text-slate-300 font-medium outline-none transition appearance-none pr-8">
                                     <option value="">Toutes les unités</option>
-                                    <option value="CPA 10">CPA 10</option>
-                                    <option value="4e RHFS">4e RHFS</option>
-                                    <option value="13e RDP">13e RDP</option>
-                                    <option value="Commandos Jaubert (marine)">Commandos Jaubert</option>
-                                    <option value="Groupe de Commandos Parachutistes (GCP)">GCP</option>
                                     <option value="N/A">N/A</option>
+                                    <optgroup label="La Marine nationale">
+                                        <option value="Commando Jaubert">Commando Jaubert</option>
+                                        <option value="Commando Montfort">Commando Montfort</option>
+                                        <option value="Commando Ponchardier">Commando Ponchardier</option>
+                                    </optgroup>
+                                    <optgroup label="Armée de terre">
+                                        <option value="13e RDP">13e RDP</option>
+                                        <option value="4e RHFS">4e RHFS</option>
+                                    </optgroup>
+                                    <optgroup label="Armée de l'air et de l'espace">
+                                        <option value="CPA 10">CPA 10</option>
+                                    </optgroup>
                                 </select>
                                 <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
                             </div>
@@ -1360,11 +1381,18 @@
                         <input type="text" id="pMat" placeholder="Matricule" required class="bg-input border rounded px-2 py-1.5 text-xs">
                         <select id="pUnite" required class="bg-input border rounded px-2 py-1.5 text-xs font-bold text-blue-300">
                             <option value="N/A">N/A (Sans affectation)</option>
-                            <option value="CPA 10">CPA 10</option>
-                            <option value="4e RHFS">4e RHFS</option>
-                            <option value="13e RDP">13e RDP</option>
-                            <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                            <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
+                            <optgroup label="La Marine nationale">
+                                <option value="Commando Jaubert">Commando Jaubert</option>
+                                <option value="Commando Montfort">Commando Montfort</option>
+                                <option value="Commando Ponchardier">Commando Ponchardier</option>
+                            </optgroup>
+                            <optgroup label="Armée de terre">
+                                <option value="13e RDP">13e RDP</option>
+                                <option value="4e RHFS">4e RHFS</option>
+                            </optgroup>
+                            <optgroup label="Armée de l'air et de l'espace">
+                                <option value="CPA 10">CPA 10</option>
+                            </optgroup>
                         </select>
                         <select id="pForm" required class="bg-input border rounded px-2 py-1.5 text-xs">
                             <option value="" disabled selected>-- Formation / Brevet / Permis --</option>
@@ -1428,11 +1456,18 @@
                         <select id="uniteFilterSelect" onchange="renderUnites()" class="w-full bg-input border rounded p-2 text-xs font-bold">
                             <option value="TOUTES">Toutes les Unités</option>
                             <option value="N/A">N/A (Sans affectation)</option>
-                            <option value="CPA 10">CPA 10</option>
-                            <option value="4e RHFS">4e RHFS</option>
-                            <option value="13e RDP">13e RDP</option>
-                            <option value="Commandos Jaubert (marine)">Commandos Jaubert (marine)</option>
-                            <option value="Groupe de Commandos Parachutistes (GCP)">Groupe de Commandos Parachutistes (GCP)</option>
+                            <optgroup label="La Marine nationale">
+                                <option value="Commando Jaubert">Commando Jaubert</option>
+                                <option value="Commando Montfort">Commando Montfort</option>
+                                <option value="Commando Ponchardier">Commando Ponchardier</option>
+                            </optgroup>
+                            <optgroup label="Armée de terre">
+                                <option value="13e RDP">13e RDP</option>
+                                <option value="4e RHFS">4e RHFS</option>
+                            </optgroup>
+                            <optgroup label="Armée de l'air et de l'espace">
+                                <option value="CPA 10">CPA 10</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -5350,7 +5385,7 @@
             const container = document.getElementById('unitesListGrid');
             if(!container) return; container.innerHTML = '';
             const selectedFilter = document.getElementById('uniteFilterSelect')?.value || 'TOUTES';
-            ["N/A", "CPA 10", "4e RHFS", "13e RDP", "Commandos Jaubert (marine)", "Groupe de Commandos Parachutistes (GCP)"].forEach(u => {
+            ["N/A", "Commando Jaubert", "Commando Montfort", "Commando Ponchardier", "13e RDP", "4e RHFS", "CPA 10"].forEach(u => {
                 if (selectedFilter !== 'TOUTES' && selectedFilter !== u) return;
                 const membres = getUniqueMilitaires().filter(m => (m.aff || 'N/A') === u);
                 container.innerHTML += `
